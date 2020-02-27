@@ -1,2 +1,3 @@
 Bibliography :
 
+For perspective and distortion : http://www.imagemagick.org/Usage/distorts/#perspective_projection
