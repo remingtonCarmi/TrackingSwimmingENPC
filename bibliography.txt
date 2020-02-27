@@ -1,3 +1,5 @@
 Bibliography :
 
 For perspective and distortion : http://www.imagemagick.org/Usage/distorts/#perspective_projection
+
+Image processing : TP1-2018-TRIVA : Cours de TRIVA, David Picard
