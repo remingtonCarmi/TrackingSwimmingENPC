@@ -4,3 +4,6 @@ For perspective and distortion : http://www.imagemagick.org/Usage/distorts/#pers
 
 For distortion:
 https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
+
+Image processing : TP1-2018-TRIVA : Cours de TRIVA, David Picard
+
