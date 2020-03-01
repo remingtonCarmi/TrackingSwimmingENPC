@@ -1,12 +1,12 @@
 """
-Ce script permet de télécharger les bibliothèques utiles pour lancer le projet.
+This code allows to download useful libraries to launch the project.
 @author: Victoria Brami, Maxime Brisinger, Theo Vincent
 """
 
-# Import de la bibliothèque os
+# import the os library
 
 import os
 
-# Telechargement des bibliothèques pour le traitement de la video
+# download library for video processing
 
 os.system("pip install opencv-python")
