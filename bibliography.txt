@@ -7,3 +7,5 @@ https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/
 
 Image processing : TP1-2018-TRIVA : Cours de TRIVA, David Picard
 
+Skin_rgb : https://i.pinimg.com/originals/d2/fd/38/d2fd384a8922aca6f0583cdf861b7064.jpg
+

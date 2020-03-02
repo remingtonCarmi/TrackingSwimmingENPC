@@ -15,17 +15,33 @@ import scipy.ndimage as ndimage
 plt.rcParams['image.cmap'] = 'gray' 
 # by default, the grayscale images are displayed with the jet colormap: use grayscale instead
 
-name = 'man.jpg'
-threshold = 0.9
-threshold2 = 10
+NAME = 'man.jpg'
+THRESHOLD = 0.9
+THRESHOLD_2 = 10
+FIG_SIZE = (10,10)
 
-def load_image(name, crop_window=-1): 
+def load_image_red(name): 
+    """
+    Loads image named NAME and returns its red component as a numpy.ndarray
+
+    Args:
+        name(string) : name of the file to load
+    """
     I = plt.imread(name)
-    I = I[:,:,0]
+    I = 10.*I[:,:,0] - 9.*I[:,:,2]
     I = I.astype('float')/255 # just to scale the values of the image between 0 and 1 (instead of 0 255)
     return I
 
 def compute_gradient(I, sigma=0):
+    """
+    Computes the vertical, horizontal, and the norm of the gradient of an image I. 
+    Returns them as three numpy.ndarray
+
+    Args:
+        I(numpy.ndarray) : image we want the gradient of
+        
+        sigma(integer) : value of the parameter of the gaussian filter the algorithm apply
+    """
     I = ndimage.gaussian_filter(I, sigma, mode = 'constant', cval = 0)
     v = np.array([[1./9, 0, -1./9],
                [2./9, 0, -2./9],
@@ -38,17 +54,19 @@ def compute_gradient(I, sigma=0):
     In = np.sqrt(Iv**2 + Ih**2)
     return (Iv, Ih, In)
 
-I = load_image(name)
-I_threshold = (I > threshold) * 255
+I = load_image_red(NAME)
+I_threshold = (I > THRESHOLD) * 255
 I_grady, I_gradx, I_gradnorm = compute_gradient(I_threshold, 3)
-#I_gradnorm = I_gradnorm > threshold2
-#I_edges = I_gradnorm > threshold
-plt.figure(figsize=(5,5)) # this line is not necessary, but allows you to control the size of the displayed image
+#I_gradnorm = I_gradnorm > THRESHOLD_2
+#I_edges = I_gradnorm > THRESHOLD
+plt.figure(figsize=FIG_SIZE)
+plt.imshow(I)
+plt.figure(figsize=FIG_SIZE)
 plt.imshow(I_gradnorm)
 plt.show()
 
 def extreme_white_pixels(I):
-    I = I > threshold2
+    I = I > THRESHOLD_2
     y_min, x_min = I.shape[0] - 1, I.shape[1] - 1
     y_max, x_max = 0, 0
     for y in range(I.shape[0] - 1):
@@ -64,13 +82,15 @@ def extreme_white_pixels(I):
                     x_max = x
     return (x_min, y_min),  (x_max, y_max)
 
+# Draw the rectangle
 extremes = extreme_white_pixels(I_gradnorm)
 size = (extremes[1][0] - extremes[0][0], extremes[1][1] - extremes[0][1])
 
 rectangle = plt.Rectangle(extremes[0], size[0], size[1], fc="none", ec="red")
 
-I = plt.imread(name)
-plt.figure(figsize=(5,5)) # this line is not necessary, but allows you to control the size of the displayed image
+# Plot the result
+I = plt.imread(NAME)
+plt.figure(figsize=FIG_SIZE) # this line is not necessary, but allows you to control the size of the displayed image
 plt.imshow(I)
 
 plt.gca().add_patch(rectangle)
