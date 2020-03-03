@@ -15,12 +15,12 @@ import scipy.ndimage as ndimage
 plt.rcParams['image.cmap'] = 'gray' 
 # by default, the grayscale images are displayed with the jet colormap: use grayscale instead
 
-NAME = 'man.jpg'
-THRESHOLD = 0.9
-THRESHOLD_2 = 10
+NAME = 'framee3.jpg'
+THRESHOLD = 0.1
+THRESHOLD_2 = 18
 FIG_SIZE = (10,10)
 
-def load_image_red(name): 
+def load_image_red(name, method=1): 
     """
     Loads image named NAME and returns its red component as a numpy.ndarray
 
@@ -28,8 +28,19 @@ def load_image_red(name):
         name(string) : name of the file to load
     """
     I = plt.imread(name)
-    I = 10.*I[:,:,0] - 9.*I[:,:,2]
-    I = I.astype('float')/255 # just to scale the values of the image between 0 and 1 (instead of 0 255)
+    if method == 1:
+        I = 100.*I[:,:,0] - 99.*I[:,:,2]
+        I = I.astype('float')/255 # just to scale the values of the image between 0 and 1 (instead of 0 255)
+    if method == 2:
+        J = I[:,:,0]
+        K = I[:,:,2]
+        I = I[:,:,0] < -1
+
+        for i in range(I.shape[0] - 1):
+            for j in range(I.shape[1] -1):
+                if J[i,j] > 100 and J[i,j] < 190 and K[i,j] < 200:
+                    I[i,j] = 1
+
     return I
 
 def compute_gradient(I, sigma=0):
@@ -54,7 +65,7 @@ def compute_gradient(I, sigma=0):
     In = np.sqrt(Iv**2 + Ih**2)
     return (Iv, Ih, In)
 
-I = load_image_red(NAME)
+I = load_image_red(NAME, 2)
 I_threshold = (I > THRESHOLD) * 255
 I_grady, I_gradx, I_gradnorm = compute_gradient(I_threshold, 3)
 #I_gradnorm = I_gradnorm > THRESHOLD_2
@@ -63,6 +74,8 @@ plt.figure(figsize=FIG_SIZE)
 plt.imshow(I)
 plt.figure(figsize=FIG_SIZE)
 plt.imshow(I_gradnorm)
+# plt.figure(figsize=FIG_SIZE)
+# plt.imshow(I_threshold)
 plt.show()
 
 def extreme_white_pixels(I):
