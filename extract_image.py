@@ -19,8 +19,12 @@ class TimeError(Exception):
 
     def __repr__(self):
         """"Indicates the name of the video and the time asked"""
-        begin_message = "The video {} is too short to capture the frames asked.".format(self.name)
-        end_message = " Please lower the time {} seconds".format(self.time)
+        if self.time == 0:
+            begin_message = ""
+            end_message = " Please higher the time {} seconds".format(self.time)
+        else:
+            begin_message = "The video {} is too short to capture the frames asked.".format(self.name)
+            end_message = " Please lower the time {} seconds".format(self.time)
         return begin_message + end_message
 
 
@@ -46,7 +50,7 @@ def extract_image_video(name_video, time, number_image=1):
     count_image = 0
 
     # Check if the time or the number of images asked is possible
-    if nb_image_wait + number_image > frame_count:
+    if time == 0 or nb_image_wait + number_image > frame_count:
         raise TimeError(time, name_video)
 
     # We find the first interesting image
@@ -64,6 +68,6 @@ def extract_image_video(name_video, time, number_image=1):
 
 if __name__ == "__main__":
     try:
-        extract_image_video('vid0', 30, 5)
+        extract_image_video('vid0', 1)
     except TimeError as time_error:
         print(time_error.__repr__())

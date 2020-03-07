@@ -2,6 +2,8 @@ Bibliography :
 
 For perspective and distortion : http://www.imagemagick.org/Usage/distorts/#perspective_projection
 
+To get the points : https://www.pyimagesearch.com/2015/03/09/capturing-mouse-click-events-with-python-and-opencv/
+
 For distortion:
 https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
 
