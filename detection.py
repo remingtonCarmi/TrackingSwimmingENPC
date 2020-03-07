@@ -54,7 +54,7 @@ def select_points(name_image, nb_points):
     # load the image, clone it, and setup the mouse callback function
     image = cv2.imread(name_image)
     clone = image.copy()
-    cv2.namedWindow("image_select")
+    cv2.namedWindow("image_select", cv2.WINDOW_NORMAL)
     param = [points, image, "image_select"]
 
     while nb_select_points < nb_points:
@@ -74,11 +74,11 @@ def select_points(name_image, nb_points):
             # display the right image
             param[1][:, :] = clone[:, :]
             for point in param[0]:
-                cv2.circle(param[1], (point[0], point[1]), 10, (0, 0, 255), 2)
+                cv2.circle(param[1], (point[0], point[1]), 2, (0, 0, 255), 2)
             cv2.imshow(param[2], param[1])
 
         # if the 'q' key is pressed, exit the loop
-        elif key == ord("q"):
+        elif key == ord("o"):
             nb_select_points = float('inf')
 
     cv2.destroyAllWindows()
@@ -87,5 +87,5 @@ def select_points(name_image, nb_points):
 
 
 if __name__ == "__main__":
-    print("Click left to select the point, press r to withdraw the last point, press q to exit.")
+    print("Click left to select the point, press r to withdraw the last point, press o to exit.")
     print(select_points("frame25.jpg", 6))

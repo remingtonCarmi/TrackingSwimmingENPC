@@ -9,8 +9,8 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-im = cv2.imread("imageTest.jpg",1)
-im2 = cv2.imread("imageTest4.jpg")
+im = cv2.imread("frame25.jpg", 1)
+im2 = cv2.imread("frame25.jpg")
 
 
 def onclick(event):
