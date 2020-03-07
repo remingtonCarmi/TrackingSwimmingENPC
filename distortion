@@ -1,0 +1,54 @@
+import numpy as np
+import cv2
+import glob
+from detection import select_points
+
+# termination criteria
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
+# prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+height = 3
+width = 2
+objp = np.zeros((width * height,3), np.float32)
+objp[:,:2] = np.mgrid[0: height,0: width].T.reshape(-1,2)
+
+# Arrays to store object points and image points from all the images.
+objpoints = [] # 3d point in real world space
+objpoints.append(objp)
+imgpoints = [] # 2d points in image plane.
+
+images = glob.glob('chess.jpg')
+
+for fname in images:
+    img = cv2.imread(fname)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+selection = select_points('chess.jpg', width * height)
+imgpoints = np.zeros((height * width, 1, 2), dtype='float32')
+for i in range(height * width):
+    imgpoints[i, 0, 0] = selection[i][0]
+    imgpoints[i, 0, 1] = selection[i][1]
+
+imgpoints = [imgpoints]
+
+print(type(imgpoints))
+print(len(imgpoints))
+print(type(imgpoints[0]))
+print(len(imgpoints[0]))
+print(type(imgpoints[0][0]))
+print(len(imgpoints[0][0]))
+print(type(imgpoints[0][0][0]))
+print(len(imgpoints[0][0][0]))
+print(type(imgpoints[0][0][0][0]))
+
+(ret, mtx, dist, rvecs, tvecs) = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+img = cv2.imread('chess.jpg')
+(h,  w) = img.shape[:2]
+(newcameramtx, roi) = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), 1, (w, h))
+# undistort
+dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
+
+cv2.imwrite('calibresult.png', dst)
+
+if __name__ == "__main__":
+    pass
