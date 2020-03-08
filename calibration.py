@@ -18,7 +18,7 @@ def make_video(name_video, images):
     """
     height, width, layers = images[0].shape
     size = (width, height)
-    out = cv2.VideoWriter(name_video, cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+    out = cv2.VideoWriter(name_video, cv2.VideoWriter_fourcc(*'mp4v'), 25, size)
 
     for image in images:
         out.write(image)
@@ -40,5 +40,5 @@ def calibrate_video(name_video, time_begin, time_end):
 
 
 if __name__ == "__main__":
-    list_images = extract_image_video('vid0', 0, 1, False)
-    make_video('test', list_images)
+    list_images = extract_image_video('vid0', 0, 5, False)
+    make_video('test.mp4', list_images)
