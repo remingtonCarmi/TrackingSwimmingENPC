@@ -1,5 +1,5 @@
 """The aim of this code is to make the user select the points
-that are relevant to withdraw distortion and perspective."""
+that are relevant to withdraw distortion.py and perspective."""
 import cv2
 
 

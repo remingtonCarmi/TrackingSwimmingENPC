@@ -51,7 +51,8 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
         destination (string): the destination of the registered images.
 
     Returns:
-        images (list of array of 3 dimensions - height, width, layers): list of the registered images.
+        images (list of array of 3 dimensions - height, width, layers):
+        list of the registered images.
     """
     # Compute parameters
     video = cv2.VideoCapture('{}.mp4'.format(name_video))
@@ -94,6 +95,6 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
 
 if __name__ == "__main__":
     try:
-        list_images = extract_image_video('vid0', 0, 0, True, "test\\")
+        LIST_IMAGES = extract_image_video('vid0', 0, 0, True, "test\\")
     except TimeError as time_error:
         print(time_error.__repr__())
