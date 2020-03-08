@@ -6,6 +6,7 @@ import numpy as np
 import glob
 from extract_image import extract_image_video
 
+
 def make_video(name_video, images):
     """
     Makes a video with all the images in images.
@@ -15,7 +16,8 @@ def make_video(name_video, images):
 
         images (list of array of 3 dimensions - height, width, layers): list of the images.
     """
-    size = images[0].shape
+    height, width, layers = images[0].shape
+    size = (width, height)
     out = cv2.VideoWriter(name_video, cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
 
     for image in images:
@@ -38,5 +40,5 @@ def calibrate_video(name_video, time_begin, time_end):
 
 
 if __name__ == "__main__":
-    images = [extract_image_video()]
-    make_video()
+    list_images = extract_image_video('vid0', 0, 1, False)
+    make_video('test', list_images)

@@ -31,7 +31,7 @@ class TimeError(Exception):
         return begin_message + end_message
 
 
-def extract_image_video(name_video, time_begin, time_end, destination=""):
+def extract_image_video(name_video, time_begin, time_end, register="False", destination=""):
     """
     Extracts number_image images from name_video and
     save them.
@@ -40,20 +40,25 @@ def extract_image_video(name_video, time_begin, time_end, destination=""):
     the function register until the end
 
     Args:
-        name_video (string): name of the video
+        name_video (string): name of the video.
 
         time_begin (integer in second): the first image will be at the second 'time'.
 
         time_end (integer in second): the final time at which we stop to register the video.
 
+        register (boolean): if True, the images will be registered.
+
         destination (string): the destination of the registered images.
+
+    Returns:
+        images (list of array of 3 dimensions - height, width, layers): list of the registered images.
     """
     # Compute parameters
     video = cv2.VideoCapture('{}.mp4'.format(name_video))
     fps = video.get(cv2.CAP_PROP_FPS)
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
     nb_image_wait = int(time_begin * fps)
-    count_image = 0
+    images = []
     # We make sure that the video will be register until the end if time_end is
     # bigger than the duration of the video.
     number_image = min(int(time_end * fps), frame_count) - int(time_begin * fps)
@@ -73,17 +78,22 @@ def extract_image_video(name_video, time_begin, time_end, destination=""):
     for i in range(nb_image_wait):
         (success, image) = video.read()
 
+    count_image = 1
     # We register the interesting images
-    while success and count_image < number_image:
+    while success and count_image <= number_image:
+        images.append(image)
         nb_count_image = nb_image_wait + count_image
-        cv2.imwrite(destination + "frame%d.jpg" % nb_count_image, image)
+        if register:
+            cv2.imwrite(destination + "frame%d.jpg" % nb_count_image, image)
         (success, image) = video.read()
         print('Read a new frame: ', success)
         count_image += 1
 
+    return images
+
 
 if __name__ == "__main__":
     try:
-        extract_image_video('vid0', 59, 1000, "test\\")
+        list_images = extract_image_video('vid0', 0, 0, True, "test\\")
     except TimeError as time_error:
         print(time_error.__repr__())
