@@ -7,52 +7,68 @@ import cv2
 class TimeError(Exception):
     """The exception class error to tell that the time
     or the number of images is not possible"""
-    def __init__(self, time, name):
+    def __init__(self, name, time_begin, time_end):
         """
         Args:
-            time (integer): the time where we want to look to the video
+            name (string): name of the video.
 
-            name (string): the name of the video we want to look at
+            time_begin (integer in second): the first image will be at the second 'time'.
+
+            time_end (integer in second): the final time at which we stop to register the video.
         """
-        self.time = time
         self.name = name
+        self.time_begin = time_begin
+        self.time_end = time_end
 
     def __repr__(self):
         """"Indicates the name of the video and the time asked"""
-        if self.time == 0:
-            begin_message = ""
-            end_message = " Please higher the time {} seconds".format(self.time)
+        if self.time_begin > self.time_end:
+            begin_message = "The begining time {} seconds is higher than".format(self.time_begin)
+            end_message = " the ending time {} seconds.".format(self.time_end)
         else:
             begin_message = "The video {} is too short to capture the frames asked.".format(self.name)
-            end_message = " Please lower the time {} seconds".format(self.time)
+            end_message = " Please lower the begining time {} seconds".format(self.time_begin)
         return begin_message + end_message
 
 
-def extract_image_video(name_video, time, number_image=1):
+def extract_image_video(name_video, time_begin, time_end, destination=""):
     """
     Extracts number_image images from name_video and
     save them.
-    This raises an exception if the time or the number of images asked
-    is not possible.
+    This raises an exception if the duration is not possible regarding the video.
+    If time_end is bigger than the duration of the video,
+    the function register until the end
 
     Args:
         name_video (string): name of the video
 
-        time (interger in second): the first image will be at the second 'time'.
+        time_begin (integer in second): the first image will be at the second 'time'.
 
-        number_image (integer): number of images wanted
+        time_end (integer in second): the final time at which we stop to register the video.
+
+        destination (string): the destination of the registered images.
     """
     # Compute parameters
     video = cv2.VideoCapture('{}.mp4'.format(name_video))
     fps = video.get(cv2.CAP_PROP_FPS)
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
-    nb_image_wait = int(time * fps)
+    nb_image_wait = int(time_begin * fps)
     count_image = 0
+    # We make sure that the video will be register until the end if time_end is
+    # bigger than the duration of the video.
+    number_image = min(int(time_end * fps), frame_count) - int(time_begin * fps)
+
+    # If time_begin == time_end, one picture is registered.
+    if number_image == 0:
+        number_image = 1
 
     # Check if the time or the number of images asked is possible
-    if time == 0 or nb_image_wait + number_image > frame_count:
-        raise TimeError(time, name_video)
+    if time_begin > time_end or nb_image_wait > frame_count:
+        raise TimeError(name_video, time_begin, time_end)
 
+    # If time_begin == 0, the first picture is registered
+    if time_begin == 0:
+        nb_image_wait = 1
     # We find the first interesting image
     for i in range(nb_image_wait):
         (success, image) = video.read()
@@ -60,7 +76,7 @@ def extract_image_video(name_video, time, number_image=1):
     # We register the interesting images
     while success and count_image < number_image:
         nb_count_image = nb_image_wait + count_image
-        cv2.imwrite("frame%d.jpg" % nb_count_image, image)
+        cv2.imwrite(destination + "frame%d.jpg" % nb_count_image, image)
         (success, image) = video.read()
         print('Read a new frame: ', success)
         count_image += 1
@@ -68,6 +84,6 @@ def extract_image_video(name_video, time, number_image=1):
 
 if __name__ == "__main__":
     try:
-        extract_image_video('vid0', 1)
+        extract_image_video('vid0', 59, 1000, "test\\")
     except TimeError as time_error:
         print(time_error.__repr__())
