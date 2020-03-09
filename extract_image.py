@@ -21,7 +21,7 @@ class TimeError(Exception):
         self.time_end = time_end
 
     def __repr__(self):
-        """"Indicates the name of the video and the time asked"""
+        """"Indicates that the time asked is not possible."""
         if self.time_begin > self.time_end:
             begin_message = "The begining time {} seconds is higher than".format(self.time_begin)
             end_message = " the ending time {} seconds.".format(self.time_end)

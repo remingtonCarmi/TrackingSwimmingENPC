@@ -1,5 +1,5 @@
 """The aim of this code is to make the user select the points
-that are relevant to withdraw distortion.py and perspective."""
+that are relevant to withdraw distortion and perspective."""
 import cv2
 
 
@@ -32,7 +32,7 @@ def register_points(event, x_coord, y_coord, flags, param):
         cv2.imshow(param[2], param[1])
 
 
-def select_points(name_image, nb_points):
+def select_points(image):
     """
     Makes the user select the points he wants.
     Click left to select the point,
@@ -40,9 +40,7 @@ def select_points(name_image, nb_points):
     press q to exit.
 
     Args:
-        name_image (string): the name of the image
-
-        nb_points (integer): the number of points that the user wants
+        image (array): the array representing the image
 
     Returns:
         points (list of lists of floats): the selected points
@@ -50,17 +48,18 @@ def select_points(name_image, nb_points):
     # --- Parameters --- #
     points = []
     nb_select_points = 0
+    selecting = True
 
     # load the image, clone it, and setup the mouse callback function
-    image = cv2.imread(name_image)
     clone = image.copy()
-    cv2.namedWindow("image_select", cv2.WINDOW_NORMAL)
-    param = [points, image, "image_select"]
+    name_window = "image_select"
+    param = [points, image, name_window]
 
-    while nb_select_points < nb_points:
+    while selecting:
         # display the image
+        cv2.namedWindow(name_window, cv2.WINDOW_NORMAL)
         cv2.imshow(param[2], param[1])
-        cv2.setMouseCallback("image_select", register_points, param)
+        cv2.setMouseCallback(param[2], register_points, param)
         key = cv2.waitKey(0) & 0xFF
 
         # we count the number of points that we have selected
@@ -70,7 +69,6 @@ def select_points(name_image, nb_points):
         if nb_select_points > 0 and key == ord("r"):
             # withdraw the last point
             param[0] = param[0][:-1]
-            nb_select_points -= 1
             # display the right image
             param[1][:, :] = clone[:, :]
             for point in param[0]:
@@ -78,14 +76,15 @@ def select_points(name_image, nb_points):
             cv2.imshow(param[2], param[1])
 
         # if the 'q' key is pressed, exit the loop
-        elif key == ord("o"):
-            nb_select_points = float('inf')
+        elif key == ord("q"):
+            selecting = False
 
     cv2.destroyAllWindows()
 
-    return points[: nb_points]
+    return param[0]
 
 
 if __name__ == "__main__":
-    print("Click left to select the point, press r to withdraw the last point, press o to exit.")
-    print(select_points("frame25.jpg", 6))
+    print("Click left to select the point, press r to withdraw the last point, press q to exit.")
+    IMAGE = cv2.imread("test\\test_img.jpg")
+    print(select_points(IMAGE))
