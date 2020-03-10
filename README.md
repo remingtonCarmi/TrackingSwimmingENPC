@@ -6,8 +6,10 @@ Prerequisites & Installation:
 	need Python version ??
 	and libraries :
 		opencv
-			to install opencv you can run the command:
+			To install all the required library run the command
 				python requirements.py
+			On Mac OS you should run
+				pip install --user opencv-python==4.1.2.30
 
 	need two folders :
 		to create these folders you can run the command:
