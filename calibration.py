@@ -1,4 +1,8 @@
 """
+TITRE
+Authors: Victoria Brami, Maxime Brisinger, Remi Carmigniani, Theo Vincent
+Version:TITRE.0
+Description:
 This code calibrates an entire video by withdrawing the distortion and the perspectives.
 """
 import cv2
