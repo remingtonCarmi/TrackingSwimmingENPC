@@ -3,6 +3,9 @@ that are relevant to withdraw distortion and perspective."""
 import cv2
 
 
+
+
+
 def register_points(event, x_coord, y_coord, flags, param):
     """
     Select the point that have been clicked.

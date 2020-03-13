@@ -1,15 +1,17 @@
 """
-TITRE
-Authors: Victoria Brami, Maxime Brisinger, Remi Carmigniani, Theo Vincent
-Version:TITRE.0
-Description:
 This code calibrates an entire video by withdrawing the distortion and the perspectives.
 """
 import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 from extract_image import extract_image_video
 from distortion import find_distortion_charact, clear_image, SelectionError
 from extract_image import TimeError
+from correction_perspective import correctPerspectiveImg
+from detection import select_points
 
+
+vid0 ="C:\\Users\\Victoria\\Documents\\Victoria\\enpc\\2A\\Projet_departement\\vid0"
 
 class VideoError(Exception):
     """The exception class error to tell that the video does not exist."""
@@ -62,21 +64,41 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
     nb_images = len(list_images)
     if nb_images == 0:
         raise VideoError(name_video)
+    list_unwarp_images = [0] * nb_images
     list_clean_images = [0] * nb_images
 
     # Get the caracteristics
-    charact = find_distortion_charact(list_images[0])
-    list_clean_images[0] = clear_image(list_images[0], charact)
+    points = select_points(list_images[0])
+    src = np.float32([(points[0][0], points[0][1]),
+                      (points[1][0], points[1][1]),
+                       (points[3][0], points[3][1]),
+                       (points[2][0], points[2][1])
+            ])
+    dst2 = np.float32([(1500, 0),
+                  (0, 0),
+                  (1500, 750),
+                  (0, 750)])
+    print(src)
+    list_unwarp_images[0] =  correctPerspectiveImg(list_images[0], src, dst2, True, False)
+    print("taille originale: ", list_images[0].shape)
+    print("taille modifiée: ", list_unwarp_images[0].shape)
+    charact = find_distortion_charact(list_unwarp_images[0])
+    list_clean_images[0] = clear_image(list_unwarp_images[0], charact)
+
+
     for index_image in range(1, nb_images):
-        list_clean_images[index_image] = clear_image(list_images[index_image], charact)
+        list_unwarp_images[index_image] = correctPerspectiveImg(list_images[index_image], src, dst2, True, False)
+        list_clean_images[index_image] = clear_image(list_unwarp_images[index_image], charact)
 
     name_video_clean = destination_video + name_video + "_clean.mp4"
-    make_video(name_video_clean, list_clean_images)
+    make_video(name_video_clean, list_unwarp_images)
 
+#vid0 ="C:\\Users\\Victoria\\Documents\\Victoria\\enpc\\2A\\Projet_departement\\vid0"
 
 if __name__ == "__main__":
     try:
-        calibrate_video("vid0", 0, 2, "test\\")
+        #calibrate_video(vid0, 0, 2, "C:\\Users\\Victoria\\Documents\\Victoria\\enpc\\2A\\Projet_departement\\TrackingSwimmingENPC\\tests")
+        calibrate_video(vid0, 8, 20)
     except TimeError as time_error:
         print(time_error.__repr__())
     except SelectionError as select_error:
