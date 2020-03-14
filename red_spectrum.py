@@ -20,7 +20,7 @@ plt.rcParams['image.cmap'] = 'gray'
 # by default, the grayscale images are displayed with the jet colormap: use grayscale instead
 
 THRESHOLD = 0.1
-THRESHOLD_2 = 18
+THRESHOLD_2 = 18  # a preciser
 FIG_SIZE = (10, 10)
 
 
@@ -28,8 +28,8 @@ def load_image(name, crop=None):
     """
     Loads image named NAME
     Args :
-        :param crop:
         :param name : string, name of the file to load
+        :param crop : (list of four integers) : to crop the image into a smaller one
     :return:
     """
     if crop is None:
@@ -42,24 +42,29 @@ def load_image(name, crop=None):
 
 def load_red(image, method=2):
     """
-    Returns its red component as a numpy.ndarray
+    Uses the 3 components of a pixel to highlight skin colors, returns the image as a numpy.ndarray
 
     Args:
-        :param image:
-        :param method: integer
+        image (numpy array)
+        method (integer): method of extraction of colors
+            method = 1: keep the difference between the red and the blue component
+            method = 2: use precises criterias verified by most skin colors to extract the correct pixels
+    Returns:
+        image (numpy array):
     """
 
     if method == 1:
         image = 100. * image[:, :, 0] - 99. * image[:, :, 2]
-        image = image.astype('float') / 255  # just to scale the values of the image between 0 and 1 (instead of 0 255)
+        # image = image.astype('float') / 255  # just to scale the values of the image between 0 and 1
+
     if method == 2:
         red_image = image[:, :, 0]
+        green_image = image[:, :, 1]
         blue_image = image[:, :, 2]
         image = image[:, :, 0] < -1
-
         for i in range(image.shape[0] - 1):
             for j in range(image.shape[1] - 1):
-                if 100 < red_image[i, j] < 190 and blue_image[i, j] < 200:
+                if 120 < red_image[i, j] < 190 and green_image[i, j] < 220 and blue_image[i, j] < 230:
                     image[i, j] = 1
 
     return image
@@ -85,11 +90,46 @@ def compute_gradient(image, sigma=0):
     gradient_y = ndimage.convolve(image, y)
     gradient_x = ndimage.convolve(image, x)
     gradient_norm = np.sqrt(gradient_y ** 2 + gradient_x ** 2)
-    return gradient_y, gradient_x, gradient_norm
+    return gradient_norm
+
+
+def keep_edges(name, method=2, crop=None, figures=False):
+    """
+    Treats an image to only keep the edges of the swimmer
+
+    Args:
+        name (string): name of the file
+        method (integer): method of extraction of colors
+        crop (list of 4 integers): see docstring for load_image
+        figures (boolean): if True, display the gradient and the threshold gradient
+    """
+    image = load_image(name, crop)
+    red_image = load_red(image, method)
+
+    threshold_image = (red_image > THRESHOLD) * 255
+
+    gradient = compute_gradient(threshold_image, 3)
+    threshold_gradient = gradient > THRESHOLD_2
+
+    if figures:
+        plt.figure(figsize=FIG_SIZE)
+        plt.imshow(gradient)
+        plt.figure(figsize=FIG_SIZE)
+        plt.imshow(threshold_gradient)
+    return threshold_gradient
 
 
 def extreme_white_pixels(image):
-    image = image > THRESHOLD_2
+    """
+    Among the white pixels of a binary image, finds the top left one and the bottom right one
+    
+    Args:
+        image(numpy.ndarray) : binary image
+    
+    Returns:
+        (x_min, y_min), (x_max, y_max) : 2 couples of coordinates
+    """
+
     y_min, x_min = image.shape[0] - 1, image.shape[1] - 1
     y_max, x_max = 0, 0
     for y in range(image.shape[0] - 1):
@@ -106,23 +146,8 @@ def extreme_white_pixels(image):
     return (x_min, y_min), (x_max, y_max)
 
 
-def keep_edges(name, method=2, crop=None, figures=False):
-    image = load_image(name, crop)
-    red_image = load_red(image, method)
-    threshold_image = (red_image > THRESHOLD) * 255
-    gradient_y, gradient_x, gradient_norm = compute_gradient(threshold_image, 3)
-
-    if figures:
-        plt.figure(figsize=FIG_SIZE)
-        plt.imshow(I)
-        plt.figure(figsize=FIG_SIZE)
-        plt.imshow(I_gradnorm)
-        plt.show()
-    return gradient_y, gradient_x, gradient_norm
-
-
-def draw_rectangle(gradient_norm):
-    extremes = extreme_white_pixels(gradient_norm)
+def draw_rectangle(gradient):
+    extremes = extreme_white_pixels(gradient)
     size = (extremes[1][0] - extremes[0][0], extremes[1][1] - extremes[0][1])
 
     rectangle = plt.Rectangle(extremes[0], size[0], size[1], fc="none", ec="red")
@@ -135,9 +160,24 @@ if __name__ == "__main__":
         extract("videos\\Florent Manaudou Wins Men's 50m Freestyle Gold -- London 2012 Olympics", 180, 180, True,
                 "test\\")
 
-    CROP = [400, 900, 990, 1130]  # later, it will be calculated automatically
-    IMAGE = load_image(NAME, CROP)
+    # later, it will be calculated automatically
+    CROPS = [[400, 720, 210, 360],
+             [350, 720, 400, 550],
+             [400, 800, 600, 735],
+             [200, 1100, 800, 950],
+             [400, 900, 990, 1130],
+             [360, 900, 1200, 1310],
+             [300, 900, 1380, 1480],
+             [430, 800, 1580, 1680],
+             ]
+    for CROP in CROPS:
+        IMAGE = load_image(NAME, CROP)
+        plt.figure(figsize=FIG_SIZE)
+        plt.imshow(IMAGE)
+        draw_rectangle(keep_edges(NAME, 2, CROP, False))
+
+    IMAGE = load_image(NAME, None)
     plt.figure(figsize=FIG_SIZE)
     plt.imshow(IMAGE)
-    draw_rectangle(keep_edges(NAME, 2, CROP)[2])
+
     plt.show()
