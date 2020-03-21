@@ -3,6 +3,13 @@ Allows to merge the lines-separated frames in a unique frame
 """
 
 from crop_lines import *
+import cv2
+
+
+def bgr_to_rgb(image):
+    im = image.copy()
+    im[:, :, 0], im[:, :, 2] = image[:, :, 2], image[:, :, 0]
+    return im
 
 
 def merge(images):
@@ -19,8 +26,9 @@ def merge(images):
 
 
 if __name__ == "__main__":
-    lines, points = load_lines("test0.jpg", "vid0", 0, 0)
+    lines, points = load_lines("frame2.jpg", "vid0_clean", 0, 0)
 
     m = merge(lines)
-    plt.imshow(m)
+
+    plt.imshow(bgr_to_rgb(m))
     plt.show()
