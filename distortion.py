@@ -60,7 +60,7 @@ def find_distortion_charact(image):
     imgpoints = [imgpoints]
 
     # We get the characteristics
-    return cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)[1: 3]
+    return selection, cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)[1: 3]
 
 
 def clear_image(image, characts):
