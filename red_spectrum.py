@@ -148,10 +148,8 @@ def extreme_white_pixels(image):
 def get_rectangle(gradient, offset=[0, 0]):
     extremes = extreme_white_pixels(gradient)
     size = (extremes[1][0] - extremes[0][0], extremes[1][1] - extremes[0][1])
-    print(extremes)
     extremes[0][0] += offset[0]
     extremes[0][1] += offset[1]
-    print(extremes)
     return extremes[0], size
 
 
@@ -178,11 +176,12 @@ if __name__ == "__main__":
              [300, 900, 1380, 1480],
              [430, 800, 1580, 1680],
              ]
+
     for CROP in CROPS:
         IMAGE = load_image(NAME, CROP)
         plt.figure(figsize=FIG_SIZE)
         plt.imshow(IMAGE)
-
+        print(np.shape(IMAGE))
         CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, False))
         draw_rectangle(CORNER, SIZE)
 
