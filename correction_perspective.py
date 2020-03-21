@@ -13,9 +13,7 @@ from distortion import find_distortion_charact, clear_image, SelectionError
 from extract_image import TimeError
 from detection import select_points, register_points
 
-vid0 ="C:\\Users\\Victoria\\Documents\\Victoria\\enpc\\2A\\Projet_departement\\vid0"
-
-
+vid0 = "videos\\vid0"
 
 
 def correctPerspectiveImg(img, src, dst, testing, display):
@@ -45,9 +43,6 @@ def correctPerspectiveImg(img, src, dst, testing, display):
     else:
         return warped, M
     
-        
-
-
 
 # We will first manually select the source points 
 # we will select the destination point which will map the source points in
@@ -64,7 +59,6 @@ dst2 = np.float32([(1500, 0),
                   (0, 750)])
 
 
-
 list_images = extract_image_video(vid0, 0, 5, False)
 plt.imsave("imageTest1.jpg", list_images[0])
     
@@ -75,8 +69,8 @@ if __name__ == "__main__":
     src = np.float32([(points[0][0], points[0][1]),
                       (points[1][0], points[1][1]),
                       (points[3][0], points[3][1]),
-                       (points[2][0], points[2][1])
-            ])
+                      (points[2][0], points[2][1])
+                      ])
     print(src)
     new_im = correctPerspectiveImg(im, src, dst2, True, True)
 
