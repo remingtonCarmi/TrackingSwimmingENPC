@@ -73,25 +73,3 @@ if __name__ == "__main__":
                       ])
     print(src)
     new_im = correctPerspectiveImg(im, src, dst2, True, True)
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
