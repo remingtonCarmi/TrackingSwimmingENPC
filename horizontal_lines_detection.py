@@ -12,7 +12,7 @@ from extract_image import extract_image_video
 
 
 #Use of unwarped and undistored images
-list_cleanImg = extract_image_video("vid0_clean", 3, 5, False)
+list_cleanImg = extract_image_video("videos\\vid0_clean", 3, 5, False)
 cleanImg = list_cleanImg[0]
 
 
@@ -55,7 +55,7 @@ def form_clustering(lines : list, threshold : int, average : list)  -> list:
         
         if count_zero >= 1:
             cluster.remove(lines[i])
-            new_av.remove(new_av[i])
+            new_av.remove(average[i])
     return cluster, new_av
 
 
@@ -80,7 +80,7 @@ def form_clustering2(lines : list, threshold : int, average : list) -> list:
     k = 0
     while k < len(newlines):
         a = newlines[k]
-        while newlines.count(a) >= 2:
+        while newlines.count(a) > 1:
             newlines.remove(a)
             new_av.remove(average[k])
         for line in newlines:
@@ -107,7 +107,7 @@ def detect_lines(I2, name_window : str,
     NewI = I2.copy()
     minLineLength = 100
     maxLineGap = 10
-    lines = cv2.HoughLinesP(edges,1,np.pi/180, 600, minLineLength, maxLineGap)
+    lines = cv2.HoughLinesP(edges,1,np.pi/180, 400, minLineLength, maxLineGap)
     average = []
     select_lines = []
     Norms = []
@@ -127,18 +127,25 @@ def detect_lines(I2, name_window : str,
     
     #filtering only the essential lines
     newlines, new_av = form_clustering2(select_lines, threshold, average)
-    #newlines, m = form_clustering(select_lines, threshold, average)
     
-    
+    #filtering once more to delete remaining duplicates
+    for l in newlines:
+        y3 = l[0][1]
+        for s in newlines:
+            y4 = s[0][1]
+            if s != l and abs(y3 - y4) < 10:
+                newlines.remove(s)
+                
+          
     #making sure the line is almost horizontal regardint 
-    for i in range(len(new_av)):
+    for i in range(len(newlines)):
         cv2.line(NewI, newlines[i][0], newlines[i][1],(255,100,230),2)
     
     #Show the image    
     cv2.namedWindow(name_window, cv2.WINDOW_NORMAL)        
     cv2.imshow(name_window, NewI)
-    cv2.imwrite("HorizontalLines.jpg", NewI)
-    
+    cv2.imwrite("test\\HorizontalLines.jpg", NewI)
+    print("nombre de lignes: ", len(newlines))
     return NewI, newlines
 
 
@@ -146,4 +153,4 @@ def detect_lines(I2, name_window : str,
 
 if __name__ == "__main__":
     name_window = "Horizontal lines"
-    newI, lines = detect_lines(cleanImg, name_window, 20)
+    newI, lines = detect_lines(cleanImg, name_window, 80)
