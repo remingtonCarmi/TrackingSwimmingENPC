@@ -68,7 +68,8 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
     list_clean_images = [0] * nb_images
 
     # Get the caracteristics
-    points = select_points(list_images[0])
+    # points = select_points(list_images[0])
+    points, charact = find_distortion_charact(list_images[0])
     src = np.float32([(points[0][0], points[0][1]),
                       (points[1][0], points[1][1]),
                        (points[3][0], points[3][1]),
@@ -82,7 +83,7 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
     list_unwarp_images[0] =  correctPerspectiveImg(list_images[0], src, dst2, True, False)
     print("taille originale: ", list_images[0].shape)
     print("taille modifiée: ", list_unwarp_images[0].shape)
-    charact = find_distortion_charact(list_unwarp_images[0])
+    
     list_clean_images[0] = clear_image(list_unwarp_images[0], charact)
 
 
