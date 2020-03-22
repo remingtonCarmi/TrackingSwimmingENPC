@@ -8,7 +8,7 @@ Created on Sat Mar 21 13:07:13 2020
 import cv2
 import numpy as np
 from extract_image import extract_image_video
-
+from operator import itemgetter
 
 
 #Use of unwarped and undistored images
@@ -146,6 +146,10 @@ def detect_lines(I2, name_window : str,
     cv2.imshow(name_window, NewI)
     cv2.imwrite("test\\HorizontalLines.jpg", NewI)
     print("nombre de lignes: ", len(newlines))
+    
+    #sorting the lines
+    newlines = sorted(newlines, key = itemgetter(1))
+    print(newlines)
     return NewI, newlines
 
 
