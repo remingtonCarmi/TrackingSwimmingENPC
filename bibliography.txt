@@ -11,3 +11,8 @@ Image processing : TP1-2018-TRIVA : Cours de TRIVA, David Picard
 
 Skin_rgb : https://i.pinimg.com/originals/d2/fd/38/d2fd384a8922aca6f0583cdf861b7064.jpg
 
+Line detection:
+https://www.ipol.im/pub/art/2012/gjmr-lsd/
+(pip install pylsd)
+http://www.robindavid.fr/opencv-tutorial/chapter5-line-edge-and-contours-detection.html
+https://towardsdatascience.com/edge-detection-in-python-a3c263a13e03
