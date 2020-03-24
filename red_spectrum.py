@@ -93,7 +93,7 @@ def compute_gradient(image, sigma=0):
     return gradient_norm
 
 
-def keep_edges(name, method=2, crop=None, figures=False):
+def keep_edges(image, method=2, figures=False):
     """
     Treats an image to only keep the edges of the swimmer
 
@@ -103,7 +103,6 @@ def keep_edges(name, method=2, crop=None, figures=False):
         crop (list of 4 integers): see docstring for load_image
         figures (boolean): if True, display the gradient and the threshold gradient
     """
-    image = load_image(name, crop)
     red_image = load_red(image, method)
 
     threshold_image = (red_image > THRESHOLD) * 255
@@ -143,15 +142,22 @@ def extreme_white_pixels(image):
                     x_min = x
                 if x > x_max:
                     x_max = x
-    return (x_min, y_min), (x_max, y_max)
+    return [x_min, y_min], [x_max, y_max]
 
 
-def draw_rectangle(gradient):
+def get_rectangle(gradient, offset=[0, 0]):
     extremes = extreme_white_pixels(gradient)
     size = (extremes[1][0] - extremes[0][0], extremes[1][1] - extremes[0][1])
+    extremes[0][0] += offset[0]
+    extremes[0][1] += offset[1]
+    return extremes[0], size
 
-    rectangle = plt.Rectangle(extremes[0], size[0], size[1], fc="none", ec="red")
-    plt.gca().add_patch(rectangle)
+
+def draw_rectangle(corner, size, draw=True):
+    rectangle = plt.Rectangle(corner, size[0], size[1], fc="none", ec="red")
+    if draw:
+        plt.gca().add_patch(rectangle)
+    return rectangle
 
 
 if __name__ == "__main__":
@@ -170,11 +176,14 @@ if __name__ == "__main__":
              [300, 900, 1380, 1480],
              [430, 800, 1580, 1680],
              ]
+
     for CROP in CROPS:
         IMAGE = load_image(NAME, CROP)
         plt.figure(figsize=FIG_SIZE)
         plt.imshow(IMAGE)
-        draw_rectangle(keep_edges(NAME, 2, CROP, False))
+        print(np.shape(IMAGE))
+        CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, False))
+        draw_rectangle(CORNER, SIZE)
 
     IMAGE = load_image(NAME, None)
     plt.figure(figsize=FIG_SIZE)
