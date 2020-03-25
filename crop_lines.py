@@ -50,6 +50,21 @@ def crop(image, list_y):
 
 
 def load_lines(frame_name, folder, video_name, time_begin, time_end):
+    """
+
+    Args:
+        frame_name (string): generic name for the images that will be saved
+        folder (string): name of the folder where we save all the images
+        video_name: name of the video from where we extract the image (perspective has to be corrected)
+        time_begin (float): starting time of the video we consider
+        time_end (float): ending time of the video we consider
+
+    Returns:
+        list_images_crop (list of list of numpy arrays):
+            list_images_crop[i][j] : the j-th water line of the i-th frame from the video
+        points (list of integers): manually-selected ordinates of the 11 lines
+
+    """
     frame_name = folder + frame_name
 
     if os.path.exists(folder):
@@ -57,18 +72,15 @@ def load_lines(frame_name, folder, video_name, time_begin, time_end):
     os.makedirs(folder)
 
     list_images = extract_image_video("videos\\" + video_name, time_begin, time_end, True, folder)
-    # plt.imsave(frame_name, i[0])
 
     list_images_crop = []
-    # image = cv2.imread(frame_name)
 
+    # manually-selected ordinates of the 11 lines
     points = [6, 82, 156, 233, 309, 382, 458, 531, 604, 679, 749]
     # points = [3, 76, 153, 234, 306, 380, 456, 531, 604, 680, 749]
 
     for im in list_images:
         list_images_crop.append(crop(im, points))
-
-    # images_crop = crop(image, points)
 
     return list_images_crop, points
 
