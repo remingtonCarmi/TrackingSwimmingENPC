@@ -3,9 +3,6 @@ that are relevant to withdraw distortion and perspective."""
 import cv2
 
 
-
-
-
 def register_points(event, x_coord, y_coord, flags, param):
     """
     Select the point that have been clicked.
@@ -89,5 +86,5 @@ def select_points(image):
 
 if __name__ == "__main__":
     print("Click left to select the point, press r to withdraw the last point, press q to exit.")
-    IMAGE = cv2.imread("test\\test_img.jpg")
+    IMAGE = cv2.imread("frame2.jpg")
     print(select_points(IMAGE))
