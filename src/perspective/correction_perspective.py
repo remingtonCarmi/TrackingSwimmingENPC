@@ -15,6 +15,10 @@ from detection import select_points, register_points
 
 vid0 = "videos\\vid0"
 
+def convertRGBtoBGR(I):
+    newI = I.copy()
+    newI[:, :, 0], newI[:, :, 2] = I[:, :, 2], I[:, :, 0]
+    return newI
 
 def correctPerspectiveImg(img, src, dst, testing, display):
     h, w = img.shape[:2]
@@ -59,13 +63,14 @@ dst2 = np.float32([(1500, 0),
                   (0, 750)])
 
 
-list_images = extract_image_video(vid0, 0, 5, False)
-plt.imsave("imageTest1.jpg", list_images[0])
-    
+
     
 if __name__ == "__main__":
-    im = plt.imread("imageTest1.jpg")
+    list_images = extract_image_video(vid0, 0, 5, False)
+    cv2.imwrite("imageTest1.jpg", list_images[0])
+    im = cv2.imread("imageTest1.jpg")
     points = select_points(im)
+    im = convertRGBtoBGR(im)
     src = np.float32([(points[0][0], points[0][1]),
                       (points[1][0], points[1][1]),
                       (points[3][0], points[3][1]),
