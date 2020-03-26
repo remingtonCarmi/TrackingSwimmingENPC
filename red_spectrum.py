@@ -98,10 +98,12 @@ def keep_edges(image, method=2, figures=False):
     Treats an image to only keep the edges of the swimmer
 
     Args:
-        name (string): name of the file
+        image (string): name of the file
         method (integer): method of extraction of colors
-        crop (list of 4 integers): see docstring for load_image
         figures (boolean): if True, display the gradient and the threshold gradient
+
+    Returns:
+        threshold_gradient (numpy array): image after threshold the gradient
     """
     red_image = load_red(image, method)
 
@@ -123,7 +125,7 @@ def extreme_white_pixels(image):
     Among the white pixels of a binary image, finds the top left one and the bottom right one
     
     Args:
-        image(numpy.ndarray) : binary image
+        image(numpy array) : binary image
     
     Returns:
         (x_min, y_min), (x_max, y_max) : 2 couples of coordinates
@@ -146,6 +148,16 @@ def extreme_white_pixels(image):
 
 
 def get_rectangle(gradient, offset=[0, 0]):
+    """
+    To get characteristics of the boxes surrounding the swimmers
+    Args:
+        gradient (numpy array): a binary image, with white pixels only for the swimmer
+        offset (list of 2 integers): to move the box horizontally and vertically
+
+    Returns:
+        extremes[0]: the coordinates of top left corner of the box
+        size (list of 2 integers) : the x_size and the y_size of the box
+    """
     extremes = extreme_white_pixels(gradient)
     size = (extremes[1][0] - extremes[0][0], extremes[1][1] - extremes[0][1])
     extremes[0][0] += offset[0]
@@ -154,6 +166,16 @@ def get_rectangle(gradient, offset=[0, 0]):
 
 
 def draw_rectangle(corner, size, draw=True):
+    """
+    To build a given rectangle as a plt object, and plot it on the opened figure
+    Args:
+        corner (list of 2 integers): the coordinates of top left corner of the box
+        size (list of 2 integers) : the x_size and the y_size of the box
+        draw (boolean): if True, plot the rectangle on the opened figure
+
+    Returns:
+        rectangle (patch de plt):
+    """
     rectangle = plt.Rectangle(corner, size[0], size[1], fc="none", ec="red")
     if draw:
         plt.gca().add_patch(rectangle)
