@@ -2,7 +2,7 @@
 Allows to merge the lines-separated frames into a unique frame
 """
 
-from crop_lines import *
+from src.red_boxes.crop_lines import *
 import matplotlib.pyplot as plt
 import numpy as np
 

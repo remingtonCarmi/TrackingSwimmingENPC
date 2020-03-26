@@ -3,9 +3,9 @@ To get the video with all the rectangle boxes at each time
 """
 
 
-from merge_lines import *
-from red_spectrum import *
-from calibration import make_video
+from src.red_boxes.merge_lines import *
+from src.red_boxes.red_spectrum import *
+from src.calibration import make_video
 
 import cv2
 import numpy as np
