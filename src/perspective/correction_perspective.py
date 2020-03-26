@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Feb 27 18:05:04 2020
-
-@author: Victoria
-"""
 
 import cv2
 import matplotlib.pyplot as plt
@@ -67,8 +61,8 @@ dst2 = np.float32([(1500, 0),
     
 if __name__ == "__main__":
     list_images = extract_image_video(vid0, 0, 5, False)
-    cv2.imwrite("imageTest1.jpg", list_images[0])
-    im = cv2.imread("imageTest1.jpg")
+    cv2.imwrite("data\\image\\imageTest1.jpg", list_images[0])
+    im = cv2.imread("data\\image\\imageTest1.jpg")
     points = select_points(im)
     im = convertRGBtoBGR(im)
     src = np.float32([(points[0][0], points[0][1]),
