@@ -95,6 +95,6 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
 
 if __name__ == "__main__":
     try:
-        LIST_IMAGES = extract_image_video('videos\\vid0', 0, 0, True, "test\\")
+        LIST_IMAGES = extract_image_video('data\\videos\\vid0', 0, 0, True, "test\\")
     except TimeError as time_error:
         print(time_error.__repr__())

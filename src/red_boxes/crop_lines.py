@@ -6,7 +6,7 @@ import os
 import shutil
 
 # from correction_perspective import correctPerspectiveImg
-from extract_image import extract_image_video
+from src.extract_image import extract_image_video
 
 
 def slope_intercept(a, b):
@@ -71,7 +71,7 @@ def load_lines(frame_name, folder, video_name, time_begin, time_end):
         shutil.rmtree(folder)
     os.makedirs(folder)
 
-    list_images = extract_image_video("videos\\" + video_name, time_begin, time_end, True, folder)
+    list_images = extract_image_video("data\\videos\\" + video_name, time_begin, time_end, True, folder)
 
     list_images_crop = []
 
