@@ -71,7 +71,7 @@ def load_lines(frame_name, folder, video_name, time_begin, time_end):
         shutil.rmtree(folder)
     os.makedirs(folder)
 
-    list_images = extract_image_video("data\\videos\\" + video_name, time_begin, time_end, True, folder)
+    list_images = extract_image_video("..\\..\\data\\videos\\" + video_name, time_begin, time_end, True, folder)
 
     list_images_crop = []
 
@@ -83,6 +83,17 @@ def load_lines(frame_name, folder, video_name, time_begin, time_end):
         list_images_crop.append(crop(im, points))
 
     return list_images_crop, points
+
+
+# cleaned function, without imports and call of functions
+def crop_list(list_images, points):
+
+    list_images_crop = []
+
+    for image in list_images:
+        list_images_crop.append(crop(image, points))
+
+    return list_images_crop
 
 
 if __name__ == "__main__":

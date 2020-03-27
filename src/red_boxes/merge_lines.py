@@ -2,23 +2,8 @@
 Allows to merge the lines-separated frames into a unique frame
 """
 
-from src.red_boxes.crop_lines import *
 import matplotlib.pyplot as plt
 import numpy as np
-
-
-def bgr_to_rgb(image):
-    """
-    To convert a BGR image into a RGB one
-    Args:
-        image(numpy array): image to convert
-
-    Returns:
-        im(numpy array): new image, in RGB
-    """
-    im = image.copy()
-    im[:, :, 0], im[:, :, 2] = image[:, :, 2], image[:, :, 0]
-    return im
 
 
 def merge(images):
@@ -37,6 +22,9 @@ def merge(images):
 
 
 if __name__ == "__main__":
+    from src.red_boxes.crop_lines import load_lines
+    from src.bgr_to_rgb import bgr_to_rgb
+
     LINES, POINTS = load_lines("frame2.jpg", "vid0_clean", 0, 0)
 
     MERGED = merge(LINES)

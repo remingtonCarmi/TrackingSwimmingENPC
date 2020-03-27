@@ -1,7 +1,7 @@
 """This code withdraws the distortion of an image."""
 import numpy as np
 import cv2
-from detection import select_points
+from src.detection import select_points
 
 
 class SelectionError(Exception):

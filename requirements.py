@@ -1,6 +1,5 @@
 """
 This code allows to download useful libraries to launch the project.
-@author: Victoria Brami, Maxime Brisinger, Theo Vincent
 """
 
 # import the os library
@@ -16,5 +15,3 @@ os.system("pip install opencv-python")
 if not os.path.exists("test"):
     os.makedirs("test")
 
-if not os.path.exists("videos"):
-    os.makedirs("videos")

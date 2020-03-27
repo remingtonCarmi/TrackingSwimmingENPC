@@ -1,4 +1,4 @@
-TITRE PROJET
+SWIMMER TRACKING
 
 Description:
 
@@ -11,11 +11,8 @@ Prerequisites & Installation:
 			On Mac OS you should run
 				pip install --user opencv-python==4.1.2.30
 
-	need two folders :
-		to create these folders you can run the command:
-			python requirements.py
-			
-		"videos" : in this folder, please put all the following videos :
+	need a database :
+		In "data\videos\", please put all the following videos :
 			100NL_FAF.mov.mp4
 			2004N_FHA.mov.mp4
 			Florent Manaudou Wins Men's 50m Freestyle Gold -- London 2012 Olympics.mp4
@@ -24,6 +21,11 @@ Prerequisites & Installation:
 			Rio Replay_ Women's 50m Freestyle Final.mp4
 			vid0.mp4
 			vid1.mp4
+
+	need a folder :
+		to create this folder you can run the command:
+			python requirements.py
+			
 		"test" : the folder where we save the tests done on the previous videos
 	
 Runing test tutorial:
@@ -34,4 +36,4 @@ Contributors:
 	Victoria Brami
 	Maxime Brisinger
 	Rémi Carmigniani
-	Théo	Vincent 
+	Théo Vincent 

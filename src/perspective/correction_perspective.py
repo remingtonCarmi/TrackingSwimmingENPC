@@ -13,10 +13,8 @@ from src.extract_image import extract_image_video
 # from extract_image import TimeError
 from src.detection import select_points, register_points
 
-vid0 = "data\\videos\\vid0"
 
-
-def correctPerspectiveImg(img, src, dst, testing, display):
+def correct_perspective_img(img, src, dst, testing, display):
     h, w = img.shape[:2]
     # we find the transform matrix M thanks to the matching of the four points
     M = cv2.getPerspectiveTransform(src, dst)
@@ -59,11 +57,10 @@ dst2 = np.float32([(1500, 0),
                   (0, 750)])
 
 
-list_images = extract_image_video(vid0, 0, 5, False)
-plt.imsave("imageTest1.jpg", list_images[0])
-    
-    
 if __name__ == "__main__":
+    vid0 = "..\\..\\data\\videos\\vid0"
+    list_images = extract_image_video(vid0, 0, 5, False)
+    plt.imsave("imageTest1.jpg", list_images[0])
     im = plt.imread("imageTest1.jpg")
     points = select_points(im)
     src = np.float32([(points[0][0], points[0][1]),
@@ -72,4 +69,4 @@ if __name__ == "__main__":
                       (points[2][0], points[2][1])
                       ])
     print(src)
-    new_im = correctPerspectiveImg(im, src, dst2, True, True)
+    new_im = correct_perspective_img(im, src, dst2, True, True)

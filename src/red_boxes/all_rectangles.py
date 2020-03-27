@@ -2,9 +2,12 @@
 To get the video with all the rectangle boxes at each time
 """
 
+from src.bgr_to_rgb import bgr_to_rgb
 
-from src.red_boxes.merge_lines import *
+from src.red_boxes.crop_lines import load_lines
+from src.red_boxes.merge_lines import merge
 from src.red_boxes.red_spectrum import *
+
 from src.calibration import make_video
 
 import cv2
@@ -21,6 +24,25 @@ def boxes1(name, margin):
     Returns:
 
     """
+    l_frames, list_y = load_lines(name, "vid0_clean", 0, 0)
+    frames = l_frames[0]
+    rectangles = []
+
+    for frame, y in zip(frames[1:-1], list_y[1:-1]):
+        frame = bgr_to_rgb(frame)[margin:-margin, :]
+        c, s = get_rectangle(keep_edges(frame, 2, False), [0, y])
+        rectangles.append([c, s])
+
+    image = merge(frames)
+    image = bgr_to_rgb(image)
+    plt.figure()
+    plt.imshow(image)
+    for r in rectangles:
+        draw_rectangle(r[0], r[1], True)
+    plt.show()
+
+
+def boxes_list(, margin):
     l_frames, list_y = load_lines(name, "vid0_clean", 0, 0)
     frames = l_frames[0]
     rectangles = []
@@ -128,7 +150,7 @@ def plot_length_rectangles(rect):
 
 
 if __name__ == "__main__":
-    FOLDER = "test\\red_boxes\\"
+    FOLDER = "..\\..\\test\\red_boxes\\"
     RECT = boxes("frame2.jpg", FOLDER, 8, 0, 0.2)
     # plot_length_rectangles(RECT)
 

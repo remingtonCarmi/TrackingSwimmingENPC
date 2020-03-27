@@ -7,11 +7,11 @@ import numpy as np
 from src.extract_image import extract_image_video
 from src.distortion.distortion import find_distortion_charact, clear_image, SelectionError
 from src.extract_image import TimeError
-from src.perspective.correction_perspective import correctPerspectiveImg
+from src.perspective.correction_perspective import correct_perspective_img
 from src.detection import select_points
 
 
-vid0 = "videos\\vid0"
+vid0 = "..\\data\\videos\\vid0"
 
 
 class VideoError(Exception):
@@ -81,14 +81,14 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
                   (1500, 750),
                   (0, 750)])
     print(src)
-    list_unwarp_images[0] =  correctPerspectiveImg(list_images[0], src, dst2, True, False)
+    list_unwarp_images[0] = correct_perspective_img(list_images[0], src, dst2, True, False)
     print("taille originale: ", list_images[0].shape)
     print("taille modifiée: ", list_unwarp_images[0].shape)
     
     list_clean_images[0] = clear_image(list_unwarp_images[0], charact)
 
     for index_image in range(1, nb_images):
-        list_unwarp_images[index_image] = correctPerspectiveImg(list_images[index_image], src, dst2, True, False)
+        list_unwarp_images[index_image] = correct_perspective_img(list_images[index_image], src, dst2, True, False)
         list_clean_images[index_image] = clear_image(list_unwarp_images[index_image], charact)
 
     name_video_clean = destination_video + name_video + "_clean.mp4"
