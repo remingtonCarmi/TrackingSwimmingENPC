@@ -42,23 +42,16 @@ def boxes1(name, margin):
     plt.show()
 
 
-def boxes_list(, margin):
-    l_frames, list_y = load_lines(name, "vid0_clean", 0, 0)
-    frames = l_frames[0]
+def boxes_list(list_lines, list_y, margin):
+    """ NOT FINISHED"""
     rectangles = []
-
-    for frame, y in zip(frames[1:-1], list_y[1:-1]):
+    for frame, y in zip(list_lines[1:-1], list_y[1:-1]):
         frame = bgr_to_rgb(frame)[margin:-margin, :]
         c, s = get_rectangle(keep_edges(frame, 2, False), [0, y])
         rectangles.append([c, s])
 
-    image = merge(frames)
-    image = bgr_to_rgb(image)
-    plt.figure()
-    plt.imshow(image)
-    for r in rectangles:
-        draw_rectangle(r[0], r[1], True)
-    plt.show()
+    # image = merge(frames)
+    # image = bgr_to_rgb(image)
 
 
 def boxes(name, folder, margin, time_begin, time_end):
