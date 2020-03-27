@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Feb 27 18:05:04 2020
-
-@author: Victoria
-"""
 
 import cv2
 import matplotlib.pyplot as plt
@@ -12,6 +6,13 @@ from src.extract_image import extract_image_video
 # from distortion import find_distortion_charact, clear_image, SelectionError
 # from extract_image import TimeError
 from src.detection import select_points, register_points
+
+
+
+def convertRGBtoBGR(I):
+    newI = I.copy()
+    newI[:, :, 0], newI[:, :, 2] = I[:, :, 2], I[:, :, 0]
+    return newI
 
 
 def correct_perspective_img(img, src, dst, testing, display):
@@ -57,12 +58,15 @@ dst2 = np.float32([(1500, 0),
                   (0, 750)])
 
 
+
+
 if __name__ == "__main__":
     vid0 = "..\\..\\data\\videos\\vid0"
     list_images = extract_image_video(vid0, 0, 5, False)
-    plt.imsave("imageTest1.jpg", list_images[0])
-    im = plt.imread("imageTest1.jpg")
+    cv2.imwrite("data\\image\\imageTest1.jpg", list_images[0])
+    im = cv2.imread("data\\image\\imageTest1.jpg")
     points = select_points(im)
+    im = convertRGBtoBGR(im)
     src = np.float32([(points[0][0], points[0][1]),
                       (points[1][0], points[1][1]),
                       (points[3][0], points[3][1]),
@@ -70,3 +74,4 @@ if __name__ == "__main__":
                       ])
     print(src)
     new_im = correct_perspective_img(im, src, dst2, True, True)
+
