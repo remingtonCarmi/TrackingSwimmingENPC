@@ -4,6 +4,7 @@ This code separates an image in several images, delimited by the water lines
 
 import os
 import shutil
+import numpy as np
 
 # from correction_perspective import correctPerspectiveImg
 from src.extract_image import extract_image_video
@@ -26,10 +27,11 @@ def slope_intercept(a, b):
     return k, ya - k*xa
 
 
-def crop(image, list_y):
+def crop(image, list_y, margin=0):
     """
     To vertically crop an images at given positions
     Args:
+        margin (integer):
         image(numpy array): image to crop
         list_y(list of integers): list of vertical positions where we crop
 
@@ -43,9 +45,8 @@ def crop(image, list_y):
     y_prev = list_y[0]
 
     for y in list_y[1:]:
-        images_crop.append(image[y_prev: y, :])
+        images_crop.append(image[y_prev + margin: y - margin, :])
         y_prev = y
-
     return images_crop
 
 
@@ -86,12 +87,12 @@ def load_lines(frame_name, folder, video_name, time_begin, time_end):
 
 
 # cleaned function, without imports and call of functions
-def crop_list(list_images, points):
+def crop_list(list_images, points, margin=0):
 
     list_images_crop = []
 
     for image in list_images:
-        list_images_crop.append(crop(image, points))
+        list_images_crop.append(crop(image, points, margin))
 
     return list_images_crop
 

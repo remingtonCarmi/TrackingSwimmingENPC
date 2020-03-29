@@ -61,12 +61,20 @@ def load_red(image, method=2):
         red_image = image[:, :, 0]
         green_image = image[:, :, 1]
         blue_image = image[:, :, 2]
-        image = image[:, :, 0] < -1
-        for i in range(image.shape[0] - 1):
-            for j in range(image.shape[1] - 1):
-                if 120 < red_image[i, j] < 190 and green_image[i, j] < 220 and blue_image[i, j] < 230:
-                    image[i, j] = 1
+        # image = image[:, :, 0] < -1
 
+        r1 = red_image < 190
+        r2 = red_image > 120
+        g = green_image < 220
+        b = blue_image < 230
+
+        image = ((1*r1 + 1*r2 + 1*g + 1*b) == 4)
+
+
+        # for i in range(image.shape[0] - 1):
+        #     for j in range(image.shape[1] - 1):
+        #         if 120 < red_image[i, j] < 190 and green_image[i, j] < 220 and blue_image[i, j] < 230:
+        #             image[i, j] = 1
     return image
 
 
@@ -131,20 +139,26 @@ def extreme_white_pixels(image):
         (x_min, y_min), (x_max, y_max) : 2 couples of coordinates
     """
 
-    y_min, x_min = image.shape[0] - 1, image.shape[1] - 1
-    y_max, x_max = 0, 0
-    for y in range(image.shape[0] - 1):
-        for x in range(image.shape[1] - 1):
-            if image[y, x]:
-                if y < y_min:
-                    y_min = y
-                if y > y_max:
-                    y_max = y
-                if x < x_min:
-                    x_min = x
-                if x > x_max:
-                    x_max = x
-    return [x_min, y_min], [x_max, y_max]
+    y_min, x_min = image.shape[0], image.shape[1] # remettre - 1
+    # y_max, x_max = 0, 0
+    # for y in range(image.shape[0] - 1):
+    #     for x in range(image.shape[1] - 1):
+    #         if image[y, x]:
+    #             if y < y_min:
+    #                 y_min = y
+    #             if y > y_max:
+    #                 y_max = y
+    #             if x < x_min:
+    #                 x_min = x
+    #             if x > x_max:
+    #                 x_max = x
+    a = np.linspace(0, x_min - 1, x_min)
+    b = np.linspace(0, y_min - 1, y_min)
+    c, d = np.meshgrid(a, b)
+    ci = c * image
+    di = d * image
+    return [int(np.min(ci + 10000*(ci == 0))), int(np.min(di + 10000*(di == 0)))], [int(np.max(ci)), int(np.max(di))]
+    # return [x_min, y_min], [x_max, y_max]
 
 
 def get_rectangle(gradient, offset=[0, 0]):
@@ -183,32 +197,35 @@ def draw_rectangle(corner, size, draw=True):
 
 
 if __name__ == "__main__":
-    NAME = "test//frame4501.jpg"
+    NAME = "..\\..\\Figure_2.jpg"
     if not os.path.exists(NAME):
         extract("videos\\Florent Manaudou Wins Men's 50m Freestyle Gold -- London 2012 Olympics", 180, 180, True,
                 "test\\")
 
-    # later, it will be calculated automatically
-    CROPS = [[400, 720, 210, 360],
-             [350, 720, 400, 550],
-             [400, 800, 600, 735],
-             [200, 1100, 800, 950],
-             [400, 900, 990, 1130],
-             [360, 900, 1200, 1310],
-             [300, 900, 1380, 1480],
-             [430, 800, 1580, 1680],
-             ]
+    # # later, it will be calculated automatically
+    # CROPS = [[400, 720, 210, 360],
+    #          [350, 720, 400, 550],
+    #          [400, 800, 600, 735],
+    #          [200, 1100, 800, 950],
+    #          [400, 900, 990, 1130],
+    #          [360, 900, 1200, 1310],
+    #          [300, 900, 1380, 1480],
+    #          [430, 800, 1580, 1680],
+    #          ]
 
-    for CROP in CROPS:
-        IMAGE = load_image(NAME, CROP)
-        plt.figure(figsize=FIG_SIZE)
-        plt.imshow(IMAGE)
-        print(np.shape(IMAGE))
-        CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, False))
-        draw_rectangle(CORNER, SIZE)
+    # for CROP in CROPS:
+    #     IMAGE = load_image(NAME, CROP)
+    #     plt.figure(figsize=FIG_SIZE)
+    #     plt.imshow(IMAGE)
+    #     print(np.shape(IMAGE))
+    #     CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, False))
+    #     draw_rectangle(CORNER, SIZE)
 
-    IMAGE = load_image(NAME, None)
-    plt.figure(figsize=FIG_SIZE)
+    IMAGE = load_image(NAME)
+    plt.figure()
     plt.imshow(IMAGE)
+    CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, True))
+
+    draw_rectangle(CORNER, SIZE)
 
     plt.show()

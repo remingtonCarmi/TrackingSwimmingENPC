@@ -63,8 +63,8 @@ dst2 = np.float32([(1500, 0),
 if __name__ == "__main__":
     vid0 = "..\\..\\data\\videos\\vid0"
     list_images = extract_image_video(vid0, 0, 5, False)
-    cv2.imwrite("data\\image\\imageTest1.jpg", list_images[0])
-    im = cv2.imread("data\\image\\imageTest1.jpg")
+    cv2.imwrite("..\\..\\test\\imageTest1.jpg", list_images[0])
+    im = cv2.imread("..\\..\\test\\imageTest1.jpg")
     points = select_points(im)
     im = convertRGBtoBGR(im)
     src = np.float32([(points[0][0], points[0][1]),

@@ -42,16 +42,22 @@ def boxes1(name, margin):
     plt.show()
 
 
-def boxes_list(list_lines, list_y, margin):
-    """ NOT FINISHED"""
+def boxes_list(list_lines, list_y):
     rectangles = []
-    for frame, y in zip(list_lines[1:-1], list_y[1:-1]):
-        frame = bgr_to_rgb(frame)[margin:-margin, :]
-        c, s = get_rectangle(keep_edges(frame, 2, False), [0, y])
-        rectangles.append([c, s])
+    for line, y in zip(list_lines, list_y):
+        c, s = get_rectangle(keep_edges(line, 2, False), [0, y])
+        if abs(s[0]) < np.shape(list_lines[0])[1] / 4:
+            rectangles.append([c, s])
+        else:
+            rectangles.append([c, [0, 0]])
+    return rectangles
 
-    # image = merge(frames)
-    # image = bgr_to_rgb(image)
+
+def boxes_list_images(list_images_crop, list_y):
+    list_rectangles = []
+    for list_lines in list_images_crop:
+        list_rectangles.append(boxes_list(list_lines, list_y))
+    return list_rectangles
 
 
 def boxes(name, folder, margin, time_begin, time_end):
@@ -69,7 +75,7 @@ def boxes(name, folder, margin, time_begin, time_end):
         rectangles(numpy array): information about red boxes plotted, for each water line, at each time.
             shape: 8*n*2*2, with n = number of frames in the video
             rectangles[i][j][0] : x,y (integers) : the coordinates of top left corner of the box
-            rectangles[i][j][0] : a,b (integers) : the x_size and the y_size of the box
+            rectangles[i][j][1] : a,b (integers) : the x_size and the y_size of the box
 
     """
     lines_per_frame, list_y = load_lines(name, folder, "vid0_clean", time_begin, time_end)
@@ -117,11 +123,12 @@ def boxes(name, folder, margin, time_begin, time_end):
     return rectangles
 
 
-def plot_length_rectangles(rect):
+def plot_length_rectangles(rect, element=1):
     """
     NOT FINISHED
     To plot graphs of characteristics of the boxes
     Args:
+        element:
         rect: list of information about rectangles, returns by the function "boxes", see below
 
     Returns:
@@ -130,13 +137,15 @@ def plot_length_rectangles(rect):
     """
     n = len(rect)
     x = np.arange(n)
-    print(n)
 
     # transform to a numpy array
     rect_np = np.array(rect)
 
     for j in range(8):
-        r = [rect_np[i, j, 1, 0] for i in range(n)]
+        if element == 1:
+            r = [rect_np[i, j, 1, 0] for i in range(n)]
+        elif element == 2:
+            r = [rect_np[i, j, 1, 0] * rect_np[i, j, 1, 1] for i in range(n)]
         plt.figure()
         plt.plot(x, r)
     plt.show()
