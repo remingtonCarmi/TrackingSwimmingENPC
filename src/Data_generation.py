@@ -6,15 +6,13 @@ import random as rd
 import numpy as np
 import cv2
 #from line_selection.corrected_images.horizontal_lines_detection import detect_lines, filterBetterLines
-from detection import select_points, register_points
 from extract_image import extract_image_video
-from perspective.correction_perspective import *
 from bgr_to_rgb import *
 from skimage import transform
 #import glob
 
-vid0 = "..\\data\\videos\\vid0_clean"
-vid1 = "..\\data\\videos\\100NL_FAF.mov_clean"
+vid0_clean = "..\\data\\videos\\vid0_clean"
+vid1_clean = "..\\data\\videos\\100NL_FAF.mov_clean"
 
 
 def rotateImage(I, rot1, zoom, display):
@@ -147,9 +145,9 @@ def shear_image(I, shear, display):
      Shears the image
      
      Args:
-         I (array)
-         shear (float)
-         display (bool)
+         I (array) : 
+         shear (float) : 
+         display (bool) : 
      
      """
      affine = transform.AffineTransform(shear = shear)
@@ -157,7 +155,7 @@ def shear_image(I, shear, display):
      return newI
 
 
-def generateImageData(I, index = 0, name_video = ' '):
+def generate_image_data(I, index = 0, name_video = ' '):
     """
     
     Generates and save new images that were slightly modified from the input one
@@ -219,12 +217,12 @@ def generateImageData(I, index = 0, name_video = ' '):
 if __name__ == "__main__":
     
     #We first extract random images from several different videos  
-    time_begin0 = 3
+    time_begin0 = 0
     time_end0 = 12
-    list_cleanImg0 = extract_image_video(vid0, time_begin0, time_end0, False)
-    time_begin1 = 7
-    time_end1 = 18
-    list_cleanImg1 = extract_image_video(vid1, time_begin1, time_end1, False)
+    list_cleanImg0 = extract_image_video(vid0_clean, time_begin0, time_end0, False)
+    time_begin1 = 0
+    time_end1 = 7
+    list_cleanImg1 = extract_image_video(vid1_clean, time_begin1, time_end1, False)
     
     time0 = time_end0 - time_begin0
     time1 = time_end1 - time_begin1
@@ -235,6 +233,6 @@ if __name__ == "__main__":
         index_image1 = rd.randint(0, time1 * 24)
         I0 = list_cleanImg0[index_image0]
         I1 = list_cleanImg0[index_image1]
-        generateImageData(I0, k, name_video = 'vid0')
-        generateImageData(I1, k, name_video = 'vid1')
+        generate_image_data(I0, k, name_video = 'vid0_clean')
+        generate_image_data(I1, k, name_video = 'vid1_clean')
         
