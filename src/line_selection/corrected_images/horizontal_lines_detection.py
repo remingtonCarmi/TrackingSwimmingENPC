@@ -7,12 +7,12 @@ Created on Sat Mar 21 13:07:13 2020
 
 import cv2
 import numpy as np
-from extract_image import extract_image_video
+from src.extract_image import extract_image_video
 from operator import itemgetter
 
 
 #Use of unwarped and undistored images
-list_cleanImg = extract_image_video("videos\\vid0_clean", 3, 5, False)
+list_cleanImg = extract_image_video("..\\data\\videos\\vid0_clean", 3, 5, False)
 cleanImg = list_cleanImg[0]
 
 
@@ -155,6 +155,45 @@ def detect_lines(I2, name_window : str,
 
 
 
+def lines_coherence(lines):
+    """
+    
+    Tests the coherence of the extracted lines, looking at the average 
+    space between them (calculates the difference between lines' ordinates)
+    
+    args:
+        lines (array) : range of sorted extracted lines from a corrected image
+    
+    returns:
+        max_error (float) : maximum difference between the distance between 
+                            two lines and the average distance
+        
+    """
+    dist_lines = []
+    
+    #stocking all the distances between lines
+    for i in range (len(lines)-1):
+        x1, y1 = lines[i][0]
+        x2, y2 = lines[i+1][0]
+        distance = y2 - y1
+        dist_lines.append(distance)
+        
+    # regard the closeness of the distances to the distances average   
+    dist_avg = np.mean(dist_lines)
+    error = dist_lines - dist_avg * np.ones(len(dist_lines))    
+    print("distance between lines: ", dist_lines)
+    
+    return np.max(error)
+
+
+
+
 if __name__ == "__main__":
+    
+    #Detection of the lines
     name_window = "Horizontal lines"
     newI, lines = detect_lines(cleanImg, name_window, 80)
+    
+    #calculating the regularities of the line
+    max_error = lines_coherence(lines)
+    print("Maximum line error: ", max_error)
