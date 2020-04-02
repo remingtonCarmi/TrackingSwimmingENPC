@@ -4,10 +4,9 @@ This code separates an image in several images, delimited by the water lines
 
 import os
 import shutil
-import numpy as np
 
 # from correction_perspective import correctPerspectiveImg
-from src.extract_image import extract_image_video
+from src.utils.extract_image import extract_image_video
 
 
 def slope_intercept(a, b):

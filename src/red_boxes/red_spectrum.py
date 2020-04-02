@@ -14,7 +14,7 @@ import scipy.ndimage as ndimage
 
 import os
 
-from src.extract_image import extract_image_video as extract
+from src.utils.extract_image import extract_image_video as extract
 
 plt.rcParams['image.cmap'] = 'gray'
 # by default, the grayscale images are displayed with the jet colormap: use grayscale instead

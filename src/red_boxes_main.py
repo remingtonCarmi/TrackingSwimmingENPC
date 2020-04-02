@@ -7,7 +7,7 @@ import numpy as np
 from time import time
 import matplotlib.pyplot as plt
 
-from src.extract_image import extract_image_video
+from src.utils.extract_image import extract_image_video
 from src.perspective.correction_perspective import correct_perspective_img
 
 from src.red_boxes.crop_lines import crop_list

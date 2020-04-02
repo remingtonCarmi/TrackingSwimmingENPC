@@ -1,7 +1,9 @@
 """
 This code allows the user to load an image that is in a video.
 """
+from pathlib import Path
 import cv2
+import os
 
 
 class TimeError(Exception):
@@ -31,6 +33,18 @@ class TimeError(Exception):
         return begin_message + end_message
 
 
+class VideoFindError(Exception):
+    """The exception class error to tell that the video has not been found."""
+    def __init__(self, video_name):
+        """
+        Construct the video_name.
+        """
+        self.video_name = video_name
+
+    def __repr__(self):
+        return "The video {} is was not found.".format(self.video_name)
+
+
 def extract_image_video(name_video, time_begin, time_end, register="False", destination=""):
     """
     Extracts number_image images from name_video and
@@ -55,7 +69,7 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
         list of the registered images.
     """
     # Compute parameters
-    video = cv2.VideoCapture('{}.mp4'.format(name_video))
+    video = cv2.VideoCapture(str(name_video))
     fps = video.get(cv2.CAP_PROP_FPS)
     frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
     nb_image_wait = int(time_begin * fps)
@@ -79,13 +93,16 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
     for i in range(nb_image_wait):
         (success, image) = video.read()
 
+    if not success:
+        raise VideoFindError(name_video)
     count_image = 1
     # We register the interesting images
     while success and count_image <= number_image:
         images.append(image)
         nb_count_image = nb_image_wait + count_image
         if register:
-            cv2.imwrite(destination + "frame%d.jpg" % nb_count_image, image)
+            end_path = "frame{}.jpg".format(nb_count_image)
+            cv2.imwrite(str(destination / end_path), image)
         (success, image) = video.read()
         print('Read a new frame: ', success)
         count_image += 1
@@ -95,6 +112,8 @@ def extract_image_video(name_video, time_begin, time_end, register="False", dest
 
 if __name__ == "__main__":
     try:
-        LIST_IMAGES = extract_image_video('..\\data\\videos\\vid0', 0, 0, True, "..\\test\\")
+        LIST_IMAGES = extract_image_video(Path("../../data/videos/vid0.mp4"), 0, 0, True, Path("../../output/test/"))
     except TimeError as time_error:
         print(time_error.__repr__())
+    except VideoFindError as find_error:
+        print(find_error.__repr__())
