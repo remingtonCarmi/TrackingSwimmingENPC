@@ -12,43 +12,18 @@ from src.calibration import make_video
 
 import cv2
 import numpy as np
-
-
-def boxes1(name, margin):
-    """
-    Useless for now
-    Args:
-        name:
-        margin:
-
-    Returns:
-
-    """
-    l_frames, list_y = load_lines(name, "vid0_clean", 0, 0)
-    frames = l_frames[0]
-    rectangles = []
-
-    for frame, y in zip(frames[1:-1], list_y[1:-1]):
-        frame = bgr_to_rgb(frame)[margin:-margin, :]
-        c, s = get_rectangle(keep_edges(frame, 2, False), [0, y])
-        rectangles.append([c, s])
-
-    image = merge(frames)
-    image = bgr_to_rgb(image)
-    plt.figure()
-    plt.imshow(image)
-    for r in rectangles:
-        draw_rectangle(r[0], r[1], True)
-    plt.show()
+from scipy.interpolate import spline
 
 
 def boxes_list(list_lines, list_y):
     rectangles = []
     for line, y in zip(list_lines, list_y):
         c, s = get_rectangle(keep_edges(line, 2, False), [0, y])
+        # if the box has a realistic size
         if abs(s[0]) < np.shape(list_lines[0])[1] / 4:
             rectangles.append([c, s])
         else:
+            print("Detection of swimmer from line " + str(list_y.index(y) + 1) + " failed.")
             rectangles.append([c, [0, 0]])
     return rectangles
 
@@ -60,7 +35,7 @@ def boxes_list_images(list_images_crop, list_y):
     return list_rectangles
 
 
-def boxes(name, folder, margin, time_begin, time_end):
+def make_video_boxes(name, folder, margin, time_begin, time_end):
     """
     From a given video (with corrected perspective), plot the red boxes containing the swimmers, and save this new video
 
@@ -123,11 +98,12 @@ def boxes(name, folder, margin, time_begin, time_end):
     return rectangles
 
 
-def plot_length_rectangles(rect, element=1):
+def plot_length_rectangles(rect, lines_to_plot, element="length",):
     """
     NOT FINISHED
     To plot graphs of characteristics of the boxes
     Args:
+        lines_to_plot:
         element:
         rect: list of information about rectangles, returns by the function "boxes", see below
 
@@ -140,21 +116,34 @@ def plot_length_rectangles(rect, element=1):
 
     # transform to a numpy array
     rect_np = np.array(rect)
-
+    frames_to_check = []
     for j in range(8):
-        if element == 1:
-            r = [rect_np[i, j, 1, 0] for i in range(n)]
-        elif element == 2:
+        if element == "area":
             r = [rect_np[i, j, 1, 0] * rect_np[i, j, 1, 1] for i in range(n)]
-        plt.figure()
-        plt.plot(x, r)
-    plt.show()
+        elif element == "height":
+            r = [rect_np[i, j, 1, 1] for i in range(n)]
+        elif element == "center":
+            r = [rect_np[i, j, 1, 0] + rect_np[i, j, 0, 0] for i in range(n)]
+        else:  # element = "length"
+            r = [rect_np[i, j, 1, 0] for i in range(n)]
+
+        if j in lines_to_plot:
+            for i in range(n):
+                if r[i] > 5000:
+                    frames_to_check.append(i)
+
+            x_new = np.linspace(min(x), max(x), 1000)
+            r_smooth = spline(x, r, x_new)
+            plt.figure()
+            plt.plot(x_new, r_smooth)
+
+    # plt.show()
+
+    return frames_to_check
 
 
 if __name__ == "__main__":
     FOLDER = "..\\..\\test\\red_boxes\\"
-    RECT = boxes("frame2.jpg", FOLDER, 8, 0, 0.2)
+    RECT = make_video_boxes("frame2.jpg", FOLDER, 8, 0, 0.2)
     # plot_length_rectangles(RECT)
-
-
 

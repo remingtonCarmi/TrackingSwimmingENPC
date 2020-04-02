@@ -19,9 +19,7 @@ from src.extract_image import extract_image_video as extract
 plt.rcParams['image.cmap'] = 'gray'
 # by default, the grayscale images are displayed with the jet colormap: use grayscale instead
 
-THRESHOLD = 0.1
-THRESHOLD_2 = 18  # a preciser
-FIG_SIZE = (10, 10)
+THRESHOLD_2 = 8  # a preciser
 
 
 def load_image(name, crop=None):
@@ -70,7 +68,6 @@ def load_red(image, method=2):
 
         image = ((1*r1 + 1*r2 + 1*g + 1*b) == 4)
 
-
         # for i in range(image.shape[0] - 1):
         #     for j in range(image.shape[1] - 1):
         #         if 120 < red_image[i, j] < 190 and green_image[i, j] < 220 and blue_image[i, j] < 230:
@@ -113,17 +110,15 @@ def keep_edges(image, method=2, figures=False):
     Returns:
         threshold_gradient (numpy array): image after threshold the gradient
     """
-    red_image = load_red(image, method)
+    red_image = load_red(image, method) * 255
 
-    threshold_image = (red_image > THRESHOLD) * 255
-
-    gradient = compute_gradient(threshold_image, 3)
+    gradient = compute_gradient(red_image, 3)
     threshold_gradient = gradient > THRESHOLD_2
 
     if figures:
-        plt.figure(figsize=FIG_SIZE)
+        plt.figure()
         plt.imshow(gradient)
-        plt.figure(figsize=FIG_SIZE)
+        plt.figure()
         plt.imshow(threshold_gradient)
     return threshold_gradient
 
@@ -139,26 +134,14 @@ def extreme_white_pixels(image):
         (x_min, y_min), (x_max, y_max) : 2 couples of coordinates
     """
 
-    y_min, x_min = image.shape[0], image.shape[1] # remettre - 1
-    # y_max, x_max = 0, 0
-    # for y in range(image.shape[0] - 1):
-    #     for x in range(image.shape[1] - 1):
-    #         if image[y, x]:
-    #             if y < y_min:
-    #                 y_min = y
-    #             if y > y_max:
-    #                 y_max = y
-    #             if x < x_min:
-    #                 x_min = x
-    #             if x > x_max:
-    #                 x_max = x
+    y_min, x_min = image.shape[0], image.shape[1]
+
     a = np.linspace(0, x_min - 1, x_min)
     b = np.linspace(0, y_min - 1, y_min)
     c, d = np.meshgrid(a, b)
     ci = c * image
     di = d * image
     return [int(np.min(ci + 10000*(ci == 0))), int(np.min(di + 10000*(di == 0)))], [int(np.max(ci)), int(np.max(di))]
-    # return [x_min, y_min], [x_max, y_max]
 
 
 def get_rectangle(gradient, offset=[0, 0]):
@@ -197,7 +180,7 @@ def draw_rectangle(corner, size, draw=True):
 
 
 if __name__ == "__main__":
-    NAME = "..\\..\\Figure_2.jpg"
+    NAME = "..\\..\\test\\Figure_2.jpg"
     if not os.path.exists(NAME):
         extract("videos\\Florent Manaudou Wins Men's 50m Freestyle Gold -- London 2012 Olympics", 180, 180, True,
                 "test\\")
@@ -215,7 +198,7 @@ if __name__ == "__main__":
 
     # for CROP in CROPS:
     #     IMAGE = load_image(NAME, CROP)
-    #     plt.figure(figsize=FIG_SIZE)
+    #     plt.figure()
     #     plt.imshow(IMAGE)
     #     print(np.shape(IMAGE))
     #     CORNER, SIZE = get_rectangle(keep_edges(IMAGE, 2, False))
