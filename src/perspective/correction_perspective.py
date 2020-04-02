@@ -2,11 +2,10 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from src.extract_image import extract_image_video
+from src.utils.extract_image import extract_image_video
 # from distortion import find_distortion_charact, clear_image, SelectionError
 # from extract_image import TimeError
-from src.detection import select_points, register_points
-
+from src.detection import select_points
 
 
 def convertRGBtoBGR(I):

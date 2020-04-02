@@ -7,7 +7,7 @@ Created on Sat Mar 21 13:07:13 2020
 
 import cv2
 import numpy as np
-from src.extract_image import extract_image_video
+from src.utils.extract_image import extract_image_video
 from operator import itemgetter
 
 
