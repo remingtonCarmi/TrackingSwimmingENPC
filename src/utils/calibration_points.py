@@ -7,8 +7,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QMe
 from PyQt5.QtWidgets import QLabel
 
 
-class MessageToPrint:
+class MessageAndPoints:
     def __init__(self):
+        self.points = []
+        self.width_line = 2.5
+        self.nb_points = 1
+
         self.finished = False
         self.nb_lines = 11
         self.lengths = [0, 5, 15, 35, 45, 50]
@@ -16,11 +20,16 @@ class MessageToPrint:
         self.message = np.array((self.nb_lines, self.nb_lengths))
 
         self.current_nb_line = 0
-        self.current_index_lenght = 0
+        self.current_index_length = 0
 
     def get_message(self):
-        begin_message = "Select the point on the line {} ".format(self.current_nb_line)
-        end_message = "at the lenght {} meters.".format(self.lengths[self.current_index_lenght])
+        if self.finished:
+            begin_message = ""
+            end_message = "The points selection is finished, please close the window"
+        else:
+            begin_message = "Select the point on line {} ".format(self.current_nb_line)
+            end_message = "at length {} meters.".format(self.lengths[self.current_index_length])
+
         return begin_message + end_message
 
     def next(self):
@@ -28,62 +37,79 @@ class MessageToPrint:
 
         if self.current_nb_line == self.nb_lines:
             self.current_nb_line = 0
-            self.current_index_lenght += 1
+            self.current_index_length += 1
 
-        if self.current_index_lenght == self.nb_lengths:
+        if self.current_index_length == self.nb_lengths:
             self.finished = True
-
-        return self.get_message()
 
     def next_length(self):
-        self.current_index_lenght += 1
+        if not self.finished:
+            self.current_index_length += 1
 
-        if self.current_index_lenght == self.nb_lengths:
-            self.finished = True
+            if self.current_index_length == self.nb_lengths:
+                self.current_nb_line = self.nb_lines
+                self.finished = True
 
         return self.get_message()
 
     def back(self):
-        self.current_nb_line -= 1
-
-        if self.current_nb_line < 0:
+        if self.current_index_length >= self.nb_lengths:
+            self.finished = False
+            self.current_index_length = self.nb_lengths - 1
             self.current_nb_line = self.nb_lines - 1
-            self.current_index_lenght -= 1
 
-        # If it was the first point to select
-        if self.current_index_lenght < 0:
-            self.current_index_lenght = 0
+        else:
+            self.current_nb_line -= 1
 
-        return self.get_message()
+            if self.current_nb_line < 0:
+                self.current_nb_line = self.nb_lines - 1
+                self.current_index_length -= 1
+
+            # If it was the first point selected
+            if self.current_index_length < 0:
+                self.current_nb_line = 0
+                self.current_index_length = 0
+
+    def add_points(self, points):
+        for (point2d_x, poind2d_y) in points:
+            point3d_x = self.width_line * self.current_nb_line
+            point3d_y = self.lengths[self.current_index_length]
+            self.points.append([(point2d_x, poind2d_y), (point3d_x, point3d_y, 0)])
+        self.next()
+
+    def erase_point(self):
+        self.back()
+        if len(self.points) > 0:
+            previous_point = self.points[-1][1]
+            expected_previous_x = self.width_line * self.current_nb_line
+            expected_previous_y = self.lengths[self.current_index_length]
+            if previous_point == (expected_previous_x, expected_previous_y, 0):
+                self.points.pop()
 
 
-def one_selection(image, nb_points, points, label, messages):
-    points.append(select_points(image, nb_points))
-    label.setText(messages.next())
+def one_selection(image, label, messages_points_manager):
+    if not messages_points_manager.finished:
+        messages_points_manager.add_points(select_points(image, messages_points_manager.nb_points))
+    label.setText(messages_points_manager.get_message())
 
 
-def withdraw_point(points, label, messages):
-    points.pop()
-    label.setText(messages.back())
+def withdraw_point(label, messages_points_manager):
+    messages_points_manager.erase_point()
+    label.setText(messages_points_manager.get_message())
 
 
-def skip_length(label, messages):
-    label.setText(messages.next_length())
+def skip_length(label, messages_points_manager):
+    label.setText(messages_points_manager.next_length())
 
 
-def show_points(points):
+def show_points(messages_points_manager):
     alert = QMessageBox()
-    alert.setText(str(points))
+    alert.setText(str(messages_points_manager.points))
     alert.exec_()
 
 
-def next_point(label, message):
-    label.setText(message)
-
-
 def define_points(image):
-    point_3d = []
-    message = MessageToPrint()
+    message_points = MessageAndPoints()
 
     # Set application, window and layouts
     app = QApplication([])
@@ -96,13 +122,13 @@ def define_points(image):
     withdraw_button = QPushButton('Withdraw last selection')
     skip_button = QPushButton('Skip length')
     show_button = QPushButton('Show points')
-    information = QLabel(message.get_message())
+    information = QLabel(message_points.get_message())
 
     # Set connections
-    identify_button.clicked.connect(functools.partial(one_selection, image, 2, point_3d, information, message))
-    withdraw_button.clicked.connect(functools.partial(withdraw_point, point_3d, information, message))
-    skip_button.clicked.connect(functools.partial(skip_length, information, message))
-    show_button.clicked.connect(functools.partial(show_points, point_3d))
+    identify_button.clicked.connect(functools.partial(one_selection, image, information, message_points))
+    withdraw_button.clicked.connect(functools.partial(withdraw_point, information, message_points))
+    skip_button.clicked.connect(functools.partial(skip_length, information, message_points))
+    show_button.clicked.connect(functools.partial(show_points, message_points))
     layout_button.addWidget(identify_button)
     layout_button.addWidget(withdraw_button)
     layout_button.addWidget(skip_button)
