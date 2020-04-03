@@ -19,3 +19,6 @@ https://towardsdatascience.com/edge-detection-in-python-a3c263a13e03
 
 Dimension of an Olympic Swimming pool:
 https://www.fina.org/sites/default/files/2017_2021_facilities_06102017_full_medium.pdf
+
+To create an application to correct the perspective:
+https://doc.qt.io/qt-5/qtwidgets-layouts-basiclayouts-example.html
