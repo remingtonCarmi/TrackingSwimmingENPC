@@ -4,7 +4,7 @@ from src.utils.point_selection import select_points
 from pathlib import Path
 import cv2
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QMessageBox, QVBoxLayout
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QGridLayout
 
 
 class MessageAndPoints:
@@ -78,8 +78,6 @@ class MessageAndPoints:
             new_point = np.array([[point2d_x, poind2d_y, 1], [point3d_x, point3d_y, 0]])
             self.points[self.current_nb_line, self.current_index_length] = new_point
 
-        self.next()
-
     def erase_point(self):
         self.back()
         if not self.empty:
@@ -93,36 +91,51 @@ class MessageAndPoints:
             if self.current_index_length == 0 and self.current_nb_line == 0:
                 self.empty = True
 
-    def show_points(self):
-        begin_message = "The selected points are : \n"
-        length_message = "             "
-        for index_length in range(self.nb_lengths):
-            length_message += "   {} metres       ".format(self.lengths[index_length])
-        length_message += "\n"
+    def show_points(self, grid_points, erase=False):
+        current_length = self.current_index_length + 1
+        current_line = self.current_nb_line + 1
+        qlabel = grid_points.itemAtPosition(current_line, current_length)
 
-        message = ""
-        for index_line in range(self.nb_lines):
-            message += "Line {} :".format(index_line)
-            for index_length in range(self.nb_lengths):
-                message += "{}".format(self.points[index_line, index_length, 0, : 2])
-                message += "{}; ".format(self.points[index_line, index_length, 1])
-            message += "\n"
-        print(message)
+        point = self.points[self.current_nb_line, self.current_index_length]
+        point_2d = "{},".format(point[0, 0: 2])
+        point_3d = " {};".format(point[1])
+        qlabel.widget().setText(point_2d + point_3d)
 
-        return begin_message + length_message + message
+        if not erase:
+            self.next()
 
 
-def one_selection(image, label, messages_points_manager, label_points):
+def initialize_grid(grid_points, messages_points_manager):
+    nb_lengths = messages_points_manager.nb_lengths
+    lengths = messages_points_manager.lengths
+    nb_lines = messages_points_manager.nb_lines
+
+    for index_line in range(nb_lines):
+        for index_length in range(nb_lengths):
+            grid_points.addWidget(QLabel("[0. 0.], [0. 0. 0.];"), index_line + 1, index_length + 1)
+
+    for index_length in range(1, nb_lengths + 1):
+        grid_points.addWidget(QLabel("Length {} meters".format(lengths[index_length - 1])), 0, index_length)
+
+    for index_line in range(1, nb_lines + 1):
+        grid_points.addWidget(QLabel("Line {}".format(index_line - 1)), index_line, 0)
+
+
+def one_selection(image, label, messages_points_manager, grid_points):
     if not messages_points_manager.finished:
         messages_points_manager.add_points(select_points(image, messages_points_manager.nb_points))
+    # Update points
+    messages_points_manager.show_points(grid_points)
+    # Update instructions
     label.setText(messages_points_manager.get_message())
-    label_points.setText(messages_points_manager.show_points())
 
 
-def withdraw_point(label, messages_points_manager, label_points):
+def withdraw_point(label, messages_points_manager, grid_points):
     messages_points_manager.erase_point()
+    # Update points
+    messages_points_manager.show_points(grid_points, erase=True)
+    # Update instructions
     label.setText(messages_points_manager.get_message())
-    label_points.setText(messages_points_manager.show_points())
 
 
 def skip_length(label, messages_points_manager):
@@ -137,24 +150,25 @@ def define_points(image):
     window = QWidget()
     layout_button = QHBoxLayout()
     layout = QVBoxLayout()
+    grid = QGridLayout()
 
-    # Set buttons
+    # Set buttons and labels
     identify_button = QPushButton('Identify the point')
     withdraw_button = QPushButton('Go one step back and erase')
     skip_button = QPushButton('Skip length')
-    points_label = QLabel(message_points.show_points())
-    information = QLabel(message_points.get_message())
+    instructions = QLabel(message_points.get_message())
+    initialize_grid(grid, message_points)
 
     # Set connections
-    identify_button.clicked.connect(functools.partial(one_selection, image, information, message_points, points_label))
-    withdraw_button.clicked.connect(functools.partial(withdraw_point, information, message_points, points_label))
-    skip_button.clicked.connect(functools.partial(skip_length, information, message_points))
+    identify_button.clicked.connect(functools.partial(one_selection, image, instructions, message_points, grid))
+    withdraw_button.clicked.connect(functools.partial(withdraw_point, instructions, message_points, grid))
+    skip_button.clicked.connect(functools.partial(skip_length, instructions, message_points))
     layout_button.addWidget(identify_button)
     layout_button.addWidget(withdraw_button)
     layout_button.addWidget(skip_button)
     layout.addLayout(layout_button)
-    layout.addWidget(information)
-    layout.addWidget(points_label)
+    layout.addWidget(instructions)
+    layout.addLayout(grid)
 
     # Show the buttons
     window.setLayout(layout)

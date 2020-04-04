@@ -2,10 +2,14 @@ Bibliography :
 
 For perspective and distortion : http://www.imagemagick.org/Usage/distorts/#perspective_projection
 
+https://www.pyimagesearch.com/2014/08/25/4-point-opencv-getperspective-transform-example/
+
 To get the points : https://www.pyimagesearch.com/2015/03/09/capturing-mouse-click-events-with-python-and-opencv/
 
 For distortion:
 https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_calib3d/py_calibration/py_calibration.html
+
+https://www.learnopencv.com/camera-calibration-using-opencv/
 
 Image processing : TP1-2018-TRIVA : Cours de TRIVA, David Picard
 
