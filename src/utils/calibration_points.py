@@ -22,11 +22,13 @@ class MessageAndPoints:
             point3d_y = self.lengths[index_length]
             new_point = np.array([[point2d_x, poind2d_y, 1], [point3d_x, point3d_y, 0]])
             self.points[index_line, index_length] = new_point
+        if len(points) == 0:
+            self.points[index_line, index_length] = np.zeros((2, 3))
 
     def update_button(self, button, index_line, index_length):
         point = self.points[index_line, index_length]
         point_2d = "{},".format(point[0, 0: 2])
-        point_3d = " {};".format(point[1])
+        point_3d = " {}".format(point[1])
         button.setText(point_2d + point_3d)
 
 
@@ -37,7 +39,7 @@ def initialize_grid(grid_points, manager, image):
 
     for idx_line in range(nb_lines):
         for idx_length in range(nb_lengths):
-            push_but = QPushButton("[0. 0.], [0. 0. 0.];")
+            push_but = QPushButton("[0. 0.], [0. 0. 0.]")
             grid_points.addWidget(push_but, idx_line + 1, idx_length + 1)
             push_but.clicked.connect(functools.partial(one_selection, image, manager, push_but, idx_line, idx_length))
 
