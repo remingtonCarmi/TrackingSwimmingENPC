@@ -1,45 +1,68 @@
 
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from src.utils.extract_image import extract_image_video
-# from distortion import find_distortion_charact, clear_image, SelectionError
-# from extract_image import TimeError
 from src.detection import select_points
+from src.bgr_to_rgb import bgr_to_rgb
 
-
-def convertRGBtoBGR(I):
-    newI = I.copy()
-    newI[:, :, 0], newI[:, :, 2] = I[:, :, 2], I[:, :, 0]
-    return newI
 
 
 def correct_perspective_img(img, src, dst, testing, display):
+    """
+    
+    Affects four selected points in an input image to four other chosen in order 
+    to obtain an image with corrected perspective
+    
+    Args:
+        img (array): the input image
+        src (list of four tuples): the four points selected on the input image to correct perspective
+        dst (list of four tuples): the coordinates of the four points selected in the output image
+        testing (bool)
+        display (bool): if we want to display the image or not
+    Returns
+        the perspective-corrected image
+        
+    """
     h, w = img.shape[:2]
-    # we find the transform matrix M thanks to the matching of the four points
-    M = cv2.getPerspectiveTransform(src, dst)
-    # warp the image to a top-down view
-    warped = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LINEAR)
-
-    if testing:
-        if display:
-            f, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
-            f.subplots_adjust(hspace=.2, wspace=.05)
-            ax1.imshow(img)
-            x = [src[0][0], src[2][0], src[3][0], src[1][0], src[0][0]]
-            y = [src[0][1], src[2][1], src[3][1], src[1][1], src[0][1]]
-            ax1.plot(x, y, color='red', alpha=0.4, linewidth=3, solid_capstyle='round', zorder=2)
-            ax1.set_ylim([h, 0])
-            ax1.set_xlim([0, w])
-            ax1.set_title('Original Image', fontsize=30)
-            ax2.imshow(cv2.flip(warped, 1))
-            ax2.set_title('Corrected Image', fontsize=30)
-            plt.show()
-            return cv2.flip(warped, 1)
+    
+    #we verify the pointed points are relevant (for example the lines formed must be parallel ie norm of crossing is null)
+    point1 = src[0]
+    point2 = src[1]
+    point3 = src[2]
+    point4 = src[3]
+    vect1 = point1 - point2
+    vect2 = point3 - point4
+    vect3 = point1 - point4
+    vect4 = point1 - point3
+    norm12 = abs(vect1[0]*vect2[1] - vect2[0]*vect1[1])
+    norm34 = abs(vect3[0]*vect4[1] - vect3[0]*vect4[1])
+    
+    if norm12 < 0.01 and norm34 < 0.01:
+        # we find the transform matrix M thanks to the matching of the four points
+        M = cv2.getPerspectiveTransform(src, dst)
+        # warp the image to a top-down view
+        warped = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LINEAR)
+    
+        if testing:
+            if display:
+                f, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 10))
+                f.subplots_adjust(hspace=.2, wspace=.05)
+                ax1.imshow(img)
+                x = [src[0][0], src[2][0], src[3][0], src[1][0], src[0][0]]
+                y = [src[0][1], src[2][1], src[3][1], src[1][1], src[0][1]]
+                ax1.plot(x, y, color='red', alpha=0.4, linewidth=3, solid_capstyle='round', zorder=2)
+                ax1.set_ylim([h, 0])
+                ax1.set_xlim([0, w])
+                ax1.set_title('Original Image', fontsize=30)
+                ax2.imshow(cv2.flip(warped, 1))
+                ax2.set_title('Corrected Image', fontsize=30)
+                plt.show()
+                return cv2.flip(warped, 1)
+            else:
+                return cv2.flip(warped, 1)
         else:
-            return cv2.flip(warped, 1)
-    else:
-        return warped, M
+            return warped, M
     
 
 # We will first manually select the source points 
@@ -65,12 +88,13 @@ if __name__ == "__main__":
     cv2.imwrite("..\\..\\test\\imageTest1.jpg", list_images[0])
     im = cv2.imread("..\\..\\test\\imageTest1.jpg")
     points = select_points(im)
-    im = convertRGBtoBGR(im)
+    im = bgr_to_rgb(im)
     src = np.float32([(points[0][0], points[0][1]),
                       (points[1][0], points[1][1]),
                       (points[3][0], points[3][1]),
                       (points[2][0], points[2][1])
                       ])
     print(src)
-    new_im = correct_perspective_img(im, src, dst2, True, True)
+    print("Select four points to unwarp the perspective: they must form a quadrangle")
+    new_im = correct_perspective_img(im, src, dst2, True, False)
 
