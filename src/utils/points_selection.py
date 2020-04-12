@@ -1,14 +1,14 @@
 from pathlib import Path
 import numpy as np
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
 from PyQt5.QtGui import QPainter, QPixmap, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
 import cv2
 
 
-class ImageSelection(QWidget):
+class ImageSelection(QLabel):
 
-    def __init__(self, list_points):
+    def __init__(self, list_points, pix_map, size):
         super().__init__()
         self.setMouseTracking(True)
         self.setFocusPolicy(True)
@@ -21,13 +21,18 @@ class ImageSelection(QWidget):
         self.top_left = QPoint(0, 0)
         self.bottom_right = QPoint(0, 0)
         self.rectangle = QRectF(self.top_left, self.bottom_right)
-        self.finish = False
+        self.pix_map = pix_map
+        self.size = size
+        # self.setAttribute(Qt.WA_TranslucentBackground, True)
+        # self.setAutoFillBackground(False)
+        self.setFixedSize(size)
 
     def paintEvent(self, e):
+        super().paintEvent(e)
         painter = QPainter()
-        painter.begin(self)
+        self.pStart = painter.begin(self)
         self.draw_points(painter)
-        painter.end()
+        self.pEnd = painter.end()
 
     def mouseMoveEvent(self, event):  # evenement mouseMove
         self.cursorPos = event.pos()  # on stocke la position du curseur
@@ -145,14 +150,13 @@ if __name__ == "__main__":
     # Set application, window and layouts
     app = QApplication([])
     window = QWidget()
-    layout = QVBoxLayout()
+    layout = QHBoxLayout()
 
     # Set image selection
     pix_map = array_to_qpixmap(IMAGE)
-    label = QLabel()
-    label.setPixmap(pix_map)
-    label.show()
-    image_selection = ImageSelection(LIST_POINTS)
+    screen_size = QDesktopWidget().screenGeometry().size()
+    image_selection = ImageSelection(LIST_POINTS, pix_map, screen_size)
+    image_selection.setPixmap(pix_map.scaled(3 * screen_size / 4, Qt.IgnoreAspectRatio))
 
     # Add widget to layout
     layout.addWidget(image_selection)
@@ -161,9 +165,5 @@ if __name__ == "__main__":
     # Add layout to window
     window.setLayout(layout)
     window.showMaximized()
-    # window.resize(window.maximumWidth(), window.maximumHeight())
-    window.show()
     app.exec_()
 
-    # pixmap = QPixmap('../../data/images/raw_images/100NL_FAF.mov_frame126.jpg')
-    # window.setPixmap(pixmap)
