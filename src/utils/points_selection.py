@@ -1,90 +1,83 @@
 from pathlib import Path
 import numpy as np
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
-from PyQt5.QtGui import QPainter, QPixmap, QImage
-from PyQt5.QtCore import Qt, QPoint, QRectF
+from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import Qt, QPoint, QRect
 import cv2
 
 
 class ImageSelection(QLabel):
-
     def __init__(self, list_points, pix_map, size):
         super().__init__()
+
+        # Tracking
         self.setMouseTracking(True)
         self.setFocusPolicy(True)
+
+        # Points management
         self.final_list_points = list_points
         self.list_point = np.zeros(20, dtype=QPoint)
         self.nb_points = 0
         self.cursorPos = QPoint(0, 0)
         self.pStart = QPoint(0, 0)
         self.pEnd = QPoint(0, 0)
-        self.top_left = QPoint(0, 0)
-        self.bottom_right = QPoint(0, 0)
-        self.rectangle = QRectF(self.top_left, self.bottom_right)
+
+        # Background management
         self.pix_map = pix_map
         self.size = size
-        # self.setAttribute(Qt.WA_TranslucentBackground, True)
-        # self.setAutoFillBackground(False)
         self.setFixedSize(size)
 
-    def paintEvent(self, e):
-        super().paintEvent(e)
+    def paintEvent(self, event):
+        super().paintEvent(event)
         painter = QPainter()
-        self.pStart = painter.begin(self)
+        painter.begin(self)
         self.draw_points(painter)
-        self.pEnd = painter.end()
+        painter.end()
 
-    def mouseMoveEvent(self, event):  # evenement mouseMove
-        self.cursorPos = event.pos()  # on stocke la position du curseur
+    def mouseMoveEvent(self, event):
+        self.cursorPos = event.pos()
         self.update()
 
-    def mousePressEvent(self, event):  # evenement mousePress
+    def mousePressEvent(self, event):
         self.pStart = event.pos()
 
-    def mouseReleaseEvent(self, event):  # evenement mouseRelease
+    def mouseReleaseEvent(self, event):
         self.pEnd = event.pos()
         self.update_points()
         self.update()
 
     def keyReleaseEvent(self, event):
+        # If control is pressed and a point has been selected
         if self.nb_points > 0 and event.key() == Qt.Key_Control:
             self.nb_points -= 1
+        # If space is pressed
         if event.key() == Qt.Key_Space:
+            super().close()
             self.close()
         self.update()
 
-    def closeEvent(self, event):
-        self.final_list_points = self.list_point
-
     def update_points(self):
-        if not self.pStart.isNull():
-            if self.pStart == self.pEnd:
-                self.list_point[self.nb_points] = self.pStart
-                self.nb_points += 1
-            else:
-                self.top_left.setX(min(self.pStart.x(), self.pEnd.x()))
-                self.top_left.setY(min(self.pStart.y(), self.pEnd.y()))
-                self.bottom_right.setX(max(self.pStart.x(), self.pEnd.x()))
-                self.bottom_right.setY(max(self.pStart.y(), self.pEnd.y()))
-                self.rectangle = QRectF(self.top_left, self.bottom_right)
+        # Add a point if the mouse did not move
+        if self.pStart == self.pEnd:
+            self.list_point[self.nb_points] = self.pStart
+            self.nb_points += 1
+        # Zoom if the mouse mouved
+        else:
+            self.zoom()
 
     def draw_points(self, q_painter):
+        # Draw a circle that follows the mouse
         q_painter.setPen(Qt.black)
-
         if not self.cursorPos.isNull():
             q_painter.drawEllipse(self.cursorPos.x() - 2, self.cursorPos.y() - 2, 4, 4)
 
+        # Draw the points
         q_painter.setPen(Qt.red)
-
         for index_point in range(self.nb_points):
             x = self.list_point[index_point].x()
             y = self.list_point[index_point].y()
             q_painter.drawEllipse(x - 2, y - 2, 4, 4)
-
-        q_painter.setPen(Qt.blue)
-
-        if not self.rectangle.isNull():
-            q_painter.drawRect(self.rectangle)
 
     def get_points(self):
         points = np.zeros((self.nb_points, 2))
@@ -96,21 +89,18 @@ class ImageSelection(QLabel):
 
         return points
 
-
-class MainWidget(QWidget):
-
-    def __init__(self):
-        super().__init__()
-
-    def mouseMoveEvent(self, event):  # evenement mouseMove
-        self.update()
-        print("vv")
-
-    def keyReleaseEvent(self, event):
-        print("aa")
-        if event.key() == Qt.Key_Space:
-            self.close()
-        self.update()
+    def zoom(self):
+        # Compute the rectangle for the zoom
+        top_left = QPoint(0, 0)
+        bottom_right = QPoint(0, 0)
+        top_left.setX(min(self.pStart.x(), self.pEnd.x()))
+        top_left.setY(min(self.pStart.y(), self.pEnd.y()))
+        bottom_right.setX(max(self.pStart.x(), self.pEnd.x()))
+        bottom_right.setY(max(self.pStart.y(), self.pEnd.y()))
+        rectangle = QRect(top_left, bottom_right)
+        print(rectangle)
+        zoom_pix = self.pix_map.copy(rectangle)
+        self.setPixmap(zoom_pix.scaled(self.size, Qt.IgnoreAspectRatio))
 
 
 def initialize_points(main_layout, height):
@@ -142,27 +132,27 @@ def array_to_qpixmap(image):
 
 
 if __name__ == "__main__":
+    # Get the array
     LIST_POINTS = np.array([1])
     ROOT_IMAGE = Path('../../data/images/raw_images/vid0_frame126.jpg')
-    # print(os.listdir(ROOT_IMAGE))
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
-    # Set application, window and layouts
+    # Set application, window and layout
     app = QApplication([])
     window = QWidget()
     layout = QHBoxLayout()
 
-    # Set image selection
+    # Set image selection zone
     pix_map = array_to_qpixmap(IMAGE)
     screen_size = QDesktopWidget().screenGeometry().size()
     image_selection = ImageSelection(LIST_POINTS, pix_map, screen_size)
-    image_selection.setPixmap(pix_map.scaled(3 * screen_size / 4, Qt.IgnoreAspectRatio))
+    image_selection.setPixmap(pix_map.scaled(screen_size, Qt.IgnoreAspectRatio))
 
-    # Add widget to layout
+    # Add widgets to layout
     layout.addWidget(image_selection)
-    initialize_points(layout, window.height())
+    # initialize_points(layout, window.height())
 
-    # Add layout to window
+    # Add layout to window and show the window
     window.setLayout(layout)
     window.showMaximized()
     app.exec_()
