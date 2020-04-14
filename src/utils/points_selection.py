@@ -3,12 +3,12 @@ import numpy as np
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
 from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
 from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import Qt, QPoint, QRect
+from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
 
 
 class ImageSelection(QLabel):
-    def __init__(self, list_points, pix_map, size):
+    def __init__(self, pix_map):
         super().__init__()
 
         # Tracking
@@ -24,12 +24,12 @@ class ImageSelection(QLabel):
 
         # Background management
         self.pix_map = pix_map
-        self.size = size
-        self.setFixedSize(size)
+        self.setFixedSize(pix_map.size())
         top_left = QPoint()
-        bottom_right = QPoint(size.width() - 1, size.height() - 1)
+        bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
         self.rect_in_image = QRect(top_left, bottom_right)
         self.zoom_in = False
+        self.setPixmap(pix_map)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -66,13 +66,13 @@ class ImageSelection(QLabel):
             # Withdraw the zoom and add the point
             if self.zoom_in:
                 # Withdraw the zoom
-                self.setPixmap(self.pix_map.scaled(self.size, Qt.IgnoreAspectRatio))
+                self.setPixmap(self.pix_map.scaled(self.size(), Qt.IgnoreAspectRatio))
                 self.zoom_in = False
                 # Add the point
                 self.list_point[self.nb_points] = self.point_in_image()
                 # Reset the rectangle
                 top_left = QPoint()
-                bottom_right = QPoint(self.size.width() - 1, self.size.height() - 1)
+                bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
                 self.rect_in_image = QRect(top_left, bottom_right)
             else:
                 self.list_point[self.nb_points] = self.pStart
@@ -112,15 +112,15 @@ class ImageSelection(QLabel):
         self.rect_in_image = self.rectangle_in_image(rect_in_screen)
 
         zoom_pix = self.pix_map.copy(self.rect_in_image)
-        self.setPixmap(zoom_pix.scaled(self.size, Qt.IgnoreAspectRatio))
+        self.setPixmap(zoom_pix.scaled(self.size(), Qt.IgnoreAspectRatio))
 
     def rectangle_in_screen(self):
         top_left_x = max(min(self.pStart.x(), self.pEnd.x()), 0)
         top_left_y = max(min(self.pStart.y(), self.pEnd.y()), 0)
         top_left = QPoint(top_left_x, top_left_y)
 
-        bottom_right_x = min(max(self.pStart.x(), self.pEnd.x()), self.size.width())
-        bottom_right_y = min(max(self.pStart.y(), self.pEnd.y()), self.size.height())
+        bottom_right_x = min(max(self.pStart.x(), self.pEnd.x()), self.size().width())
+        bottom_right_y = min(max(self.pStart.y(), self.pEnd.y()), self.size().height())
         bottom_right = QPoint(bottom_right_x, bottom_right_y)
 
         return QRect(top_left, bottom_right)
@@ -129,12 +129,12 @@ class ImageSelection(QLabel):
         start_x = self.rect_in_image.topLeft().x()
         start_y = self.rect_in_image.topLeft().y()
 
-        top_left_x = start_x + (rectangle_zoom.topLeft().x() / self.size.width()) * self.rect_in_image.width()
-        top_left_y = start_y + (rectangle_zoom.topLeft().y() / self.size.height()) * self.rect_in_image.height()
+        top_left_x = start_x + (rectangle_zoom.topLeft().x() / self.size().width()) * self.rect_in_image.width()
+        top_left_y = start_y + (rectangle_zoom.topLeft().y() / self.size().height()) * self.rect_in_image.height()
         top_left = QPoint(int(top_left_x), int(top_left_y))
 
-        bottom_right_x = start_x + (rectangle_zoom.bottomRight().x() / self.size.width()) * self.rect_in_image.width()
-        bottom_right_y = start_y + (rectangle_zoom.bottomRight().y() / self.size.height()) * self.rect_in_image.height()
+        bottom_right_x = start_x + (rectangle_zoom.bottomRight().x() / self.size().width()) * self.rect_in_image.width()
+        bottom_right_y = start_y + (rectangle_zoom.bottomRight().y() / self.size().height()) * self.rect_in_image.height()
         bottom_right = QPoint(int(bottom_right_x), int(bottom_right_y))
 
         return QRect(top_left, bottom_right)
@@ -143,8 +143,8 @@ class ImageSelection(QLabel):
         start_x = self.rect_in_image.topLeft().x()
         start_y = self.rect_in_image.topLeft().y()
 
-        point_x = start_x + (self.pStart.x() / self.size.width()) * self.rect_in_image.width()
-        point_y = start_y + (self.pStart.y() / self.size.height()) * self.rect_in_image.height()
+        point_x = start_x + (self.pStart.x() / self.size().width()) * self.rect_in_image.width()
+        point_y = start_y + (self.pStart.y() / self.size().height()) * self.rect_in_image.height()
 
         return QPoint(int(point_x), int(point_y))
 
@@ -155,8 +155,8 @@ class ImageSelection(QLabel):
         return False
 
     def adapt_point(self, x_coord, y_coord):
-        in_zoom_x = (x_coord - self.rect_in_image.topLeft().x()) * self.size.width() / self.rect_in_image.width()
-        in_zoom_y = (y_coord - self.rect_in_image.topLeft().y()) * self.size.height() / self.rect_in_image.height()
+        in_zoom_x = (x_coord - self.rect_in_image.topLeft().x()) * self.size().width() / self.rect_in_image.width()
+        in_zoom_y = (y_coord - self.rect_in_image.topLeft().y()) * self.size().height() / self.rect_in_image.height()
 
         return in_zoom_x, in_zoom_y
 
@@ -195,23 +195,30 @@ if __name__ == "__main__":
     ROOT_IMAGE = Path('../../data/images/raw_images/vid0_frame126.jpg')
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
+    SCREE_RATIO = 4 / 5
+
     # Set application, window and layout
     app = QApplication([])
     window = QWidget()
+    window.show()
     layout = QHBoxLayout()
+
+    # Get the sizes
+    screen_size = QDesktopWidget().screenGeometry()
+    image_size = QSize(screen_size.width() * SCREE_RATIO - 115, screen_size.height() - 150)
+    point_size = QSize(screen_size.width() * (1 - SCREE_RATIO) - 115, screen_size.height() - 150)
 
     # Set image selection zone
     pix_map = array_to_qpixmap(IMAGE)
-    screen_size = QDesktopWidget().screenGeometry().size()
-    image_selection = ImageSelection(LIST_POINTS, pix_map, screen_size)
-    image_selection.setPixmap(pix_map.scaled(screen_size, Qt.IgnoreAspectRatio))
+    image_selection = ImageSelection(pix_map.scaled(image_size, Qt.IgnoreAspectRatio))
 
     # Add widgets to layout
     layout.addWidget(image_selection)
-    # initialize_points(layout, window.height())
+    initialize_points(layout, window.height())
 
     # Add layout to window and show the window
     window.setLayout(layout)
     window.showMaximized()
+    print('after show', image_selection.size())
     app.exec_()
 
