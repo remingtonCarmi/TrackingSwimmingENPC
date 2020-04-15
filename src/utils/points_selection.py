@@ -8,7 +8,7 @@ import cv2
 
 
 class ImageSelection(QLabel):
-    def __init__(self, pix_map):
+    def __init__(self, pix_map, size, points, colors):
         super().__init__()
 
         # Tracking
@@ -17,14 +17,18 @@ class ImageSelection(QLabel):
 
         # Points management
         self.list_point = np.zeros(20, dtype=QPoint)
+        self.points = points
+        self.register = False
         self.nb_points = 0
         self.cursorPos = QPoint()
         self.pStart = QPoint()
         self.pEnd = QPoint()
 
         # Background management
-        self.pix_map = pix_map
-        self.setFixedSize(pix_map.size())
+        self.colors = colors
+        self.real_image_size = pix_map.size()
+        self.pix_map = pix_map.scaled(size, Qt.IgnoreAspectRatio)
+        self.setFixedSize(self.pix_map.size())
         top_left = QPoint()
         bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
         self.rect_in_image = QRect(top_left, bottom_right)
@@ -60,9 +64,24 @@ class ImageSelection(QLabel):
             self.close()
         self.update()
 
+    def closeEvent(self, event):
+        # closeEvent is called twice since the super needs to be closed
+        if not self.register:
+            self.register = True
+            for index_point in range(self.nb_points):
+                x_select = self.list_point[index_point].x()
+                y_select = self.list_point[index_point].y()
+                x_image = int((x_select / self.size().width()) * self.real_image_size.width())
+                y_image = int((y_select / self.size().height()) * self.real_image_size.height())
+                self.points.append(np.array([x_image, y_image]))
+
     def update_points(self):
         # Add a point if the mouse did not move
         if self.pStart == self.pEnd:
+            # There should be has much as selected points as colors
+            if self.nb_points >= len(self.colors):
+                super().close()
+                self.close()
             # Withdraw the zoom and add the point
             if self.zoom_in:
                 # Withdraw the zoom
@@ -89,23 +108,13 @@ class ImageSelection(QLabel):
             q_painter.drawEllipse(self.cursorPos.x() - 2, self.cursorPos.y() - 2, 4, 4)
 
         # Draw the points
-        q_painter.setPen(Qt.red)
         for index_point in range(self.nb_points):
+            q_painter.setPen(self.colors[index_point])
             x = self.list_point[index_point].x()
             y = self.list_point[index_point].y()
             if self.in_showed_image(x, y):
                 (x, y) = self.adapt_point(x, y)
                 q_painter.drawEllipse(x - 2, y - 2, 4, 4)
-
-    def get_points(self):
-        points = np.zeros((self.nb_points, 2))
-
-        for index_point in range(self.nb_points):
-            x = self.list_point[index_point].x()
-            y = self.list_point[index_point].y()
-            points[index_point, :] = np.array([x, y])
-
-        return points
 
     def zoom(self):
         rect_in_screen = self.rectangle_in_screen()
@@ -161,7 +170,7 @@ class ImageSelection(QLabel):
         return in_zoom_x, in_zoom_y
 
 
-def initialize_points(main_layout, height):
+"""def initialize_points(size):
     grid = QGridLayout()
     color = ["Blue", "Red", "Yellow", "Green"]
 
@@ -176,7 +185,7 @@ def initialize_points(main_layout, height):
         grid.addWidget(point, 0, index_line)
         grid.addWidget(text, 1, index_line)
 
-    main_layout.addLayout(grid)
+    main_layout.addLayout(grid)"""
 
 
 def array_to_qpixmap(image):
@@ -197,6 +206,8 @@ if __name__ == "__main__":
 
     SCREE_RATIO = 4 / 5
 
+    POINTS = []
+    COLORS = [Qt.black, Qt.red, Qt.yellow, Qt.gray]
     # Set application, window and layout
     app = QApplication([])
     window = QWidget()
@@ -210,15 +221,16 @@ if __name__ == "__main__":
 
     # Set image selection zone
     pix_map = array_to_qpixmap(IMAGE)
-    image_selection = ImageSelection(pix_map.scaled(image_size, Qt.IgnoreAspectRatio))
+    image_selection = ImageSelection(pix_map, image_size, POINTS, COLORS)
+    # information_points = initialize_points(point_size)
 
     # Add widgets to layout
     layout.addWidget(image_selection)
-    initialize_points(layout, window.height())
+    # layout.addWidget(information_points)
 
     # Add layout to window and show the window
     window.setLayout(layout)
     window.showMaximized()
-    print('after show', image_selection.size())
     app.exec_()
+    print("Points", POINTS)
 
