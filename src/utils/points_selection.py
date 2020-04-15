@@ -2,7 +2,7 @@ from pathlib import Path
 import numpy as np
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
 from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QLayout
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
 
@@ -28,12 +28,12 @@ class ImageSelection(QLabel):
         self.colors = colors
         self.real_image_size = pix_map.size()
         self.pix_map = pix_map.scaled(size, Qt.IgnoreAspectRatio)
-        self.setFixedSize(self.pix_map.size())
+        self.setPixmap(self.pix_map)
+        self.setFixedSize(size)
         top_left = QPoint()
         bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
         self.rect_in_image = QRect(top_left, bottom_right)
         self.zoom_in = False
-        self.setPixmap(pix_map)
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -170,22 +170,54 @@ class ImageSelection(QLabel):
         return in_zoom_x, in_zoom_y
 
 
-"""def initialize_points(size):
-    grid = QGridLayout()
-    color = ["Blue", "Red", "Yellow", "Green"]
+class TextPoint(QTextEdit):
+    def __init__(self):
+        super().__init__()
 
-    for index_line in range(4):
-        point = QLabel("{} Point".format(color[index_line]))
-        text = QTextEdit()
+        self.setTabChangesFocus(True)
+        # self.setFocusPolicy(True)
+        # print('init', self.tabChangesFocus())
 
-        point.setAlignment(Qt.AlignCenter)
-        point.setFixedHeight(height / 4)
-        text.setFixedHeight(height / 4)
+    """def keyReleaseEvent(self, event):
+        print("Focus state", self.tabChangesFocus())
+        if event.key() == Qt.Key_Alt:
+            print(1)
+            self.setTabChangesFocus(True)"""
 
-        grid.addWidget(point, 0, index_line)
-        grid.addWidget(text, 1, index_line)
 
-    main_layout.addLayout(grid)"""
+class InformationPoints(QGridLayout):
+    def __init__(self, size, colors):
+        super().__init__()
+        self.colors = colors
+        self.nb_points = len(colors)
+        self.size = size
+        self.size.setHeight(self.size.height() / (2 * self.nb_points))
+        self.size.setWidth(self.size.width())
+        self.set_raw_labels()
+
+    def set_raw_labels(self):
+        for index_line in range(self.nb_points):
+            point = QLabel("{} Point".format(self.colors[index_line]))
+            text = TextPoint()
+
+            point.setAlignment(Qt.AlignCenter)
+            point.setFixedSize(self.size)
+            text.setFixedSize(self.size)
+            text.setTextColor(self.colors[index_line])
+
+            self.addWidget(point, 2 * index_line, 0)
+            self.addWidget(text, 2 * index_line + 1, 0)
+
+
+class MainWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setFocusPolicy(True)
+
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_Space:
+            super().close()
+            self.close()
 
 
 def array_to_qpixmap(image):
@@ -207,11 +239,10 @@ if __name__ == "__main__":
     SCREE_RATIO = 4 / 5
 
     POINTS = []
-    COLORS = [Qt.black, Qt.red, Qt.yellow, Qt.gray]
+    COLORS = [Qt.black, Qt.red, Qt.darkYellow, Qt.gray]
     # Set application, window and layout
     app = QApplication([])
-    window = QWidget()
-    window.show()
+    window = MainWidget()
     layout = QHBoxLayout()
 
     # Get the sizes
@@ -222,11 +253,11 @@ if __name__ == "__main__":
     # Set image selection zone
     pix_map = array_to_qpixmap(IMAGE)
     image_selection = ImageSelection(pix_map, image_size, POINTS, COLORS)
-    # information_points = initialize_points(point_size)
+    information_points = InformationPoints(point_size, COLORS)
 
     # Add widgets to layout
     layout.addWidget(image_selection)
-    # layout.addWidget(information_points)
+    layout.addLayout(information_points)
 
     # Add layout to window and show the window
     window.setLayout(layout)
