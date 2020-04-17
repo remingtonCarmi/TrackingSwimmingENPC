@@ -1,28 +1,15 @@
 """
 This code calibrates an entire video by withdrawing the distortion and the perspectives.
 """
+from pathlib import Path
 import cv2
 import numpy as np
+import random as rd
 from src.utils.extract_image import extract_image_video
-from src.distortion.distortion import find_distortion_charact, clear_image, SelectionError
 from src.utils.extract_image import TimeError
-from src.perspective.correction_perspective import correct_perspective_img
-
-vid0 = "..\\data\\videos\\vid0"
-
-
-class VideoError(Exception):
-    """The exception class error to tell that the video does not exist."""
-    def __init__(self, name_video):
-        """
-        Args:
-            name_video (string): the name of the video
-        """
-        self.name_video = name_video
-
-    def __repr__(self):
-        """"Indicates that the video cannot be found."""
-        return "The video {} cannot be found.".format(self.name_video)
+# from src.perspective.correction_perspective import correct_perspective_img
+from src.utils.exception_classes import VideoFindError
+from src.utils.point_selection.point_selection import perspective_selection
 
 
 def make_video(name_video, images):
@@ -43,7 +30,7 @@ def make_video(name_video, images):
     out.release()
 
 
-def calibrate_video(name_video, time_begin, time_end, destination_video=""):
+def calibrate_video(name_video, time_begin=0, time_end=1, destination_video=""):
     """
     Calibrates the video from the starting time to the end
     and register it.
@@ -51,18 +38,21 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
     Args:
         name_video (string): name of the video.
 
-        time_begin (integer): the starting time in second.
+        time_begin (integer): the starting time in second. Default value = 0.
 
-        time_end (integer): the ending time in second.
+        time_end (integer): the ending time in second. Default value = -1.
 
-        destination_video (string): the destination path of the cleaned video.
+        destination_video (string): the destination path of the cleaned video
+            Default value = "".
     """
     # Get the images
-    list_images = extract_image_video(name_video, time_begin, time_end, False)
+    list_images = extract_image_video(name_video, time_begin, time_end)
     nb_images = len(list_images)
-    if nb_images == 0:
-        raise VideoError(name_video)
-    list_unwarp_images = [0] * nb_images
+
+    # Selection of the perspective points
+    perspective_selection(list_images[rd.randint(int(nb_images / 2), nb_images)])
+
+    """list_unwarp_images = [0] * nb_images
     list_clean_images = [0] * nb_images
 
     # Get the caracteristics
@@ -89,15 +79,14 @@ def calibrate_video(name_video, time_begin, time_end, destination_video=""):
         list_clean_images[index_image] = clear_image(list_unwarp_images[index_image], charact)
 
     name_video_clean = destination_video + name_video + "_clean.mp4"
-    make_video(name_video_clean, list_unwarp_images)
+    make_video(name_video_clean, list_unwarp_images)"""
 
 
 if __name__ == "__main__":
+    PATH_VIDEO = Path("../data/videos/vid0.mp4")
     try:
-        calibrate_video(vid0, 12, 15)
+        calibrate_video(PATH_VIDEO)
     except TimeError as time_error:
         print(time_error.__repr__())
-    except SelectionError as select_error:
-        print(select_error.__repr__())
-    except VideoError as video_error:
-        print(video_error.__repr__())
+    except VideoFindError as video_find_error:
+        print(video_find_error.__repr__())
