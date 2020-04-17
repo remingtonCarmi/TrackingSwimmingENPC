@@ -170,43 +170,64 @@ class ImageSelection(QLabel):
         return in_zoom_x, in_zoom_y
 
 
-class TextPoint(QTextEdit):
-    def __init__(self):
+class EditPoint(QTextEdit):
+    def __init__(self, size, color, points, index_point, meter_or_line):
         super().__init__()
-
         self.setTabChangesFocus(True)
-        # self.setFocusPolicy(True)
-        # print('init', self.tabChangesFocus())
+        self.setFixedSize(size)
+        self.setTextColor(color)
+        self.points = points
+        self.index_point = index_point
+        self.meter_or_line = meter_or_line
 
-    """def keyReleaseEvent(self, event):
-        print("Focus state", self.tabChangesFocus())
-        if event.key() == Qt.Key_Alt:
-            print(1)
-            self.setTabChangesFocus(True)"""
+    def focusOutEvent(self, event):
+        if self.toPlainText() != "":
+            self.points[self.index_point, self.meter_or_line] = float(self.toPlainText())
+            if self.meter_or_line == 1:
+                self.points[self.index_point, self.meter_or_line] *= 2.5
+
+
+class TextPoint(QLabel):
+    def __init__(self, text, size):
+        super().__init__(text)
+        self.setAlignment(Qt.AlignCenter)
+        self.setFixedSize(size)
 
 
 class InformationPoints(QGridLayout):
-    def __init__(self, size, colors):
+    def __init__(self, size, colors, points):
         super().__init__()
         self.colors = colors
         self.nb_points = len(colors)
         self.size = size
         self.size.setHeight(self.size.height() / (2 * self.nb_points))
-        self.size.setWidth(self.size.width())
+        self.size_text = QSize(self.size.width() / 4, self.size.height())
+        self.size_edit = QSize(self.size.width() / 4, self.size.height() / 4)
+        self.points = points
+
         self.set_raw_labels()
 
     def set_raw_labels(self):
-        for index_line in range(self.nb_points):
-            point = QLabel("{} Point".format(self.colors[index_line]))
-            text = TextPoint()
+        for index_color in range(self.nb_points):
+            color = self.colors[index_color]
+            point_layout = QHBoxLayout()
 
-            point.setAlignment(Qt.AlignCenter)
-            point.setFixedSize(self.size)
-            text.setFixedSize(self.size)
-            text.setTextColor(self.colors[index_line])
+            color_point = TextPoint("Point {}".format(index_color + 1), self.size)
 
-            self.addWidget(point, 2 * index_line, 0)
-            self.addWidget(text, 2 * index_line + 1, 0)
+            edit_meter = EditPoint(self.size_edit, color, self.points, index_color, 0)
+            point_layout.addWidget(edit_meter)
+
+            text_meter = TextPoint("meters", self.size_text)
+            point_layout.addWidget(text_meter)
+
+            text_line = TextPoint("n° line", self.size_text)
+            point_layout.addWidget(text_line)
+
+            edit_line = EditPoint(self.size_edit, color, self.points, index_color, 1)
+            point_layout.addWidget(edit_line)
+
+            self.addWidget(color_point, 2 * index_color, 0)
+            self.addLayout(point_layout, 2 * index_color + 1, 0)
 
 
 class MainWidget(QWidget):
@@ -214,10 +235,10 @@ class MainWidget(QWidget):
         super().__init__()
         self.setFocusPolicy(True)
 
-    def keyReleaseEvent(self, event):
+    """def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Space:
             super().close()
-            self.close()
+            self.close()"""
 
 
 def array_to_qpixmap(image):
@@ -232,14 +253,14 @@ def array_to_qpixmap(image):
 
 if __name__ == "__main__":
     # Get the array
-    LIST_POINTS = np.array([1])
     ROOT_IMAGE = Path('../../data/images/raw_images/vid0_frame126.jpg')
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     SCREE_RATIO = 4 / 5
 
-    POINTS = []
-    COLORS = [Qt.black, Qt.red, Qt.darkYellow, Qt.gray]
+    POINTS_IMAGE = []
+    COLORS = [Qt.black, Qt.red, Qt.darkYellow, Qt.darkGray]
+    POINTS_REAL = np.zeros((len(COLORS), 2))
     # Set application, window and layout
     app = QApplication([])
     window = MainWidget()
@@ -252,8 +273,8 @@ if __name__ == "__main__":
 
     # Set image selection zone
     pix_map = array_to_qpixmap(IMAGE)
-    image_selection = ImageSelection(pix_map, image_size, POINTS, COLORS)
-    information_points = InformationPoints(point_size, COLORS)
+    image_selection = ImageSelection(pix_map, image_size, POINTS_IMAGE, COLORS)
+    information_points = InformationPoints(point_size, COLORS, POINTS_REAL)
 
     # Add widgets to layout
     layout.addWidget(image_selection)
@@ -263,5 +284,6 @@ if __name__ == "__main__":
     window.setLayout(layout)
     window.showMaximized()
     app.exec_()
-    print("Points", POINTS)
+    print("Points image", POINTS_IMAGE)
+    print("Points real", POINTS_REAL)
 
