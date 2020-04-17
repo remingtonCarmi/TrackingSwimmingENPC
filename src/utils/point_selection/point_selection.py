@@ -32,9 +32,9 @@ def array_to_qpixmap(image):
 
 def perspective_selection(image):
     # Set the points
-    points_image = []
     colors = [Qt.black, Qt.red, Qt.darkYellow, Qt.darkGray]
-    points_real = np.zeros((len(colors), 2))
+    points_image = np.zeros((len(colors), 2), dtype=np.float32)
+    points_real = np.zeros((len(colors), 2), dtype=np.float32)
 
     # Set application, window and layout
     app = QApplication([])
@@ -61,8 +61,7 @@ def perspective_selection(image):
     window.showMaximized()
     app.exec_()
 
-    print("Points image", points_image)
-    print("Points real", points_real)
+    return points_image, points_real
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ from src.utils.extract_image import TimeError
 # from src.perspective.correction_perspective import correct_perspective_img
 from src.utils.exception_classes import VideoFindError
 from src.utils.point_selection.point_selection import perspective_selection
+import matplotlib.pyplot as plt
 
 
 def make_video(name_video, images):
@@ -30,7 +31,25 @@ def make_video(name_video, images):
     out.release()
 
 
-def calibrate_video(name_video, time_begin=0, time_end=1, destination_video=""):
+def correct_perspective_img(image, src, dst):
+    (h, w) = image.shape[: 2]
+    # we find the transform matrix M thanks to the matching of the four points
+    perspective_matrix = cv2.getPerspectiveTransform(src, dst)
+
+    # warp the image to a top-down view
+    warped = cv2.warpPerspective(image, perspective_matrix, (image.shape[1], image.shape[0]), flags=cv2.INTER_LINEAR)
+
+    return warped
+
+
+def transform_in_2d(points, h_dim, w_dim):
+    min_h_axe = max(points[:, 0])
+    min_w_axe = max(points[:, 1])
+    points[:, 0] = (points[:, 0] + 1) * w_dim / 52
+    points[:, 1] = (points[:, 1] + 1) * h_dim / 27
+
+
+def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=""):
     """
     Calibrates the video from the starting time to the end
     and register it.
@@ -48,38 +67,20 @@ def calibrate_video(name_video, time_begin=0, time_end=1, destination_video=""):
     # Get the images
     list_images = extract_image_video(name_video, time_begin, time_end)
     nb_images = len(list_images)
+    (height, width) = list_images[0].shape[: 2]
 
-    # Selection of the perspective points
-    perspective_selection(list_images[rd.randint(int(nb_images / 2), nb_images)])
+    # Selection of the perspective points on a random image
+    (points_image, points_real) = perspective_selection(list_images[rd.randint(int(nb_images / 2), nb_images - 1)])
+    print("points_image", points_image)
+    print("point_real", points_real)
 
-    """list_unwarp_images = [0] * nb_images
-    list_clean_images = [0] * nb_images
+    transform_in_2d(points_real, height, width)
 
-    # Get the caracteristics
-    # points = select_points(list_images[0])
-    points, charact = find_distortion_charact(list_images[0])
-    src = np.float32([(points[0][0], points[0][1]),
-                      (points[1][0], points[1][1]),
-                       (points[3][0], points[3][1]),
-                       (points[2][0], points[2][1])
-            ])
-    dst2 = np.float32([(1500, 0),
-                  (0, 0),
-                  (1500, 750),
-                  (0, 750)])
-    print(src)
-    list_unwarp_images[0] = correct_perspective_img(list_images[0], src, dst2, True, False)
-    print("taille originale: ", list_images[0].shape)
-    print("taille modifiée: ", list_unwarp_images[0].shape)
-    
-    list_clean_images[0] = clear_image(list_unwarp_images[0], charact)
+    # Transform the images
+    for index_image in range(nb_images):
+        list_images[index_image] = correct_perspective_img(list_images[index_image], points_image, points_real)
 
-    for index_image in range(1, nb_images):
-        list_unwarp_images[index_image] = correct_perspective_img(list_images[index_image], src, dst2, True, False)
-        list_clean_images[index_image] = clear_image(list_unwarp_images[index_image], charact)
-
-    name_video_clean = destination_video + name_video + "_clean.mp4"
-    make_video(name_video_clean, list_unwarp_images)"""
+    make_video("test.mp4", list_images)
 
 
 if __name__ == "__main__":

@@ -71,7 +71,7 @@ class ImageSelection(QLabel):
                 y_select = self.list_point[index_point].y()
                 x_image = int((x_select / self.size().width()) * self.real_image_size.width())
                 y_image = int((y_select / self.size().height()) * self.real_image_size.height())
-                self.points.append(np.array([x_image, y_image]))
+                self.points[index_point] = np.array([x_image, y_image])
 
     def update_points(self):
         # Add a point if the mouse did not move
