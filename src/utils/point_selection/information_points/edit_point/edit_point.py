@@ -19,8 +19,8 @@ class EditPoint(QTextEdit):
         if text[-1] == " ":
             text = text[: -1]
         if text != "":
-            if not text.isdigit():
-                while text != "":
+            if not text.isnumeric():
+                while self.toPlainText() != "":
                     self.textCursor().deletePreviousChar()
             else:
                 self.points[self.index_point, self.meter_or_line] = float(text)

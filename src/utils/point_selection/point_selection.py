@@ -14,16 +14,21 @@ class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setFocusPolicy(True)
+        self.can_close = False
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.children()[1].setFocus()
         if event.key() == Qt.Key_Space:
+            self.can_close = True
             self.close()
 
     def closeEvent(self, event):
-        children = self.children()
-        children[1].close()
+        if self.can_close:
+            children = self.children()
+            children[1].close()
+        else:
+            event.ignore()
 
 
 def array_to_qpixmap(image):
@@ -43,7 +48,7 @@ def perspective_selection(image):
 
     # Set application, window and layout
     app = QApplication([])
-    instructions()
+    # instructions()
     window = MainWidget()
     layout = QHBoxLayout()
 
