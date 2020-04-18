@@ -9,7 +9,7 @@ from src.utils.point_selection.information_points.information_points import Info
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
 from src.utils.point_selection.instructions.instructions import instructions
 
-
+QImage.Format_B
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -29,7 +29,6 @@ class MainWidget(QWidget):
 def array_to_qpixmap(image):
     height, width, channel = image.shape
     bytes_per_line = 3 * width
-
     # If the format is not good : put Format_RGB888
     qimage = QImage(image.data, width, height, bytes_per_line, QImage.Format_BGR888)
 
