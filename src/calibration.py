@@ -10,6 +10,7 @@ from src.utils.extract_image import TimeError
 # from src.perspective.correction_perspective import correct_perspective_img
 from src.utils.exception_classes import VideoFindError
 from src.utils.point_selection.point_selection import perspective_selection
+from src.utils.perspective_correction.perspective_correction import correct_perspective_img
 import matplotlib.pyplot as plt
 
 
@@ -29,16 +30,6 @@ def make_video(name_video, images, fps=25, destination=Path("../output/test/")):
     for image in images:
         out.write(image)
     out.release()
-
-
-def correct_perspective_img(image, src, dst):
-    # we find the transform matrix M thanks to the matching of the four points
-    perspective_matrix = cv2.getPerspectiveTransform(src, dst)
-
-    # warp the image to a top-down view
-    warped = cv2.warpPerspective(image, perspective_matrix, (image.shape[1], image.shape[0]), flags=cv2.INTER_LINEAR)
-
-    return warped
 
 
 def transform_in_2d(points, h_dim, w_dim):
@@ -82,14 +73,15 @@ def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=Pat
     fps_video = int(video.get(cv2.CAP_PROP_FPS))
 
     print("Make the corrected video ...")
-    make_video("test1.mp4", list_images, fps_video, destination_video)
+    corrected_video = "corrected_" + name_video.parts[-1]
+    make_video(corrected_video, list_images, fps_video, destination_video)
 
 
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        calibrate_video(PATH_VIDEO, 0, 1, DESTINATION_VIDEO)
+        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:

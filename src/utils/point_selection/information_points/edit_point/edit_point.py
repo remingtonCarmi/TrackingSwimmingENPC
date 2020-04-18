@@ -15,11 +15,14 @@ class EditPoint(QTextEdit):
         self.meter_or_line = meter_or_line
 
     def focusOutEvent(self, event):
-        if self.toPlainText() != "":
-            if not self.toPlainText().isdigit():
-                while self.toPlainText() != "":
+        text = self.toPlainText()
+        if text[-1] == " ":
+            text = text[: -1]
+        if text != "":
+            if not text.isdigit():
+                while text != "":
                     self.textCursor().deletePreviousChar()
             else:
-                self.points[self.index_point, self.meter_or_line] = float(self.toPlainText())
+                self.points[self.index_point, self.meter_or_line] = float(text)
                 if self.meter_or_line == 1:
                     self.points[self.index_point, self.meter_or_line] *= 2.5
