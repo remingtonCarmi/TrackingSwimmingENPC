@@ -8,6 +8,7 @@ import os
 
 # download library for video processing
 
+os.system("conda install python")
 os.system("pip install opencv-python")
 os.system("pip install PyQt5")
 
