@@ -9,7 +9,7 @@ from src.utils.point_selection.information_points.information_points import Info
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
 from src.utils.point_selection.instructions.instructions import instructions
 
-QImage.Format_B
+
 class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
