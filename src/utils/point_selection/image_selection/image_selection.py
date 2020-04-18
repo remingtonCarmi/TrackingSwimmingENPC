@@ -54,7 +54,7 @@ class ImageSelection(QLabel):
 
     def keyReleaseEvent(self, event):
         # If control is pressed and a point has been selected
-        if self.nb_points > 0 and event.key() == Qt.Key_Control:
+        if self.nb_points > 0 and event.key() == Qt.Key_Escape:
             self.nb_points -= 1
         self.update()
 
@@ -111,7 +111,9 @@ class ImageSelection(QLabel):
             y = self.list_point[index_point].y()
             if self.in_showed_image(x, y):
                 (x, y) = self.adapt_point(x, y)
+                q_painter.drawEllipse(x - 1, y - 1, 2, 2)
                 q_painter.drawEllipse(x - 2, y - 2, 4, 4)
+                q_painter.drawEllipse(x - 4, y - 4, 8, 8)
 
     def zoom(self):
         rect_in_screen = self.rectangle_in_screen()

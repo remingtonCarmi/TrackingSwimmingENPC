@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
 from src.utils.point_selection.information_points.information_points import InformationPoints
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
+from src.utils.point_selection.instructions.instructions import instructions
 
 
 class MainWidget(QWidget):
@@ -37,12 +38,13 @@ def array_to_qpixmap(image):
 
 def perspective_selection(image):
     # Set the points
-    colors = [Qt.black, Qt.red, Qt.darkYellow, Qt.darkGray]
+    colors = [Qt.black, Qt.red, Qt.darkGreen, Qt.darkGray]
     points_image = np.zeros((len(colors), 2), dtype=np.float32)
     points_real = np.zeros((len(colors), 2), dtype=np.float32)
 
     # Set application, window and layout
     app = QApplication([])
+    instructions()
     window = MainWidget()
     layout = QHBoxLayout()
 
