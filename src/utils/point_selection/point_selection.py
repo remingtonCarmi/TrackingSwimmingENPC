@@ -14,10 +14,15 @@ class MainWidget(QWidget):
         super().__init__()
         self.setFocusPolicy(True)
 
-    """def keyReleaseEvent(self, event):
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.children()[1].setFocus()
         if event.key() == Qt.Key_Space:
-            super().close()
-            self.close()"""
+            self.close()
+
+    def closeEvent(self, event):
+        children = self.children()
+        children[1].close()
 
 
 def array_to_qpixmap(image):
@@ -70,4 +75,4 @@ if __name__ == "__main__":
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     # Select the points
-    perspective_selection(IMAGE)
+    print(perspective_selection(IMAGE))

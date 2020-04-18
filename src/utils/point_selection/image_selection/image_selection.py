@@ -56,11 +56,10 @@ class ImageSelection(QLabel):
         # If control is pressed and a point has been selected
         if self.nb_points > 0 and event.key() == Qt.Key_Control:
             self.nb_points -= 1
-        # If space is pressed
-        if event.key() == Qt.Key_Space:
-            super().close()
-            self.close()
         self.update()
+
+        if event.key() == Qt.Key_Space:
+            self.close()
 
     def closeEvent(self, event):
         # closeEvent is called twice since the super needs to be closed

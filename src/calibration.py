@@ -32,7 +32,6 @@ def make_video(name_video, images):
 
 
 def correct_perspective_img(image, src, dst):
-    (h, w) = image.shape[: 2]
     # we find the transform matrix M thanks to the matching of the four points
     perspective_matrix = cv2.getPerspectiveTransform(src, dst)
 
@@ -43,8 +42,6 @@ def correct_perspective_img(image, src, dst):
 
 
 def transform_in_2d(points, h_dim, w_dim):
-    min_h_axe = max(points[:, 0])
-    min_w_axe = max(points[:, 1])
     points[:, 0] = (points[:, 0] + 1) * w_dim / 52
     points[:, 1] = (points[:, 1] + 1) * h_dim / 27
 
@@ -80,13 +77,13 @@ def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video="")
     for index_image in range(nb_images):
         list_images[index_image] = correct_perspective_img(list_images[index_image], points_image, points_real)
 
-    make_video("test.mp4", list_images)
+    make_video("test1.mp4", list_images)
 
 
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
     try:
-        calibrate_video(PATH_VIDEO)
+        calibrate_video(PATH_VIDEO, 0, 1)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:
