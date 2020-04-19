@@ -7,10 +7,9 @@ import numpy as np
 import random as rd
 from src.utils.extract_image import extract_image_video
 from src.utils.extract_image import TimeError
-# from src.perspective.correction_perspective import correct_perspective_img
 from src.utils.exception_classes import VideoFindError
 from src.utils.point_selection.point_selection import perspective_selection
-from src.utils.perspective_correction.perspective_correction import correct_perspective_img
+from src.utils.perspective_correction.perspective_correction import correct_perspective_img, get_perspective_matrix
 import matplotlib.pyplot as plt
 
 
@@ -60,13 +59,14 @@ def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=Pat
 
     # Selection of the perspective points on a random image
     print("Point selection ...")
-    (points_image, points_real) = perspective_selection(list_images[rd.randint(int(nb_images / 2), nb_images - 1)])
+    (points_image, points_real) = perspective_selection(list_images[rd.randint(int(nb_images / 10), int(nb_images / 5))])
     transform_in_2d(points_real, height, width)
 
     # Transform the images
     print("Correction of images ...")
+    perspective_matrix = get_perspective_matrix(points_image, points_real)
     for index_image in range(nb_images):
-        list_images[index_image] = correct_perspective_img(list_images[index_image], points_image, points_real)
+        list_images[index_image] = correct_perspective_img(list_images[index_image], perspective_matrix)
 
     # Get the fps
     video = cv2.VideoCapture(str(name_video))
