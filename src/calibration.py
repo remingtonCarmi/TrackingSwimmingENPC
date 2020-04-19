@@ -8,32 +8,42 @@ import random as rd
 from src.utils.extract_image import extract_image_video
 from src.utils.extract_image import TimeError
 from src.utils.exception_classes import VideoFindError
+from src.utils.make_video import make_video
 from src.utils.point_selection.point_selection import perspective_selection
 from src.utils.perspective_correction.perspective_correction import correct_perspective_img, get_perspective_matrix
 import matplotlib.pyplot as plt
 
 
-def make_video(name_video, images, fps=25, destination=Path("../output/test/")):
-    """
-    Makes a video with all the images in images.
+def transform_in_2d(points_pixels, points_pool, image):
+    (height, width) = image.shape[: 2]
 
-    Args:
-        name_video (string): the name of the video.
+    # Get the corrected image in the entire pool
+    points_pool_pixel = np.zeros((4, 2))
+    points_pool_pixel[:, 0] = (points_pool[:, 0] + 1) * width / 52
+    points_pool_pixel[:, 1] = points_pool[:, 1] * height / 25
 
-        images (list of array of 3 dimensions - height, width, layers): list of the images.
-    """
-    height, width, layers = images[0].shape
-    path_video = destination / name_video
-    size = (width, height)
-    out = cv2.VideoWriter(str(path_video), cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
-    for image in images:
-        out.write(image)
-    out.release()
+    # Get the transformation
+    perspective_matrix = get_perspective_matrix(points_pixels, points_pool_pixel)
+    corrected_image = correct_perspective_img(image, perspective_matrix)
 
+    # Find the first column that is not black
+    index_w = 0
+    while index_w < width and np.sum(corrected_image[:, index_w]) == 0:
+        index_w += 1
+    left_column = index_w
 
-def transform_in_2d(points, h_dim, w_dim):
-    points[:, 0] = (points[:, 0] + 1) * w_dim / 52
-    points[:, 1] = (points[:, 1] + 1) * h_dim / 27
+    # Find the last column that is not black
+    index_w = width - 1
+    while index_w >= 0 and np.sum(corrected_image[:, index_w]) == 0:
+        index_w -= 1
+    right_column = index_w
+
+    # PUT AN EXCEPTION IF LEFT_COLUMN > RIGHT_COLUMN
+
+    # Get the final transformation
+    points_pool_pixel[:, 0] = (points_pool_pixel[:, 0] - left_column) / (right_column - left_column) * width
+
+    return points_pool_pixel
 
 
 def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/")):
@@ -55,16 +65,19 @@ def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=Pat
     print("Get the images ...")
     list_images = extract_image_video(name_video, time_begin, time_end)
     nb_images = len(list_images)
-    (height, width) = list_images[0].shape[: 2]
 
     # Selection of the perspective points on a random image
     print("Point selection ...")
     (points_image, points_real) = perspective_selection(list_images[rd.randint(int(nb_images / 10), int(nb_images / 5))])
-    transform_in_2d(points_real, height, width)
+
+    # Get the real points in pixels
+    points_real_pixel = transform_in_2d(points_image, points_real, list_images[0])
+
+    # Get the perspective matrix
+    perspective_matrix = get_perspective_matrix(points_image, points_real_pixel)
 
     # Transform the images
     print("Correction of images ...")
-    perspective_matrix = get_perspective_matrix(points_image, points_real)
     for index_image in range(nb_images):
         list_images[index_image] = correct_perspective_img(list_images[index_image], perspective_matrix)
 
@@ -78,10 +91,10 @@ def calibrate_video(name_video, time_begin=0, time_end=-1, destination_video=Pat
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../data/videos/vid0.mp4")
+    PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
+        calibrate_video(PATH_VIDEO, 0, -1, DESTINATION_VIDEO)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:
