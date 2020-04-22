@@ -8,8 +8,8 @@ INSTRUCTIONS = "YOU ARE ABOUT TO SELECT FOUR POINTS AND WRITE THEIR REAL COORDIN
 INSTRUCTIONS += "Select a point : left click. \n"
 INSTRUCTIONS += "Zoom in : keep left click, move and release. \n"
 INSTRUCTIONS += "Zoom out : click anywhere. \n"
-INSTRUCTIONS += "Withdraw a point : press escape button (if it does not work press it twice). \n"
-INSTRUCTIONS += "Quit : press space bar (if it does not work press it twice). \n \n"
+INSTRUCTIONS += "Withdraw a point : press escape button. \n"
+INSTRUCTIONS += "Quit : press space bar. \n \n"
 
 INSTRUCTIONS += "WARNINGS ! \n"
 INSTRUCTIONS += "Only numbers are accepted to write the coordinates. \n"

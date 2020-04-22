@@ -53,13 +53,11 @@ class ImageSelection(QLabel):
         self.update()
 
     def keyReleaseEvent(self, event):
-        # If control is pressed and a point has been selected
-        if self.nb_points > 0 and event.key() == Qt.Key_Escape:
-            self.nb_points -= 1
-        self.update()
+        if event.key() == Qt.Key_Escape:
+            self.erase_point()
 
         if event.key() == Qt.Key_Space:
-            self.close()
+            self.parentWidget().close()
 
     def closeEvent(self, event):
         # closeEvent is called twice since the super needs to be closed
@@ -76,23 +74,21 @@ class ImageSelection(QLabel):
         # Add a point if the mouse did not move
         if self.pStart == self.pEnd:
             # There should be has much as selected points as colors
-            if self.nb_points >= len(self.colors):
-                super().close()
-                self.close()
-            # Withdraw the zoom and add the point
-            if self.zoom_in:
-                # Withdraw the zoom
-                self.setPixmap(self.pix_map.scaled(self.size(), Qt.IgnoreAspectRatio))
-                self.zoom_in = False
-                # Add the point
-                self.list_point[self.nb_points] = self.point_in_image()
-                # Reset the rectangle
-                top_left = QPoint()
-                bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
-                self.rect_in_image = QRect(top_left, bottom_right)
-            else:
-                self.list_point[self.nb_points] = self.pStart
-            self.nb_points += 1
+            if self.nb_points < len(self.colors):
+                # Withdraw the zoom and add the point
+                if self.zoom_in:
+                    # Withdraw the zoom
+                    self.setPixmap(self.pix_map.scaled(self.size(), Qt.IgnoreAspectRatio))
+                    self.zoom_in = False
+                    # Add the point
+                    self.list_point[self.nb_points] = self.point_in_image()
+                    # Reset the rectangle
+                    top_left = QPoint()
+                    bottom_right = QPoint(self.size().width() - 1, self.size().height() - 1)
+                    self.rect_in_image = QRect(top_left, bottom_right)
+                else:
+                    self.list_point[self.nb_points] = self.pStart
+                self.nb_points += 1
         # Zoom if the mouse mouved
         else:
             self.zoom()
@@ -167,3 +163,9 @@ class ImageSelection(QLabel):
         in_zoom_y = (y_coord - self.rect_in_image.topLeft().y()) * self.size().height() / self.rect_in_image.height()
 
         return in_zoom_x, in_zoom_y
+
+    def erase_point(self):
+        # If a point has been selected
+        if self.nb_points > 0:
+            self.nb_points -= 1
+        self.update()

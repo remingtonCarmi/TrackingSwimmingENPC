@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
 from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow, QTextCursor, QColor
 from PyQt5.QtWidgets import QMessageBox, QLayout
-from PyQt5.QtCore import Qt, QPoint, QRect, QSize
+from PyQt5.QtCore import Qt, QPoint, QRect, QSize, Qt
 
 
 class EditPoint(QTextEdit):
@@ -17,6 +17,12 @@ class EditPoint(QTextEdit):
 
     def keyReleaseEvent(self, event):
         self.setTextColor(self.color)
+
+        if event.key() == Qt.Key_Escape:
+            self.parentWidget().erase_point()
+
+        if event.key() == Qt.Key_Space:
+            self.parentWidget().close()
 
     def focusOutEvent(self, event):
         # If something has been written

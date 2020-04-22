@@ -1,7 +1,7 @@
 from pathlib import Path
 import numpy as np
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow
-from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
+from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow, QColor
 from PyQt5.QtWidgets import QMessageBox, QLayout, QDesktopWidget
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
@@ -14,21 +14,19 @@ class MainWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setFocusPolicy(True)
-        self.can_close = False
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.children()[1].setFocus()
         if event.key() == Qt.Key_Space:
-            self.can_close = True
             self.close()
 
     def closeEvent(self, event):
-        if self.can_close:
-            children = self.children()
-            children[1].close()
-        else:
-            event.ignore()
+        children = self.children()
+        children[1].close()
+
+    def erase_point(self):
+        self.children()[1].erase_point()
 
 
 def array_to_qpixmap(image):
