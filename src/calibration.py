@@ -39,6 +39,8 @@ def transform_in_2d(points_pixels, points_pool, image):
     right_column = index_w
 
     # PUT AN EXCEPTION IF LEFT_COLUMN > RIGHT_COLUMN
+    # print("Left_point", left_column * 52 / width)
+    # print("Right_point", right_column * 52 / width)
 
     # Get the final transformation
     points_pool_pixel[:, 0] = (points_pool_pixel[:, 0] - left_column) / (right_column - left_column) * width
@@ -94,7 +96,7 @@ if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        calibrate_video(PATH_VIDEO, 0, -1, DESTINATION_VIDEO)
+        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:
