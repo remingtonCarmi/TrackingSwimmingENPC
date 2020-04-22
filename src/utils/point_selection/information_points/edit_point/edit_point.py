@@ -15,13 +15,16 @@ class EditPoint(QTextEdit):
         self.meter_or_line = meter_or_line
 
     def focusOutEvent(self, event):
+        # If something has been written
         if self.toPlainText() != "":
-            if self.toPlainText()[-1] == " ":
+            # If a space has been written
+            if " " in self.toPlainText():
                 self.textCursor().deletePreviousChar()
-            if not self.toPlainText().isnumeric():
-                while self.toPlainText() != "":
-                    self.textCursor().deletePreviousChar()
-            else:
+            # If the written text is a float
+            if self.toPlainText().isnumeric():
                 self.points[self.index_point, self.meter_or_line] = float(self.toPlainText())
                 if self.meter_or_line == 1:
                     self.points[self.index_point, self.meter_or_line] *= 2.5
+            # We erase the written text
+            else:
+                self.clear()
