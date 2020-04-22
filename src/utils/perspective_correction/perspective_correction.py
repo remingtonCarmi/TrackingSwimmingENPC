@@ -15,6 +15,6 @@ def correct_perspective_img(image, perspective_matrix):
 
 
 if __name__ == "__main__":
-    SRC = np.zeros((4, 2))
-    DST = np.ones((4, 2))
+    SRC = np.array([[66, 284], [1268, 118], [593, 786], [1888, 391]])
+    DST = np.array([[439, 0], [1865, 0], [439, 1081], [1865, 864]])
     print(get_perspective_matrix(SRC, DST))
