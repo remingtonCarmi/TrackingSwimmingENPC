@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
-from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow, QTextCursor
+from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow, QTextCursor, QColor
 from PyQt5.QtWidgets import QMessageBox, QLayout
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 
@@ -9,10 +9,14 @@ class EditPoint(QTextEdit):
         super().__init__()
         self.setTabChangesFocus(True)
         self.setFixedSize(size)
-        self.setTextColor(color)
+        self.color = color
+        self.setTextColor(self.color)
         self.points = points
         self.index_point = index_point
         self.meter_or_line = meter_or_line
+
+    def keyReleaseEvent(self, event):
+        self.setTextColor(self.color)
 
     def focusOutEvent(self, event):
         # If something has been written
