@@ -8,7 +8,7 @@ from src.utils.exception_classes import TimeError, VideoFindError
 
 def extract_image_video(name_video, time_begin, time_end, register=False, destination=Path("../../output/test/")):
     """
-    Extracts number_image images from name_video and
+    Extracts number_image images from path_video and
     save them.
     This raises an exception if the duration is not possible regarding the video.
     If time_end is bigger than the duration of the video,
