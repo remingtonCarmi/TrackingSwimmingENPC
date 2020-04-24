@@ -54,7 +54,8 @@ def meter_to_pixel(src_points, dst_meter, image):
     return dst_pixel_full_pool, [top_left, bottom_right]
 
 
-def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/")):
+def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/"),
+                    create_video=True, creat_cvs=False):
     """
     Calibrates the video from the starting time to the end
     and register it.
@@ -89,26 +90,30 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
     for index_image in range(nb_images):
         list_images[index_image] = get_top_down_image(list_images[index_image], homography)
 
-    # Get the fps
-    video = cv2.VideoCapture(str(path_video))
-    fps_video = int(video.get(cv2.CAP_PROP_FPS))
-
-    # Make the video
-    print("Make the corrected video ...")
     name_video = path_video.parts[-1]
-    corrected_video = "corrected_" + name_video
-    make_video(corrected_video, list_images, fps_video, destination_video)
+    if create_video:
+        # Get the fps
+        video = cv2.VideoCapture(str(path_video))
+        fps_video = int(video.get(cv2.CAP_PROP_FPS))
 
-    # Construct the csv file
-    to_store = [name_video, points_dst, points_dst, homography, exteme_points]
-    store_calibration_csv(name_video[: -3] + "csv", to_store, destination_video)
+        # Make the video
+        print("Make the corrected video ...")
+        corrected_video = "corrected_" + name_video
+        make_video(corrected_video, list_images, fps_video, destination_video)
+
+    if creat_cvs:
+        # Construct the csv file
+        to_store = [name_video, points_dst, points_dst, homography, exteme_points]
+        store_calibration_csv(name_video[: -3] + "csv", to_store, destination_video)
+
+    return np.array(list_images)
 
     
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
+        print(calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO))
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:

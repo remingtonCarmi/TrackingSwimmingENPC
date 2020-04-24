@@ -36,7 +36,6 @@ def store_calibration_csv(csv_name, data, destination_path=Path("../../../output
     Args:
         destination_path (string): the complete path where the matrix will be stored.
     """
-    print(data)
     csv_path = destination_path / csv_name
     if csv_path.exists():
         raise CSVExistError(csv_path)
