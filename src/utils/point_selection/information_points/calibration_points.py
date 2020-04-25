@@ -6,7 +6,7 @@ from src.utils.point_selection.information_points.edit_point.edit_point import E
 from src.utils.point_selection.information_points.text_point.text_point import TextPoint
 
 
-class InformationPoints(QGridLayout):
+class CalibrationPoints(QGridLayout):
     def __init__(self, size, colors, points):
         super().__init__()
         self.colors = colors

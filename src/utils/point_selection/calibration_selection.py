@@ -5,28 +5,10 @@ from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow, QColor
 from PyQt5.QtWidgets import QMessageBox, QLayout, QDesktopWidget
 from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
-from src.utils.point_selection.information_points.information_points import InformationPoints
+from src.utils.point_selection.information_points.calibration_points import CalibrationPoints
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
-from src.utils.point_selection.instructions.instructions import instructions
-
-
-class MainWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setFocusPolicy(True)
-
-    def keyReleaseEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.children()[1].setFocus()
-        if event.key() == Qt.Key_Space:
-            self.close()
-
-    def closeEvent(self, event):
-        children = self.children()
-        children[1].close()
-
-    def erase_point(self):
-        self.children()[1].erase_point()
+from src.utils.point_selection.instructions.instructions import instructions_perspective
+from src.utils.point_selection.main_widget.main_widget import MainWidget
 
 
 def array_to_qpixmap(image):
@@ -38,7 +20,7 @@ def array_to_qpixmap(image):
     return QPixmap.fromImage(qimage)
 
 
-def perspective_selection(image):
+def calibration_selection(image):
     # Set the points
     colors = [Qt.black, Qt.red, Qt.darkGreen, Qt.darkGray]
     points_image = np.zeros((len(colors), 2), dtype=np.float32)
@@ -46,7 +28,7 @@ def perspective_selection(image):
 
     # Set application, window and layout
     app = QApplication([])
-    # instructions()
+    # instructions_perspective()
     window = MainWidget()
     layout = QHBoxLayout()
 
@@ -59,7 +41,7 @@ def perspective_selection(image):
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)
     image_selection = ImageSelection(pix_map, image_size, points_image, colors)
-    information_points = InformationPoints(point_size, colors, points_real)
+    information_points = CalibrationPoints(point_size, colors, points_real)
 
     # Add widgets to layout
     layout.addWidget(image_selection)
@@ -79,4 +61,4 @@ if __name__ == "__main__":
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     # Select the points
-    print(perspective_selection(IMAGE))
+    print(calibration_selection(IMAGE))

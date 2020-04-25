@@ -9,7 +9,7 @@ from src.utils.extract_image import extract_image_video
 from src.utils.extract_image import TimeError
 from src.utils.exception_classes import VideoFindError
 from src.utils.make_video import make_video
-from src.utils.point_selection.point_selection import perspective_selection
+from src.utils.point_selection.calibration_selection import calibration_selection
 from src.utils.perspective_correction.perspective_correction import get_top_down_image, get_homography
 from src.utils.store_load_matrix.start_csv import store_calibration_csv, CSVExistError
 
@@ -55,7 +55,7 @@ def meter_to_pixel(src_points, dst_meter, image):
 
 
 def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/"),
-                    create_video=True, creat_cvs=False):
+                    create_video=True, creat_csv=False):
     """
     Calibrates the video from the starting time to the end
     and register it.
@@ -77,7 +77,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
 
     # Selection of the 8 points in a random image
     print("Point selection ...")
-    (points_src, points_meter) = perspective_selection(list_images[rd.randint(int(nb_images / 10), int(nb_images / 5))])
+    (points_src, points_meter) = calibration_selection(list_images[rd.randint(int(nb_images / 10), int(nb_images / 5))])
 
     # Get the coordinate of the points in the final image in pixels and the extreme points
     (points_dst, exteme_points) = meter_to_pixel(points_src, points_meter, list_images[0])
@@ -101,7 +101,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
         corrected_video = "corrected_" + name_video
         make_video(corrected_video, list_images, fps_video, destination_video)
 
-    if creat_cvs:
+    if creat_csv:
         # Construct the csv file
         to_store = [name_video, points_dst, points_dst, homography, exteme_points]
         store_calibration_csv(name_video[: -3] + "csv", to_store, destination_video)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        print(calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO))
+        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:

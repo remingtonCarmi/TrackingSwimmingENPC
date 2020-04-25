@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 
 
 class ImageSelection(QLabel):
-    def __init__(self, pix_map, size, points, colors):
+    def __init__(self, pix_map, size, points, colors, skip=False):
         super().__init__()
 
         # Tracking
@@ -33,6 +33,9 @@ class ImageSelection(QLabel):
         self.rect_in_image = QRect(top_left, bottom_right)
         self.zoom_in = False
 
+        # Skip point option
+        self.skip = skip
+
     def paintEvent(self, event):
         super().paintEvent(event)
         painter = QPainter()
@@ -55,6 +58,11 @@ class ImageSelection(QLabel):
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Escape:
             self.erase_point()
+
+        if self.skip and event.key() == Qt.Key_Control:
+            # Skip point only if a point can be registered
+            if self.nb_points < len(self.colors):
+                self.skip_points()
 
         if event.key() == Qt.Key_Space:
             self.parentWidget().close()
@@ -169,3 +177,7 @@ class ImageSelection(QLabel):
         if self.nb_points > 0:
             self.nb_points -= 1
         self.update()
+
+    def skip_points(self):
+        self.list_point[self.nb_points] = QPoint(-1, -1)
+        self.nb_points += 1
