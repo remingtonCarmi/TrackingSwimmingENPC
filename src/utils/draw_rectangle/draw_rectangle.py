@@ -9,6 +9,8 @@ def draw_rectangle(image, x0, y0, x1, y1, outline=5):
         image (numpy array): the input image
         x0 (integer): the x-coordinate of the top left pixel of the rectangle
         y0 (integer): the y-coordinate of the top left pixel of the rectangle
+        x1 (integer): the x-coordinate of the bottom right pixel of the rectangle
+        y1 (integer): the y-coordinate of the bottom right pixel of the rectangle
         outline (integer): the thickness, in pixels, of the outline of the rectangle to draw
 
     Returns:

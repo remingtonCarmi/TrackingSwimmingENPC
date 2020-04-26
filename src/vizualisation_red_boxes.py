@@ -47,19 +47,7 @@ def boxes_list_images(list_images_crop, list_y):
     return list_rectangles
 
 
-def show_frames_failed(images, list_rectangles, lines=None, line=1):
-    if lines is None:
-        lines = [0, 1, 2, 3, 4, 5, 6, 7]
-    detection_fails = plot_graphs(list_rectangles, lines)
-    for i in detection_fails:
-        plt.figure()
-        plt.title("Image number " + str(i))
-        box_i = list_rectangles[i][line]
-        plt.imshow(
-            images[i][box_i[1]: box_i[3], box_i[0]: box_i[2]])
-
-
-def animation_red_boxes(path_video, is_calibrated, lines, margin, time_begin=0, time_end=-1, show_fails=False,
+def animation_red_boxes(path_video, is_calibrated, lines, margin, time_begin=0, time_end=-1,
                         create_video=False, destination_video=Path("../output/videos/")):
     t = time()
     if is_calibrated:
@@ -87,9 +75,6 @@ def animation_red_boxes(path_video, is_calibrated, lines, margin, time_begin=0, 
                                    swimmer[3] + margin,
                                    3)
 
-    if show_fails:
-        show_frames_failed(im, list_rectangles)
-
     if create_video:
         for i in range(n_images):
             im[i] = cv2.cvtColor(im[i], cv2.COLOR_RGB2BGR)
@@ -107,6 +92,8 @@ def animation_red_boxes(path_video, is_calibrated, lines, margin, time_begin=0, 
 
     print("Runtime : ", round(time() - t, 3), " seconds.")
 
+    return list_rectangles
+
 
 if __name__ == "__main__":
 
@@ -118,4 +105,8 @@ if __name__ == "__main__":
 
     MARGIN = 15
 
-    animation_red_boxes(PATH_VIDEO_CALIBRATED, True, LINES, MARGIN, 0, 11, False, True)
+    RECTANGLES = animation_red_boxes(PATH_VIDEO_CALIBRATED, True, LINES, MARGIN, 0, 3, True)
+
+    LINES_TO_PLOT = [0, 1, 2]
+    PARAMETER_TO_PLOT = "x_front"
+    plot_graphs(RECTANGLES, LINES_TO_PLOT, PARAMETER_TO_PLOT)

@@ -4,29 +4,37 @@ from scipy.interpolate import spline
 
 
 def y_size(rectangles, i, j):
+    """ give the length along the y axis of the rectangle at indices i,j in rectangles"""
     return abs(rectangles[i, j, 1] - rectangles[i, j, 3])
 
 
-def center(rectangles, i, j):
-    return (rectangles[i, j, 0] + rectangles[i, j, 2]) / 2
-
-
 def x_size(rectangles, i, j):
+    """ give the length along the x axis of the rectangle at indices i,j in rectangles"""
     return abs(rectangles[i, j, 0] - rectangles[i, j, 2])
 
 
+def x_front(rectangles, i, j):
+    """ give the x position of the right size of the rectangle at indices i,j in rectangles"""
+    return rectangles[i, j, 2]
+
+
 def area(rectangles, i, j):
+    """ give the area of the rectangle at indices i,j in rectangles"""
     return y_size(rectangles, i, j) * x_size(rectangles, i, j)
 
 
-def plot_graphs(rect, lines_to_plot, element=x_size, smooth=True):
+def plot_graphs(rect, rectangles_to_plot, parameter="x_front", smooth=True):
     """
-    To plot graphs of characteristics of the boxes
+    To plot the evolution of dimensions of a list of rectangles
     Args:
-        smooth:
-        lines_to_plot:
-        element:
-        rect: list of information about rectangles, returns by the function "boxes", see below
+        rect (list): list of rectangles. A rectangle is described by (x0, y0, x1, y1) with
+            x0 (integer): the x-coordinate of the top left pixel of the rectangle
+            y0 (integer): the y-coordinate of the top left pixel of the rectangle
+            x1 (integer): the x-coordinate of the bottom right pixel of the rectangle
+            y1 (integer): the y-coordinate of the bottom right pixel of the rectangle
+        rectangles_to_plot (list of integers): rectangles to plot the evolution of
+        parameter (string): the dimension to plot the evolution of. See the four functions below.
+        smooth (bool): if True, graphs will be smoothed
 
     Returns:
         None
@@ -37,13 +45,15 @@ def plot_graphs(rect, lines_to_plot, element=x_size, smooth=True):
 
     # transform to a numpy array
     rect_np = np.array(rect)
-    frames_to_check = []
-    for j in lines_to_plot:
-        r = [element(rect_np, i, j) for i in range(n)]
 
-        for i in range(n):
-            if r[i] > 5000:
-                frames_to_check.append(i)
+    dic = {"x_size": x_size,
+           "y_size": y_size,
+           "x_front": x_front,
+           "area": area
+           }
+
+    for j in rectangles_to_plot:
+        r = [dic[parameter](rect_np, i, j) for i in range(n)]
 
         x_new = np.linspace(min(x), max(x), 1000)
 
@@ -52,6 +62,6 @@ def plot_graphs(rect, lines_to_plot, element=x_size, smooth=True):
             r_smooth = spline(x, r, x_new)
             plt.plot(x_new, r_smooth)
         else:
-            plt.plot(x_new, x_new)
+            plt.plot(x_new, r)
 
-    return frames_to_check
+    plt.show()
