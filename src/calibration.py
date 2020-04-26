@@ -1,10 +1,13 @@
 """
-This code calibrates an entire video by withdrawing the distortion and the perspectives.
+This code calibrates an entire video by withdrawing the perspectives.
+
+It can create a video that with a top-down view.
+It can create a txt file to register the parameters of the calibration.
 """
 from pathlib import Path
-import cv2
-import numpy as np
 import random as rd
+import numpy as np
+import cv2
 from src.utils.extractions.extract_image import extract_image_video
 from src.utils.extractions.extract_image import TimeError
 from src.utils.extractions.exception_classes import VideoFindError
@@ -15,6 +18,24 @@ from src.utils.store_load_matrix.fill_txt import store_calibration_txt, TXTExist
 
 
 def meter_to_pixel(src_points, dst_meter, image):
+    """
+    Transforms the points that where given in meters to point in pixels so that
+    the calibrated image is the biggest without loosing information.
+
+    Args:
+        src_points (array, shape = (4, 2)): the points in pixel selected in the original image.
+
+        dst_meter (array, shape = (4, 2)): the points in meter that corresponds to the src_points.
+
+        image (array, shape = the original shape of the video): the image from which the points
+            where taken.
+
+    Returns:
+        dst_pixel_full_pool (array, shape = (4, 2)): the points in pixel that corresponds to the src_points
+            to show the part of the pool, on which we have information, from the top.
+
+        extreme_points (list of lists of 2 elements): the 2 extreme points in meter.
+    """
     # Get the image size
     (height, width) = image.shape[: 2]
 
@@ -55,20 +76,32 @@ def meter_to_pixel(src_points, dst_meter, image):
 
 
 def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/"),
-                    create_video=True, creat_txt=False):
+                    create_video=True, create_txt=False):
     """
-    Calibrates the video from the starting time to the end
-    and register it.
+    Calibrates the video from the starting time to the end time.
 
     Args:
-        path_video (string): name of the video.
+        path_video (pathlib): the path where the video is. Should lead to the video file.
 
-        time_begin (integer): the starting time in second. Default value = 0.
+        time_begin (integer): the starting time in second.
+            Default value = 0.
 
-        time_end (integer): the ending time in second. Default value = -1.
+        time_end (integer): the ending time in second. If -1, the calibration is done until the end.
+            Default value = -1.
 
-        destination_video (string): the destination path of the cleaned video
-            Default value = "".
+        destination_video (string): the destination path of the calibrated video. Should lead to a folder.
+            Default value = Path("../output/test/").
+
+        create_txt (boolean): if True, create a txt file that tells how to calibrate the video.
+            Default value = True.
+
+    Returns:
+        list_images (array, shape = (number of image in the original video, shape of an image in the
+            original video): the list of the calibrated images.
+
+    If the video does not exist, an VideoFindError will be raised.
+    If the beginning time or the ending time are not well defined, an TimeError will be raised.
+    If the txt file is already created, an TXTExistError exception will be raised.
     """
     # Get the images
     print("Get the images ...")
@@ -101,22 +134,22 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
         corrected_video = "corrected_" + name_video
         make_video(corrected_video, list_images, fps_video, destination_video)
 
-    if creat_txt:
+    if create_txt:
         # Construct the txt file
         to_store = [name_video, points_src, points_dst, homography, exteme_points]
         store_calibration_txt(name_video[: -3] + "txt", to_store, destination_video)
 
     return np.array(list_images)
 
-    
+
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
         calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO, False, True)
-    except TimeError as time_error:
-        print(time_error.__repr__())
     except VideoFindError as video_find_error:
         print(video_find_error.__repr__())
+    except TimeError as time_error:
+        print(time_error.__repr__())
     except TXTExistError as exist_error:
         print(exist_error.__repr__())

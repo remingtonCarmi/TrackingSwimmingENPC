@@ -1,15 +1,15 @@
 """
-This module has the purpose of storing a matrix in a scv file.
+This module has the purpose of storing a matrix in a txt file.
 """
 from pathlib import Path
 import numpy as np
 
 
 class TXTExistError(Exception):
-    """The exception class error to tell that the csv file already exists."""
+    """The exception class error to tell that the txt file already exists."""
     def __init__(self, txt_name):
         """
-        Construct the video_name.
+        Construct the txt_name.
         """
         self.txt_name = txt_name
 
@@ -18,6 +18,20 @@ class TXTExistError(Exception):
 
 
 def array_to_string(matrix):
+    """
+    Convert an array or a list to a string ready to be registered.
+
+    Args:
+        matrix (array or list of 2 dimensions): the matrix to store.
+
+    Returns:
+        (string): the elements of matrix separated by a comma.
+
+    >>> array_to_string(np.array([[3, 4],[8, 2]]))
+    '3,4,8,2'
+    >>> array_to_string([[3, 4],[8, 2]])
+    '3,4,8,2'
+    """
     if isinstance(matrix, list):
         str_matrix = str(matrix)
     else:
@@ -30,10 +44,15 @@ def array_to_string(matrix):
 
 def store_calibration_txt(txt_name, data, destination_path=Path("../../../output/test/")):
     """
-    Store the matrix in a .txt file.
+    Store the matrix in a .txt file with the given data to allow to calibrate an image.
 
     Args:
-        destination_path (string): the complete path where the matrix will be stored.
+        txt_name (string): the name of the .txt file that will be created.
+
+        data (list, any length): the elements to put in the .txt file.
+
+        destination_path (pathlib): the complete path where the matrix will be stored.
+            Should lead to a folder.
     """
     txt_path = destination_path / txt_name
     if txt_path.exists():
@@ -47,6 +66,10 @@ def store_calibration_txt(txt_name, data, destination_path=Path("../../../output
 
 
 if __name__ == "__main__":
+    # -- Doc tests -- #
+    import doctest
+    doctest.testmod()
+
     DATA = [Path("SN.mp4").parts[0], np.array([[8.5, 0.], [1.5, 0.], [5.5, 1.]]), [[5.2, 0.], [4.4, 0.], [8.5, 9.]]]
     try:
         store_calibration_txt("test0.txt", DATA)

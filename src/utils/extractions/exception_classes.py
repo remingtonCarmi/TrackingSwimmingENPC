@@ -6,7 +6,6 @@ Classes:
     VideoFindError
     VideoPresenceError
 """
-from pathlib import Path
 
 
 class TimeError(Exception):

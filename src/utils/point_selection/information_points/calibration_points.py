@@ -1,13 +1,28 @@
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
-from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
-from PyQt5.QtWidgets import QMessageBox, QLayout
-from PyQt5.QtCore import Qt, QPoint, QRect, QSize
+"""
+This class allows the user to put the information about some points.
+"""
+from PyQt5.QtWidgets import QHBoxLayout, QGridLayout
+from PyQt5.QtCore import QSize
 from src.utils.point_selection.information_points.edit_point.edit_point import EditPoint
 from src.utils.point_selection.information_points.text_point.text_point import TextPoint
 
 
 class CalibrationPoints(QGridLayout):
+    """
+    QGridLayout class that displays QTextEdit objects.
+    """
     def __init__(self, size, colors, points):
+        """
+        Construct the objects to manage the QTextEdit objects.
+
+        Args:
+            size (QSize): the size of the QGridLayout.
+
+            colors (list of Qt.Color): the colors of the points.
+
+            points (array, shape = (len(colors), 2)): the points on which the information
+                will be registered.
+        """
         super().__init__()
         self.colors = colors
         self.nb_points = len(colors)
@@ -20,6 +35,9 @@ class CalibrationPoints(QGridLayout):
         self.set_raw_labels()
 
     def set_raw_labels(self):
+        """
+        Fill the QGridLayout with QLabel and QTextEdit.
+        """
         for index_color in range(self.nb_points):
             color = self.colors[index_color]
             point_layout = QHBoxLayout()

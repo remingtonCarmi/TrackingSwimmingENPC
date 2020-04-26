@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QLabel, QHBoxLayout, QTextEdit, QGridLayout, QMainWindow, QDesktopWidget
-from PyQt5.QtGui import QPainter, QPixmap, QImage, QWindow
-from PyQt5.QtWidgets import QMessageBox, QLayout
-from PyQt5.QtCore import Qt, QPoint, QRect, QSize
+"""
+Gives the instruction to the user to tell the possibilities.
+"""
+from PyQt5.QtWidgets import QMessageBox
 
 INSTRUCTIONS_CALIBRATION = "YOU ARE ABOUT TO SELECT FOUR POINTS AND WRITE THEIR REAL COORDINATES ! \n \n"
 
@@ -17,6 +17,9 @@ INSTRUCTIONS_CALIBRATION += "The color of a selected point should have the same 
 
 
 def instructions_perspective():
+    """
+    Create a message to tell the possibilities to the user.
+    """
     message = QMessageBox()
     message.setText(INSTRUCTIONS_CALIBRATION)
     message.exec_()
