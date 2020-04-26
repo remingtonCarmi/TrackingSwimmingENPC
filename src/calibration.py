@@ -11,7 +11,7 @@ from src.utils.exception_classes import VideoFindError
 from src.utils.make_video import make_video
 from src.utils.point_selection.calibration_selection import calibration_selection
 from src.utils.perspective_correction.perspective_correction import get_top_down_image, get_homography
-from src.utils.store_load_matrix.start_csv import store_calibration_csv, CSVExistError
+from src.utils.store_load_matrix.fill_txt import store_calibration_txt, TXTExistError
 
 
 def meter_to_pixel(src_points, dst_meter, image):
@@ -55,7 +55,7 @@ def meter_to_pixel(src_points, dst_meter, image):
 
 
 def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/"),
-                    create_video=True, creat_csv=False):
+                    create_video=True, creat_txt=False):
     """
     Calibrates the video from the starting time to the end
     and register it.
@@ -101,10 +101,10 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
         corrected_video = "corrected_" + name_video
         make_video(corrected_video, list_images, fps_video, destination_video)
 
-    if creat_csv:
-        # Construct the csv file
-        to_store = [name_video, points_dst, points_dst, homography, exteme_points]
-        store_calibration_csv(name_video[: -3] + "csv", to_store, destination_video)
+    if creat_txt:
+        # Construct the txt file
+        to_store = [name_video, points_src, points_dst, homography, exteme_points]
+        store_calibration_txt(name_video[: -3] + "txt", to_store, destination_video)
 
     return np.array(list_images)
 
@@ -113,10 +113,10 @@ if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid1.mp4")
     DESTINATION_VIDEO = Path("../data/videos/corrected/")
     try:
-        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO)
+        calibrate_video(PATH_VIDEO, 10, 11, DESTINATION_VIDEO, False, True)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:
         print(video_find_error.__repr__())
-    except CSVExistError as exist_error:
+    except TXTExistError as exist_error:
         print(exist_error.__repr__())
