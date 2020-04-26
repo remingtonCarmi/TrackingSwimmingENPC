@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from src.utils.extract_image import extract_image_video
+from src.utils.extractions.extract_image import extract_image_video
 from src.utils.point_selection import select_points
 from src.bgr_to_rgb import bgr_to_rgb
 from pathlib import Path

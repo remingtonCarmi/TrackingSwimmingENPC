@@ -22,8 +22,8 @@ def array_to_qpixmap(image):
 
 def head_selection(image):
     # Set the points
-    colors = [Qt.black, Qt.red, Qt.darkGreen, Qt.darkGray, Qt.black, Qt.red, Qt.darkGreen, Qt.darkGray]
-    points_image = np.zeros((len(colors), 2), dtype=np.float32)
+    colors = [Qt.black]
+    points_image = np.ones((len(colors), 2)) * -2
 
     # Set application, window and layout
     app = QApplication([])
@@ -33,7 +33,7 @@ def head_selection(image):
 
     # Get the sizes
     screen_size = QDesktopWidget().screenGeometry()
-    image_size = QSize(screen_size.width() - 115, screen_size.height() - 150)
+    image_size = QSize(screen_size.width() - 25, screen_size.height() - 750)
 
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)

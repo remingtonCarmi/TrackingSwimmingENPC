@@ -3,12 +3,12 @@ This code allows the user to load an image that is in a video.
 """
 from pathlib import Path
 import cv2
-from src.utils.exception_classes import TimeError, VideoFindError
+from src.utils.extractions.exception_classes import TimeError, VideoFindError
 
 
 def extract_image_video(name_video, time_begin, time_end, register=False, destination=Path("../../output/test/")):
     """
-    Extracts number_image images from path_video and
+    Extracts number_image images from path_images and
     save them.
     This raises an exception if the duration is not possible regarding the video.
     If time_end is bigger than the duration of the video,
