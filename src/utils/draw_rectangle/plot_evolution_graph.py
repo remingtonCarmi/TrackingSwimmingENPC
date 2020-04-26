@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.interpolate import spline
+from scipy.interpolate import interp1d
 
 
 def y_size(rectangles, i, j):
@@ -59,9 +59,9 @@ def plot_graphs(rect, rectangles_to_plot, parameter="x_front", smooth=True):
 
         plt.figure()
         if smooth:
-            r_smooth = spline(x, r, x_new)
+            r_smooth = interp1d(x, r, x_new)
             plt.plot(x_new, r_smooth)
         else:
-            plt.plot(x_new, r)
+            plt.plot(x, r)
 
     plt.show()
