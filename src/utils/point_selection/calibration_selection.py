@@ -12,7 +12,7 @@ import cv2
 from src.utils.point_selection.information_points.calibration_points import CalibrationPoints
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
 from src.utils.point_selection.main_widget.main_widget import MainWidget
-from src.utils.point_selection.instructions.instructions import instructions_perspective
+from src.utils.point_selection.instructions.instructions import instructions_calibration
 
 
 def array_to_qpixmap(image):
@@ -58,7 +58,7 @@ def calibration_selection(image):
 
     # Set application, window and layout
     app = QApplication([])
-    instructions_perspective()
+    instructions_calibration()
     window = MainWidget()
     layout = QHBoxLayout()
 

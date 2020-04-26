@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt, QPoint, QRect, QSize
 import cv2
 from src.utils.point_selection.information_points.calibration_points import CalibrationPoints
 from src.utils.point_selection.image_selection.image_selection import ImageSelection
-from src.utils.point_selection.instructions.instructions import instructions_perspective
+from src.utils.point_selection.instructions.instructions import instructions_calibration
 from src.utils.point_selection.main_widget.main_widget import MainWidget
 
 
@@ -27,7 +27,6 @@ def head_selection(image):
 
     # Set application, window and layout
     app = QApplication([])
-    # instructions_perspective()
     window = MainWidget()
     layout = QHBoxLayout()
 

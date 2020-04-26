@@ -8,9 +8,13 @@ from src.utils.extractions.exception_classes import VideoFindError
 from src.utils.point_selection.head_selection import head_selection
 from src.utils.store_load_matrix.fill_txt import TXTExistError
 from src.utils.extractions.extract_path import extract_path
+from src.utils.point_selection.instructions.instructions import instructions_head
 
 
 def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/test/"), create_csv=False):
+    # Instruction
+    instructions_head()
+
     # Get the images
     print("Get the images ...")
     list_images = extract_path(path_images)
