@@ -7,7 +7,9 @@ def crop(image, list_y, margin=0):
     """
     To vertically crop an images at given positions
     Args:
-        margin (integer):
+        margin (integer): number of lines of pixels
+            - we remove (if margin > 0)
+            - we add (if margin < 0)
         image(numpy array): image to crop
         list_y(list of integers): list of vertical positions where we crop
 
@@ -19,9 +21,21 @@ def crop(image, list_y, margin=0):
 
     y_prev = list_y[0]
 
-    for y in list_y[1:]:
-        images_crop.append(image[y_prev + margin: y - margin, :])
+    if margin >= 0:
+        for y in list_y[1:]:
+            images_crop.append(image[y_prev + margin: y - margin, :])
+            y_prev = y
+    else:
+        y = list_y[1]
+        images_crop.append(image[y_prev: y - 2*margin, :])
         y_prev = y
+
+        for y in list_y[2:-1]:
+            images_crop.append(image[y_prev + margin: y - margin, :])
+            y_prev = y
+
+        y = list_y[-1]
+        images_crop.append(image[y_prev + 2*margin: y, :])
     return images_crop
 
 

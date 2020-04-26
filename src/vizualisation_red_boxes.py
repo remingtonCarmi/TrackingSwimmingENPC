@@ -4,13 +4,12 @@
 import cv2
 import numpy as np
 from time import time
-import matplotlib.pyplot as plt
 from pathlib import Path
 
 from src.calibration import calibrate_video
-from src.utils.extract_image import extract_image_video
+from src.utils.extractions.extract_image import extract_image_video
 
-from src.utils.crop_lines import crop_list
+from src.utils.save_data.crop_lines import crop_list
 
 from src.utils.draw_rectangle.draw_rectangle import draw_rectangle
 from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
