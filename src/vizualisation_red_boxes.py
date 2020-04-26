@@ -7,7 +7,7 @@ from time import time
 from pathlib import Path
 
 from src.calibration import calibrate_video
-from src.utils.extract_image import extract_image_video
+from src.utils.extractions.extract_image import extract_image_video
 
 from src.utils.save_data.crop_lines import crop_list
 
