@@ -74,8 +74,12 @@ class ImageSelection(QLabel):
             for index_point in range(self.nb_points):
                 x_select = self.list_point[index_point].x()
                 y_select = self.list_point[index_point].y()
-                x_image = int((x_select / self.size().width()) * self.real_image_size.width())
-                y_image = int((y_select / self.size().height()) * self.real_image_size.height())
+                if x_select == -1:
+                    x_image = -1
+                    y_image = -1
+                else:
+                    x_image = int((x_select / self.size().width()) * self.real_image_size.width())
+                    y_image = int((y_select / self.size().height()) * self.real_image_size.height())
                 self.points[index_point] = np.array([x_image, y_image])
 
     def update_points(self):

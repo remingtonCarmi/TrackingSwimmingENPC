@@ -23,8 +23,8 @@ def array_to_qpixmap(image):
 def calibration_selection(image):
     # Set the points
     colors = [Qt.black, Qt.red, Qt.darkGreen, Qt.darkGray]
-    points_image = np.zeros((len(colors), 2), dtype=np.float32)
-    points_real = np.zeros((len(colors), 2), dtype=np.float32)
+    points_image = np.ones((len(colors), 2), dtype=np.float32) * -2
+    points_real = np.ones((len(colors), 2), dtype=np.float32) * -2
 
     # Set application, window and layout
     app = QApplication([])

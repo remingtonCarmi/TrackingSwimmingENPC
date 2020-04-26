@@ -46,21 +46,3 @@ class VideoFindError(Exception):
 
     def __repr__(self):
         return "The video {} is was not found.".format(self.video_name)
-
-
-class VideoPresenceError(Exception):
-    """
-    The error class to say that a video is missing when the video is required.
-    """
-    def __init__(self, video_name):
-        """
-        Construct the video name.
-        """
-        self.video_name = video_name
-
-    def __repr__(self):
-        """
-        Print the error with the name of the video.
-        """
-        path_video = Path("../../data/videos/")
-        return "The video {} is not in the file {}".format(self.video_name, path_video)
