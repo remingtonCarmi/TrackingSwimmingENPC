@@ -10,7 +10,7 @@ def array_to_string(matrix):
     Convert an array or a list to a string ready to be registered.
 
     Args:
-        matrix (array or list of 2 dimensions): the matrix to store.
+        matrix (array or list of 1 or 2 dimensions): the matrix to store.
 
     Returns:
         (string): the elements of matrix separated by a comma.

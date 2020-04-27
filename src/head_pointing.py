@@ -18,7 +18,7 @@ def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/tes
 
     # Get the images
     print("Get the images ...")
-    list_images = extract_path(path_images)
+    (list_images, list_images_name) = extract_path(path_images)
     nb_total_images = len(list_images)
     if nb_images == -1:
         nb_images = float('inf')
@@ -33,7 +33,7 @@ def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/tes
 
     if create_csv:
         name_csv = path_images.parts[-1]
-        fill_csv(name_csv + ".csv", list_head, destination_csv)
+        fill_csv(name_csv + ".csv", list_head, list_images_name, destination_csv)
 
     return list_head
 
