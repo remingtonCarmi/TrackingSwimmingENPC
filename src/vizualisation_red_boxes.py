@@ -97,7 +97,7 @@ def animation_red_boxes(path_video, is_calibrated, lines, margin, time_begin=0, 
 if __name__ == "__main__":
 
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
-    PATH_VIDEO_CALIBRATED = Path("../output/videos/corrected_vid0.mp4")
+    PATH_VIDEO_CALIBRATED = Path("../output/test/corrected_vid0.mp4")
 
     # lines for vid0
     LINES = [110, 227, 336, 443, 550, 659, 763, 871, 981]

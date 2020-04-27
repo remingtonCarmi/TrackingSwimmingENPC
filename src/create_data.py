@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 def create_data(path_video, path_txt, margin, nb_lines=10,
-                time_begin=0, time_end=-1, destination=Path("../output/images/")):
+                time_begin=0, time_end=-1, destination=Path("../data/lanes/")):
 
     name_video = path_video.parts[-1][: -4]
     path_directory = Path(str(destination / name_video))
@@ -28,7 +28,7 @@ def create_data(path_video, path_txt, margin, nb_lines=10,
 
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
-    PATH_TXT = Path("../data/labels/vid0.txt")
+    PATH_TXT = Path("../data/calibration/vid0.txt")
 
     MARGIN = 0
     create_data(PATH_VIDEO, PATH_TXT, MARGIN, time_begin=11, time_end=12)

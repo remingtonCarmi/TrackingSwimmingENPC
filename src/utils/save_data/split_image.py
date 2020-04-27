@@ -16,7 +16,7 @@ def split_and_save(image, margin, destination, frame, nb_lines):
 
 if __name__ == "__main__":
     NAME = "..\\..\\..\\test\\red_boxes\\fig1.jpg"
-    PATH = Path("../../../output/images/")
+    PATH = Path("../../../output/test/")
 
     IMAGE = plt.imread(NAME)
 
