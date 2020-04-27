@@ -113,13 +113,13 @@ class VideoFileError(Exception):
         self.video_name = video_name
 
     def __repr__(self):
-        video_path = Path("../../data/labels/")
+        video_path = Path("../../data/head_points/")
         return "The video {} is not in the file {}".format(self.video_name, video_path)
 
 
 if __name__ == "__main__":
-    PATH = Path("../../data/labels/test_file.csv")
-    IMAGE_PATH = Path("../../data/labels/f123_l4.jpg")
+    PATH = Path("../../data/head_points/test_file.csv")
+    IMAGE_PATH = Path("../../data/lanes/")
     data, coords_h = load_data(PATH)
     print(coords_h)
     print(associate_head_coordinates_with_image(IMAGE_PATH, data)[1])

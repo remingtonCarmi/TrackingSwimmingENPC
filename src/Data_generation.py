@@ -5,8 +5,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-from src.utils.load_data import load_data
-from src.utils.head_coords_image_association import associate_head_coordinates_with_image
+from src.load_data import load_data
+from src.head_coords_image_association import associate_head_coordinates_with_image
 
 
 def convert_into_image_tensor(image, coords_h):
@@ -58,8 +58,8 @@ def visualize(original, augmented):
 
 
 if __name__ == "main":
-    IMAGE_PATH = Path("../../data/images/swimmer/image_test1.jpg")
-    DATA_PATH = Path("../../data/labels/test_file.csv")
+    IMAGE_PATH = Path("../../data/lanes/")
+    DATA_PATH = Path("../../data/head_points/")
     data, coords = load_data(DATA_PATH)
     image, coords_h = associate_head_coordinates_with_image(IMAGE_PATH, coords)
     print('ok1')

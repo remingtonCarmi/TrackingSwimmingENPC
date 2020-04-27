@@ -21,8 +21,7 @@ def load_data(name_file):
 
 
 if __name__ == "__main__":
-    PATH = Path("../../data/labels/test_file.csv")
-    print('ok')
+    PATH = Path("../../data/head_points/")
     data, head_coords = load_data(PATH)
     print(data)
     print(head_coords)
