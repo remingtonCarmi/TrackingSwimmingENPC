@@ -87,7 +87,7 @@ def calibration_selection(image):
 
 if __name__ == "__main__":
     # Get the array
-    ROOT_IMAGE = Path('../../../data/images/raw_images/vid0_frame126.jpg')
+    ROOT_IMAGE = Path('../../../output/test/raw_images/vid0_frame126.jpg')
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     # Select the points

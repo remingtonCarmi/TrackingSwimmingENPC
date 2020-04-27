@@ -3,43 +3,8 @@ This module has the purpose of storing a matrix in a txt file.
 """
 from pathlib import Path
 import numpy as np
-
-
-class TXTExistError(Exception):
-    """The exception class error to tell that the txt file already exists."""
-    def __init__(self, txt_name):
-        """
-        Construct the txt_name.
-        """
-        self.txt_name = txt_name
-
-    def __repr__(self):
-        return "The file {} already exists.".format(self.txt_name)
-
-
-def array_to_string(matrix):
-    """
-    Convert an array or a list to a string ready to be registered.
-
-    Args:
-        matrix (array or list of 2 dimensions): the matrix to store.
-
-    Returns:
-        (string): the elements of matrix separated by a comma.
-
-    >>> array_to_string(np.array([[3, 4],[8, 2]]))
-    '3,4,8,2'
-    >>> array_to_string([[3, 4],[8, 2]])
-    '3,4,8,2'
-    """
-    if isinstance(matrix, list):
-        str_matrix = str(matrix)
-    else:
-        str_matrix = str(matrix.tolist())
-    str_matrix = str_matrix.replace("[", "")
-    str_matrix = str_matrix.replace("]", "")
-
-    return str_matrix.replace(" ", "")
+from src.utils.store_load_matrix.exception_classes import AlreadyExistError
+from src.utils.store_load_matrix.array_to_string.array_to_string import array_to_string
 
 
 def store_calibration_txt(txt_name, data, destination_path=Path("../../../output/test/")):
@@ -56,7 +21,7 @@ def store_calibration_txt(txt_name, data, destination_path=Path("../../../output
     """
     txt_path = destination_path / txt_name
     if txt_path.exists():
-        raise TXTExistError(txt_path)
+        raise AlreadyExistError(txt_path)
     nb_line = len(data)
     with open(txt_path, 'w') as file:
         # Register the video name
@@ -66,12 +31,8 @@ def store_calibration_txt(txt_name, data, destination_path=Path("../../../output
 
 
 if __name__ == "__main__":
-    # -- Doc tests -- #
-    import doctest
-    doctest.testmod()
-
     DATA = [Path("SN.mp4").parts[0], np.array([[8.5, 0.], [1.5, 0.], [5.5, 1.]]), [[5.2, 0.], [4.4, 0.], [8.5, 9.]]]
     try:
-        store_calibration_txt("test0.txt", DATA)
-    except TXTExistError as exist_error:
+        store_calibration_txt("test1.txt", DATA)
+    except AlreadyExistError as exist_error:
         print(exist_error.__repr__())

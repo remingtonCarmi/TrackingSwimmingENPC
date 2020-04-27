@@ -81,7 +81,8 @@ def extract_image_video(name_video, time_begin, time_end, register=False, destin
 
 if __name__ == "__main__":
     try:
-        LIST_IMAGES = extract_image_video(Path("../../data/videos/vid0.mp4"), 0, 0, True, Path("../../output/test/"))
+        LIST_IMAGES = extract_image_video(Path("../../../data/videos/vid0.mp4"), 0, 0, register=True,
+                                          destination=Path("../../output/test/"))
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as find_error:

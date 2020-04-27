@@ -6,9 +6,10 @@ import numpy as np
 from src.utils.extractions.extract_image import TimeError
 from src.utils.extractions.exception_classes import VideoFindError
 from src.utils.point_selection.head_selection import head_selection
-from src.utils.store_load_matrix.fill_txt import TXTExistError
+from src.utils.store_load_matrix.fill_txt import AlreadyExistError
 from src.utils.extractions.extract_path import extract_path
 from src.utils.point_selection.instructions.instructions import instructions_head
+from src.utils.store_load_matrix.fill_csv import fill_csv
 
 
 def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/test/"), create_csv=False):
@@ -24,7 +25,7 @@ def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/tes
     nb_pointed_image = min(nb_images, nb_total_images)
 
     # Head selection
-    list_head = [0] * nb_images
+    list_head = [0] * nb_pointed_image
     print("Head selection ...")
     for index_image in range(nb_pointed_image):
         list_head[index_image] = head_selection(list_images[index_image])
@@ -32,21 +33,20 @@ def head_pointing(path_images, nb_images=-1, destination_csv=Path("../output/tes
 
     if create_csv:
         name_csv = path_images.parts[-1]
-        path_csv = destination_csv / name_csv
-        # store_calibration_csv(path_csv, list_head)
+        fill_csv(name_csv + ".csv", list_head, destination_csv)
 
     return list_head
 
 
 if __name__ == "__main__":
-    PATH_IMAGES = Path("../output/test/")
-    DESTINATION_CSV = Path("../data/videos/corrected/")
+    PATH_IMAGES = Path("../output/images/vid0/")
+    DESTINATION_CSV = Path("../data/head_points/")
     try:
-        LIST_HEAD = head_pointing(PATH_IMAGES, 3)
+        LIST_HEAD = head_pointing(PATH_IMAGES, 3, create_csv=True, destination_csv=DESTINATION_CSV)
         print(LIST_HEAD)
     except TimeError as time_error:
         print(time_error.__repr__())
     except VideoFindError as video_find_error:
         print(video_find_error.__repr__())
-    except TXTExistError as exist_error:
+    except AlreadyExistError as exist_error:
         print(exist_error.__repr__())
