@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.interpolate import interp1d
 
 
 def y_size(rectangles, i, j):
@@ -23,7 +22,7 @@ def area(rectangles, i, j):
     return y_size(rectangles, i, j) * x_size(rectangles, i, j)
 
 
-def plot_graphs(rect, rectangles_to_plot, parameter="x_front", smooth=True):
+def plot_graphs(rect, rectangles_to_plot, parameter="x_front"):
     """
     To plot the evolution of dimensions of a list of rectangles
     Args:
@@ -55,13 +54,7 @@ def plot_graphs(rect, rectangles_to_plot, parameter="x_front", smooth=True):
     for j in rectangles_to_plot:
         r = [dic[parameter](rect_np, i, j) for i in range(n)]
 
-        x_new = np.linspace(min(x), max(x), 1000)
-
         plt.figure()
-        if smooth:
-            r_smooth = interp1d(x, r, x_new)
-            plt.plot(x_new, r_smooth)
-        else:
-            plt.plot(x, r)
+        plt.plot(x, r)
 
     plt.show()
