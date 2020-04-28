@@ -3,8 +3,8 @@ This module is where you can find all the exception classes.
 
 Classes:
     TimeError
-    VideoFindError
-    VideoPresenceError
+    FindError
+    EmptyFolder
 """
 
 
@@ -35,13 +35,25 @@ class TimeError(Exception):
         return begin_message + end_message
 
 
-class VideoFindError(Exception):
-    """The exception class error to tell that the video has not been found."""
-    def __init__(self, video_name):
+class FindError(Exception):
+    """The exception class error to tell that the path has not been found."""
+    def __init__(self, path_name):
         """
-        Construct the video_name.
+        Construct the path_name.
         """
-        self.video_name = video_name
+        self.path_name = path_name
 
     def __repr__(self):
-        return "The video {} is was not found.".format(self.video_name)
+        return "The path {} was not found.".format(self.path_name)
+
+
+class EmptyFolder(Exception):
+    """The exception class error to tell that the folder is empty"""
+    def __init__(self, path_folder):
+        """
+        Construct the path_folder.
+        """
+        self.path_folder = path_folder
+
+    def __repr__(self):
+        return "The folder {} is empty.".format(self.path_folder)

@@ -9,12 +9,13 @@ import random as rd
 import numpy as np
 import cv2
 from src.utils.extractions.extract_image import extract_image_video
-from src.utils.extractions.extract_image import TimeError
-from src.utils.extractions.exception_classes import VideoFindError
+from src.utils.extractions.exception_classes import TimeError
+from src.utils.extractions.exception_classes import FindError
 from src.utils.make_video import make_video
 from src.utils.point_selection.calibration_selection import calibration_selection
 from src.utils.perspective_correction.perspective_correction import get_top_down_image, get_homography
-from src.utils.store_load_matrix.fill_txt import store_calibration_txt, AlreadyExistError
+from src.utils.store_load_matrix.fill_txt import store_calibration_txt
+from src.utils.store_load_matrix.exception_classes import AlreadyExistError
 
 
 def meter_to_pixel(src_points, dst_meter, image):
@@ -76,7 +77,7 @@ def meter_to_pixel(src_points, dst_meter, image):
 
 
 def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Path("../output/test/"),
-                    destination_txt=Path("../output/test"), create_video=True, create_txt=False):
+                    destination_txt=Path("../output/test"), create_video=False, create_txt=False):
     """
     Calibrates the video from the starting time to the end time.
 
@@ -96,7 +97,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
             Default value = Path("../output/test/").
 
         create_video (boolean): if True, create the video in the destination video path.
-            Default value = True.
+            Default value = False.
 
         create_txt (boolean): if True, create a txt file that tells how to calibrate the video.
             Default value = True.
@@ -105,10 +106,33 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
         list_images (array, shape = (number of image in the original video, shape of an image in the
             original video): the list of the calibrated images.
 
-    If the video does not exist, an VideoFindError will be raised.
+    If the video does not exist, an FindError will be raised.
     If the beginning time or the ending time are not well defined, an TimeError will be raised.
     If the txt file is already created, an AlreadyExistError exception will be raised.
     """
+    # Verify that the folders exist and that the video or the txt file does not exist
+    name_video = path_video.parts[-1]
+    if create_video:
+        # Check that the folder exists
+        if not destination_video.exists():
+            raise FindError(destination_video)
+
+        corrected_video = "corrected_" + name_video
+        path_corrected_video = destination_video / corrected_video
+        # Check that the video does not exist
+        if path_corrected_video.exists():
+            raise AlreadyExistError(path_corrected_video)
+    if create_txt:
+        # Check that the folder exists
+        if not destination_txt.exists():
+            raise FindError(destination_txt)
+
+        name_txt = name_video[: -3] + "txt"
+        path_txt = destination_txt / name_txt
+        # Check that the video does not exist
+        if path_txt.exists():
+            raise AlreadyExistError(path_txt)
+
     # Get the images
     print("Get the images ...")
     list_images = extract_image_video(path_video, time_begin, time_end)
@@ -129,7 +153,6 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
     for index_image in range(nb_images):
         list_images[index_image] = get_top_down_image(list_images[index_image], homography)
 
-    name_video = path_video.parts[-1]
     if create_video:
         # Get the fps
         video = cv2.VideoCapture(str(path_video))
@@ -137,23 +160,21 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
 
         # Make the video
         print("Make the corrected video ...")
-        corrected_video = "corrected_" + name_video
         make_video(corrected_video, list_images, fps_video, destination_video)
 
     if create_txt:
         # Construct the txt file
         to_store = [name_video, points_src, points_dst, homography, exteme_points]
-        store_calibration_txt(name_video[: -3] + "txt", to_store, destination_txt)
+        store_calibration_txt(name_txt, to_store, destination_txt)
 
     return np.array(list_images)
 
 
 if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
-    DESTINATION_TXT = Path("../data/calibration/")
     try:
-        calibrate_video(PATH_VIDEO, 10, 11, create_video=False, create_txt=True, destination_txt=DESTINATION_TXT)
-    except VideoFindError as video_find_error:
+        calibrate_video(PATH_VIDEO, 10, 11, create_video=True, create_txt=True)
+    except FindError as video_find_error:
         print(video_find_error.__repr__())
     except TimeError as time_error:
         print(time_error.__repr__())
