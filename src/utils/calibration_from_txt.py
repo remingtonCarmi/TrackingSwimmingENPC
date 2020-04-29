@@ -12,7 +12,6 @@ def calibrate_from_txt(path_video, path_txt, time_begin=0, time_end=-1):
     file.close()
 
     homography = np.reshape(homography, (3, 3))
-    print(homography)
 
     # Get the images
     print("Get the images ...")
