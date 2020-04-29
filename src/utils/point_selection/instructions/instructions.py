@@ -29,6 +29,7 @@ INSTRUCTIONS_HEAD += INSTRUCTIONS_SELECTION + "Skip a point (if you don't see th
 INSTRUCTIONS_HEAD += "WARNINGS ! \n"
 INSTRUCTIONS_HEAD += "Do not press the scpace bar twice it will not register the information "
 INSTRUCTIONS_HEAD += "for the second image. \n"
+INSTRUCTIONS_HEAD += "IF THE CSV FILE IS OPEN, CLOSE IT !!!!!!!!!!!. \n"
 
 
 def instructions_calibration():

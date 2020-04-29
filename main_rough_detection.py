@@ -3,7 +3,7 @@ from src.vizualisation_red_boxes import animation_red_boxes
 from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
 from src.utils.draw_rectangle.exception_classes import VideoAlreadyExists
 from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindError
+from src.utils.extractions.exception_classes import FindErrorExtraction
 
 
 PATH_VIDEO = Path("data/videos/vid0.mp4")
@@ -30,5 +30,5 @@ except VideoAlreadyExists as already_exists:
 except TimeError as time_error:
     print(time_error.__repr__())
 
-except FindError as find_error:
+except FindErrorExtraction as find_error:
     print(find_error.__repr__())

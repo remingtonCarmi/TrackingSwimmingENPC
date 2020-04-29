@@ -3,7 +3,7 @@ from src.utils.calibration_from_txt import calibrate_from_txt
 
 from src.utils.save_data.exception_classes import FolderAlreadyExists
 from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindError
+from src.utils.extractions.exception_classes import FindErrorExtraction
 
 
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
     except TimeError as time_error:
         print(time_error.__repr__())
 
-    except FindError as find_error:
+    except FindErrorExtraction as find_error:
         print(find_error.__repr__())
 

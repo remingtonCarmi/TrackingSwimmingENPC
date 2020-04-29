@@ -2,7 +2,7 @@ from pathlib import Path
 from os import listdir
 import cv2
 import numpy as np
-from src.utils.extractions.exception_classes import FindError, EmptyFolder
+from src.utils.extractions.exception_classes import FindErrorExtraction, EmptyFolder, NoMoreFrame
 
 
 def register_image(image_name, frame, lane):
@@ -25,14 +25,21 @@ def get_frame_lane(image_name):
 
 
 def extract_path(path_file_images, frame, lane):
-
     if not path_file_images.exists():
-        raise FindError(path_file_images)
+        raise FindErrorExtraction(path_file_images)
 
     # Initialize lists
     list_images = []
     list_images_name = []
     list_file = listdir(path_file_images)
+
+    # Verify that the file is not empty
+    nb_files = len(list_file)
+    idx_file = 0
+    while idx_file < nb_files and not (list_file[idx_file][-4:] == ".jpg" or list_file[idx_file][-4:] == ".JPG"):
+        idx_file += 1
+    if idx_file == nb_files:
+        raise EmptyFolder(path_file_images)
 
     for file in list_file:
         if register_image(file, frame, lane):
@@ -41,7 +48,7 @@ def extract_path(path_file_images, frame, lane):
             list_images_name.append(get_frame_lane(file))
 
     if len(list_images_name) == 0:
-        raise EmptyFolder(path_file_images)
+        raise NoMoreFrame(path_file_images)
 
     return np.array(list_images), np.array(list_images_name)
 
@@ -53,7 +60,9 @@ if __name__ == "__main__":
         (LIST_IMAGES, LIST_IMAGES_NAME) = extract_path(PATH_IMAGE, frame=21, lane=5)
         print(LIST_IMAGES_NAME)
         print("Number of images", len(LIST_IMAGES))
-    except FindError as find_error:
+    except FindErrorExtraction as find_error:
         print(find_error.__repr__())
     except EmptyFolder as empty_folder:
         print(empty_folder.__repr__())
+    except NoMoreFrame as no_more_frame:
+        print(no_more_frame.__repr__())

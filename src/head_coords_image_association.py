@@ -3,7 +3,7 @@
 from pathlib import Path
 import cv2
 from src.load_data import load_data
-from src.utils.extractions.exception_classes import FindError
+from src.utils.extractions.exception_classes import FindErrorExtraction
 
 
 def associate_head_coordinates_with_image(image_path, data_elements):
@@ -19,7 +19,7 @@ def associate_head_coordinates_with_image(image_path, data_elements):
     """
     # checks if the if the image exists or not
     if not image_path.exists():
-        raise FindError(image_path)
+        raise FindErrorExtraction(image_path)
 
     # Preprocessing: decompose the path name to recover the information (name of the video, frame and waterline numbers)
     name = str(image_path)

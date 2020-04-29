@@ -3,7 +3,7 @@ This code allows the user to load an image that is in a video.
 """
 from pathlib import Path
 import cv2
-from src.utils.extractions.exception_classes import TimeError, FindError
+from src.utils.extractions.exception_classes import TimeError, FindErrorExtraction
 
 
 def extract_image_video(path_video, time_begin, time_end, register=False, destination=Path("../../output/test/")):
@@ -19,7 +19,7 @@ def extract_image_video(path_video, time_begin, time_end, register=False, destin
 
         time_begin (integer in second): the first image will be at the second 'time'.
 
-        time_end (integer in second): the final time at which we stop to register the video.
+        time_end (integer in second): the final time at which we can_stop to register the video.
             if time_end == -1, the video is registered until the end.
 
         register (boolean): if True, the images will be registered.
@@ -34,7 +34,7 @@ def extract_image_video(path_video, time_begin, time_end, register=False, destin
     """
     # Verify if the video exists:
     if not path_video.exists():
-        raise FindError(path_video)
+        raise FindErrorExtraction(path_video)
     # Get the video and its characteristics
     video = cv2.VideoCapture(str(path_video))
     fps = video.get(cv2.CAP_PROP_FPS)
@@ -84,5 +84,5 @@ if __name__ == "__main__":
                                           destination=Path("../../output/test/"))
     except TimeError as time_error:
         print(time_error.__repr__())
-    except FindError as find_error:
+    except FindErrorExtraction as find_error:
         print(find_error.__repr__())

@@ -10,7 +10,7 @@ import numpy as np
 import cv2
 from src.utils.extractions.extract_image import extract_image_video
 from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindError
+from src.utils.extractions.exception_classes import FindErrorExtraction
 from src.utils.make_video import make_video
 from src.utils.point_selection.calibration_selection import calibration_selection
 from src.utils.perspective_correction.perspective_correction import get_top_down_image, get_homography
@@ -106,7 +106,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
         list_images (array, shape = (number of image in the original video, shape of an image in the
             original video): the list of the calibrated images.
 
-    If the video does not exist, an FindError will be raised.
+    If the video does not exist, an FindErrorExtraction will be raised.
     If the beginning time or the ending time are not well defined, an TimeError will be raised.
     If the txt file is already created, an AlreadyExistError exception will be raised.
     """
@@ -115,7 +115,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
     if create_video:
         # Check that the folder exists
         if not destination_video.exists():
-            raise FindError(destination_video)
+            raise FindErrorExtraction(destination_video)
 
         corrected_video = "corrected_" + name_video
         path_corrected_video = destination_video / corrected_video
@@ -125,7 +125,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
     if create_txt:
         # Check that the folder exists
         if not destination_txt.exists():
-            raise FindError(destination_txt)
+            raise FindErrorExtraction(destination_txt)
 
         name_txt = name_video[: -3] + "txt"
         path_txt = destination_txt / name_txt
@@ -139,7 +139,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Pat
     nb_images = len(list_images)
 
     # Selection of the 8 points in a random image
-    print("Point selection ...")
+    print("Point selection for calibration ...")
     (points_src, points_meter) = calibration_selection(list_images[rd.randint(int(nb_images / 10), int(nb_images / 5))])
 
     # Get the coordinate of the points in the final image in pixels and the extreme points
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     PATH_VIDEO = Path("../data/videos/vid0.mp4")
     try:
         calibrate_video(PATH_VIDEO, 10, 11, create_video=True, create_txt=True)
-    except FindError as video_find_error:
+    except FindErrorExtraction as video_find_error:
         print(video_find_error.__repr__())
     except TimeError as time_error:
         print(time_error.__repr__())
