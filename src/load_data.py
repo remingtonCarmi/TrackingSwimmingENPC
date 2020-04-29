@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
+from numpy.core.multiarray import ndarray
+
 
 def load_data(name_file):
     """
@@ -15,9 +17,9 @@ def load_data(name_file):
         X: (list of lists) contains all the data
     """
     data_set = pd.read_csv(str(name_file))
-    data = np.concatenate([data_set[['f', 'l', 'x_h', 'y_h']].to_numpy()], axis = 1)
-    head_coords = np.concatenate([data_set[['x_h', 'y_h']].to_numpy()], axis = 1)
-    return data, head_coords
+    data = np.concatenate([data_set[['f', 'c', 'x_h', 'y_h']].to_numpy()], axis=1)
+    coord: ndarray = np.concatenate([data_set[['x_h', 'y_h']].to_numpy()], axis=1)
+    return data, coord
 
 
 if __name__ == "__main__":
