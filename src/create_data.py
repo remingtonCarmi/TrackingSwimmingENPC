@@ -1,4 +1,5 @@
 from src.utils.save_data.split_image import split_and_save
+from src.utils.save_data.exception_classes import FolderAlreadyExists
 from src.utils.calibration_from_txt import calibrate_from_txt
 
 import os
@@ -11,6 +12,10 @@ def create_data(path_video, path_txt, margin, nb_lines=10,
 
     name_video = path_video.parts[-1][: -4]
     path_directory = Path(str(destination / name_video))
+
+    # Check if the data has already been generated
+    if os.path.exists(path_directory):
+        raise FolderAlreadyExists(path_directory)
 
     # Create the directory where to save the data
     os.makedirs(path_directory)
