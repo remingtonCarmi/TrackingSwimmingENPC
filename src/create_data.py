@@ -1,6 +1,11 @@
 from src.utils.save_data.split_image import split_and_save
-from src.utils.save_data.exception_classes import FolderAlreadyExists
 from src.utils.calibration_from_txt import calibrate_from_txt
+
+from src.utils.save_data.exception_classes import FolderAlreadyExists
+from src.utils.extractions.exception_classes import TimeError
+from src.utils.extractions.exception_classes import FindError
+
+
 
 import os
 import cv2
@@ -36,4 +41,16 @@ if __name__ == "__main__":
     PATH_TXT = Path("../data/calibration/vid0.txt")
 
     MARGIN = 0
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, time_begin=11, time_end=12)
+
+    try:
+        create_data(PATH_VIDEO, PATH_TXT, MARGIN, time_begin=11, time_end=12)
+
+    except FolderAlreadyExists as already_exists:
+        print(already_exists.__repr__())
+
+    except TimeError as time_error:
+        print(time_error.__repr__())
+
+    except FindError as find_error:
+        print(find_error.__repr__())
+
