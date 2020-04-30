@@ -40,13 +40,12 @@ def augment_data(coord, image):
     image4 = tf.image.random_saturation(img, 1, 2)
     image5 = tf.image.random_brightness(img, max_delta=0.3)
     # image6 = tf.image.translate(image, [3,3])
-    pairs = [[img, coord], [image1, (h-coord[0], w-coord[1])], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
+    pairs = [[img, coord], [image1, (w-coord[0], h-coord[1])], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
 
     return pairs
 
 
 if __name__ == "__main__":
-    print('ok')
     DATA_PATH = Path("../output/test/test_file.csv")
     IMAGE_PATH = Path("../output/test/vid0/f4_c3.jpg")
     data, coords = load_data(DATA_PATH)
@@ -55,11 +54,12 @@ if __name__ == "__main__":
     sess = tf.InteractiveSession()
     for i in range(len(list_pairs)):
         image = list_pairs[i][0].eval()
-        print(image.shape)
+        print(list_pairs[i][1])
         image_p = np.int_(image)
         b, g, r = cv2.split(image_p)  # get b,g,r
         image_p = cv2.merge([r, g, b])
         plt.figure()
         plt.imshow(image_p)
+        plt.scatter(list_pairs[i][1][0], list_pairs[i][1][1])
         plt.show()
     sess.close()
