@@ -18,7 +18,7 @@ class ImageSelection(QLabel):
         - if the user press the space bar, the application is closed.
         - if the user press the control button and that skip=True, the point is skip.
     """
-    def __init__(self, pix_map, size, points, colors, skip=False):
+    def __init__(self, pix_map, size, points, colors, skip=False, can_stop=False):
         """
         Constructs all the parameters to manager the QLabel.
 
@@ -32,6 +32,8 @@ class ImageSelection(QLabel):
             colors (list of QColors): the colors of the points.
 
             skip (optional)(boolean): if True, allows the user to skip points.
+
+            can_stop (optional)(boolean): if True, allows the user to stop the pointing.
         """
         super().__init__()
 
@@ -61,6 +63,10 @@ class ImageSelection(QLabel):
 
         # Skip point option
         self.skip = skip
+
+        # Stop point option
+        self.can_stop = can_stop
+        self.stop = False
 
     def paintEvent(self, event):
         """
@@ -106,6 +112,10 @@ class ImageSelection(QLabel):
             # Skip point only if a point can be registered
             if self.nb_points < len(self.colors):
                 self.skip_points()
+
+        if self.can_stop and event.key() == Qt.Key_S:
+            self.stop = True
+            self.parentWidget().close()
 
         if event.key() == Qt.Key_Space:
             self.parentWidget().close()

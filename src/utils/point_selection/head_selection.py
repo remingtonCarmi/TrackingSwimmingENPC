@@ -36,7 +36,7 @@ def head_selection(image):
 
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)
-    image_selection = ImageSelection(pix_map, image_size, points_image, colors, skip=True)
+    image_selection = ImageSelection(pix_map, image_size, points_image, colors, skip=True, can_stop=True)
 
     # Add widgets to layout
     layout.addWidget(image_selection)
@@ -46,7 +46,7 @@ def head_selection(image):
     window.showMaximized()
     app.exec_()
 
-    return points_image
+    return points_image, image_selection.stop
 
 
 if __name__ == "__main__":

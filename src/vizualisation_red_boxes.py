@@ -18,7 +18,7 @@ from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
 from src.utils.draw_rectangle.exception_classes import VideoAlreadyExists
 
 from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindError
+from src.utils.extractions.exception_classes import FindErrorExtraction
 
 from src.utils.make_video import make_video
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     except TimeError as time_error:
         print(time_error.__repr__())
 
-    except FindError as find_error:
+    except FindErrorExtraction as find_error:
         print(find_error.__repr__())
 
 

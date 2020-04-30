@@ -3,7 +3,7 @@ This module is where you can find all the exception classes.
 
 Classes:
     TimeError
-    FindError
+    FindErrorExtraction
     EmptyFolder
 """
 
@@ -18,7 +18,7 @@ class TimeError(Exception):
 
             time_begin (integer in second): the first image will be at the second 'time'.
 
-            time_end (integer in second): the final time at which we stop to register the video.
+            time_end (integer in second): the final time at which we can_stop to register the video.
         """
         self.name = name
         self.time_begin = time_begin
@@ -35,7 +35,7 @@ class TimeError(Exception):
         return begin_message + end_message
 
 
-class FindError(Exception):
+class FindErrorExtraction(Exception):
     """The exception class error to tell that the path has not been found."""
     def __init__(self, path_name):
         """
@@ -57,3 +57,15 @@ class EmptyFolder(Exception):
 
     def __repr__(self):
         return "The folder {} is empty.".format(self.path_folder)
+
+
+class NoMoreFrame(Exception):
+    """The exception class error to tell that there is no more frame to point"""
+    def __init__(self, path_folder):
+        """
+        Construct the path_folder.
+        """
+        self.path_folder = path_folder
+
+    def __repr__(self):
+        return "All the frames is {} have been labeled.".format(self.path_folder)

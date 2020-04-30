@@ -3,7 +3,7 @@ This file makes a video with a list of images.
 """
 from pathlib import Path
 import cv2
-from src.utils.store_load_matrix.exception_classes import AlreadyExistError, FindError
+from src.utils.store_load_matrix.exception_classes import AlreadyExistError, FindErrorStore
 
 
 def make_video(name_video, images, fps=25, destination=Path("../output/test/")):
@@ -21,7 +21,7 @@ def make_video(name_video, images, fps=25, destination=Path("../output/test/")):
     """
     # Check that the folder exists
     if not destination.exists():
-        raise FindError(destination)
+        raise FindErrorStore(destination)
 
     # Verify that the video does not exist
     path_video = destination / name_video

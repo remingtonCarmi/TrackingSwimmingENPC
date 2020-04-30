@@ -3,7 +3,7 @@ This module has the purpose of storing a matrix in a txt file.
 """
 from pathlib import Path
 import numpy as np
-from src.utils.store_load_matrix.exception_classes import AlreadyExistError, FindError
+from src.utils.store_load_matrix.exception_classes import AlreadyExistError, FindErrorStore
 from src.utils.store_load_matrix.array_to_string.array_to_string import array_to_string
 
 
@@ -21,7 +21,7 @@ def store_calibration_txt(txt_name, data, destination_path=Path("../../../output
     """
     # Check that the folder exists
     if not destination_path.exists():
-        raise FindError(destination_path)
+        raise FindErrorStore(destination_path)
 
     # Verify if the txt does not exist
     txt_path = destination_path / txt_name
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     DATA = [Path("SN.mp4").parts[0], np.array([[8.5, 0.], [1.5, 0.], [5.5, 1.]]), [[5.2, 0.], [4.4, 0.], [8.5, 9.]]]
     try:
         store_calibration_txt("test1.txt", DATA)
-    except FindError as find_error:
+    except FindErrorStore as find_error:
         print(find_error.__repr__())
     except AlreadyExistError as exist_error:
         print(exist_error.__repr__())
