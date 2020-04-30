@@ -32,7 +32,7 @@ def head_selection(image):
 
     # Get the sizes
     screen_size = QDesktopWidget().screenGeometry()
-    image_size = QSize(screen_size.width() - 25, screen_size.height() - 750)
+    image_size = QSize(screen_size.width() - 25, screen_size.height() - 850)
 
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)

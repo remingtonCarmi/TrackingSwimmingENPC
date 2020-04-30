@@ -61,7 +61,7 @@ def head_pointing(path_images, destination_csv=Path("../output/test/")):
 
 
 if __name__ == "__main__":
-    PATH_IMAGES = Path("../output/images/vid0/")
+    PATH_IMAGES = Path("../output/test/vid1/")
 
     try:
         LIST_HEAD = head_pointing(PATH_IMAGES)

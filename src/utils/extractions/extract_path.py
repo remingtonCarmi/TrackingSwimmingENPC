@@ -19,9 +19,9 @@ def register_image(image_name, frame, lane):
 
 def get_frame_lane(image_name):
     image_name = image_name[1: -4]
-    image_name = image_name.split("c")
+    frame_lane = image_name.split("l")
 
-    return [int(image_name[0][: -1]), int(image_name[1])]
+    return [int(frame_lane[0][: -1]), int(frame_lane[1])]
 
 
 def extract_path(path_file_images, frame, lane):
@@ -54,7 +54,7 @@ def extract_path(path_file_images, frame, lane):
 
 
 if __name__ == "__main__":
-    PATH_IMAGE = Path("../../../output/test/vid0/")
+    PATH_IMAGE = Path("../../../output/test/vid1/")
 
     try:
         (LIST_IMAGES, LIST_IMAGES_NAME) = extract_path(PATH_IMAGE, frame=21, lane=5)

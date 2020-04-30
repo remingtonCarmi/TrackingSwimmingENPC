@@ -36,12 +36,11 @@ except AlreadyExistError as exist_error:
 # --- Create the lanes images --- #
 PATH_TXT = Path("data/calibration/{}.txt".format(NAME_VIDEO))
 DESTINATION_LANES = Path("data/lanes/")
-# EXCEPTION SI LE FICHIER EST DEJA REMPLIT
 try:
     print(" --- Create the lanes as jpg files --- ")
     MARGIN = 0
 
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=11, time_end=12)
+    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=5, time_end=6)
 except FolderAlreadyExists as already_exists:
     print(already_exists.__repr__())
 except TimeError as time_error:
