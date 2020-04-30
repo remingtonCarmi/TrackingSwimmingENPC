@@ -9,6 +9,7 @@ from src.load_data import load_data
 from src.head_coords_image_association import associate_head_coordinates_with_image
 
 
+
 def convert_into_image_tensor(img, coord):
     """
     Enables to convert an image in the right format with tensorflow
@@ -25,37 +26,39 @@ def convert_into_image_tensor(img, coord):
     return img, coord
 
 
-def augment(coord, image):
+def augment_data(coord, image):
     """
     Augments the data: produces 6 images with one input image
 
     """
-    image, coord = convert_into_image_tensor(image, coord)
-    image = tf.image.convert_image_dtype(image, tf.float32)
-    image1 = tf.image.random_flip_left_right(image)
-    image2 = tf.image.random_saturation(image, 0, 3)
-    image3 = tf.image.random_brightness(image, max_delta=0.5)
-    image4 = tf.image.random_saturation(image, 1, 2)
-    image5 = tf.image.random_brightness(image, max_delta=0.3)
+    img, coord = convert_into_image_tensor(image, coord)
+    img = tf.image.convert_image_dtype(img, tf.float32)
+    image1 = tf.image.random_flip_left_right(img)
+    image2 = tf.image.random_saturation(img, 0, 3)
+    image3 = tf.image.random_brightness(img, max_delta=0.5)
+    image4 = tf.image.random_saturation(img, 1, 2)
+    image5 = tf.image.random_brightness(img, max_delta=0.3)
     # image6 = tf.image.translate(image, [3,3])
-    pairs = [[image, coord], [image1, coord], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
+    pairs = [[img, coord], [image1, coord], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
 
     return pairs
 
 
 if __name__ == "__main__":
     print('ok')
-    IMAGE_PATH = Path("../data/lanes/f123_l4.jpg")
-    DATA_PATH = Path("../data/head_points/test_file.csv")
+    DATA_PATH = Path("../output/test/test_file.csv")
+    IMAGE_PATH = Path("../output/test/vid0/f4_c3.jpg")
     data, coords = load_data(DATA_PATH)
     image, coords_h = associate_head_coordinates_with_image(IMAGE_PATH, data)
-    list_pairs = augment(coords_h, image)
+    list_pairs = augment_data(coords_h, image)
     sess = tf.InteractiveSession()
-    image = list_pairs[0][0].eval()
-    print(image.shape)
-    image_p = [list(map(int, p)) for p in image[:][:]]
-    print(image[0][0])
-    plt.figure()
-    plt.imshow(image)
-    cv2.imshow(cv2.WINDOW_NORMAL, image)
+    for i in range(len(list_pairs)):
+        image = list_pairs[i][0].eval()
+        print(image.shape)
+        image_p = np.int_(image)
+        b, g, r = cv2.split(image_p)  # get b,g,r
+        image_p = cv2.merge([r, g, b])
+        plt.figure()
+        plt.imshow(image_p)
+        plt.show()
     sess.close()
