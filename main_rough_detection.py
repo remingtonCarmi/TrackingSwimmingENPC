@@ -19,7 +19,7 @@ try:
                                      destination_video=Path("output/videos/"), path_txt=Path("data/calibration"))
 
     # lanes we want to plot the swim frequency
-    LINES_TO_PLOT = [i for i in range(8)]
+    LINES_TO_PLOT = [1]
 
     PARAMETER_TO_PLOT = "x_front"
     plot_graphs(RECTANGLES, LINES_TO_PLOT, PARAMETER_TO_PLOT)

@@ -10,7 +10,7 @@ def split_and_save(image, margin, destination, frame, nb_lines):
     list_y = [int(1/nb_lines * i * image.shape[0]) for i in range(nb_lines + 1)]
     list_images = crop(image, list_y, margin)
     for c in range(10):
-        name = 'f' + str(frame) + '_c%d.jpg' % c
+        name = 'f' + '0' * (4 - (len(str(frame)))) + str(frame) + '_c%d.jpg' % c
         cv2.imwrite(str(destination / name), list_images[c])
 
 

@@ -6,7 +6,6 @@ from src.utils.extractions.exception_classes import TimeError
 from src.utils.extractions.exception_classes import FindErrorExtraction
 
 
-
 import os
 import cv2
 from pathlib import Path
@@ -53,4 +52,3 @@ if __name__ == "__main__":
 
     except FindErrorExtraction as find_error:
         print(find_error.__repr__())
-

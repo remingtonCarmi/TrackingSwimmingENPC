@@ -51,11 +51,12 @@ def plot_graphs(rect, rectangles_to_plot, parameter="x_front"):
            "area": area
            }
 
+    plt.figure()
+    plt.title("Evolution of the parameter " + parameter + " as a function of the frames.")
     for j in rectangles_to_plot:
         r = [dic[parameter](rect_np, i, j) for i in range(n)]
-        plt.figure()
-        plt.title("Evolution of the parameter " + parameter + " as a function of the frames.")
-        plt.plot(x, r, label="Swimmer from lane " + str(j + 1))
-        plt.legend()
 
+        plt.plot(x, r, label="Swimmer from lane " + str(j + 1))
+
+    plt.legend()
     plt.show()
