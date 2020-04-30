@@ -31,15 +31,16 @@ def augment_data(coord, image):
     Augments the data: produces 6 images with one input image
 
     """
+    h, w = image.shape[0], image.shape[1]
     img, coord = convert_into_image_tensor(image, coord)
     img = tf.image.convert_image_dtype(img, tf.float32)
-    image1 = tf.image.random_flip_left_right(img)
+    image1 = tf.image.flip_left_right(img)
     image2 = tf.image.random_saturation(img, 0, 3)
     image3 = tf.image.random_brightness(img, max_delta=0.5)
     image4 = tf.image.random_saturation(img, 1, 2)
     image5 = tf.image.random_brightness(img, max_delta=0.3)
     # image6 = tf.image.translate(image, [3,3])
-    pairs = [[img, coord], [image1, coord], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
+    pairs = [[img, coord], [image1, (h-coord[0], w-coord[1])], [image2, coord], [image3, coord], [image4, coord], [image5, coord]]
 
     return pairs
 
