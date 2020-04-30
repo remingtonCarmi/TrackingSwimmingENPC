@@ -40,7 +40,7 @@ def boxes_list(list_lines, list_y):
             rectangles.append([x0, y0, x1, y1])
 
         else:
-            print("Detection of swimmer from line " + str(list_y.index(y) + 1) + " failed.")
+            # print("Detection of swimmer from line " + str(list_y.index(y) + 1) + " failed.")
             rectangles.append([0, 0, 0, 0])
     return rectangles
 
@@ -74,9 +74,6 @@ def animation_red_boxes(path_video, lines, margin, time_begin=0, time_end=-1, cr
 
     for i in range(n_images):
         corrected_images[i] = cv2.cvtColor(corrected_images[i], cv2.COLOR_BGR2RGB)
-
-    plt.imshow(corrected_images[0])
-    plt.show()
 
     print("Swimmers detection...")
     list_images_crop = crop_list(corrected_images, lines, margin)
