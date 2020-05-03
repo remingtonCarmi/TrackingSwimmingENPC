@@ -17,8 +17,8 @@ def load_data(name_file):
         X: (list of lists) contains all the data
     """
     data_set = pd.read_csv(str(name_file))
-    data = np.concatenate([data_set[['f', 'c', 'x_h', 'y_h']].to_numpy()], axis=1)
-    coord: ndarray = np.concatenate([data_set[['x_h', 'y_h']].to_numpy()], axis=1)
+    data = np.concatenate([data_set[['f', 'c', 'head_x', 'head_y']].to_numpy()], axis=1)
+    coord: ndarray = np.concatenate([data_set[['head_x', 'head_y']].to_numpy()], axis=1)
     return data, coord
 
 
