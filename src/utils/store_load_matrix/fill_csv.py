@@ -11,11 +11,10 @@ def last_line(csv_path):
         raise FindErrorStore(csv_path)
 
     # Get the last line
-    last = pd.read_csv(csv_path).tail(1)
+    data_frame = pd.read_csv(csv_path)
 
-    if not last.empty:
-        frame = int(last['frame'])
-        lane = int(last['lane'])
+    if not data_frame.empty:
+        (frame, lane) = data_frame.index.values[-1]
     else:
         frame = -1
         lane = -1
@@ -31,7 +30,8 @@ def create_csv(csv_name, destination_path=Path("../../../output/test/")):
     if csv_path.exists():
         raise AlreadyExistError(csv_path)
 
-    dictionary = {'frame': [], 'lane': [], 'x_head': [], 'y_head': []}
+    # Create the keys
+    dictionary = {'x_head': [], 'y_head': []}
     keys = pd.DataFrame(dictionary)
 
     # saving the dataframe
@@ -47,9 +47,17 @@ def fill_csv(csv_path, frame_lane, points):
         raise NothingToAdd(csv_path)
 
     with open(csv_path, 'a', newline='') as csv_file:
-        dictionary = {'frame': frame_lane[:, 0], 'lane': frame_lane[:, 1], 'x_head': points[:, 0], 'y_head': points[:, 1]}
-        new_points = pd.DataFrame(dictionary)
-        new_points.to_csv(csv_file, index=False, header=False)
+        # Create lines
+        dictionary = {'x_head': points[:, 0], 'y_head': points[:, 1]}
+
+        # Create the indexes
+        index = pd.MultiIndex.from_tuples(tuple(frame_lane))
+
+        # Create data frame
+        new_points = pd.DataFrame(dictionary, index=index)
+
+        # Add data frame
+        new_points.to_csv(csv_file, header=False)
 
 
 if __name__ == "__main__":

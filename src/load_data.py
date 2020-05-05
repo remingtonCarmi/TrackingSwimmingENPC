@@ -23,7 +23,7 @@ def load_data(name_file):
 
 
 if __name__ == "__main__":
-    PATH = Path("../../data/head_points/")
+    PATH = Path("../output/test/vid0.csv")
     data, head_coords = load_data(PATH)
     print(data)
     print(head_coords)
