@@ -47,8 +47,8 @@ class DataGenerator:
 
     def fill_sets(self):
         rd.shuffle(self.full_data)
-        self.train = self.full_data[: self.nb_trains]
-        self.valid = self.full_data[: self.nb_valids]
+        self.train = np.array(self.full_data[: self.nb_trains])
+        self.valid = np.array(self.full_data[: self.nb_valids])
 
 
 if __name__ == "__main__":
