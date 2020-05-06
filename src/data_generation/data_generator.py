@@ -6,7 +6,7 @@ import random as rd
 
 
 def get_frame_lane(name_file):
-    frame_lane = name_file[1: -4].split("_")
+    frame_lane = name_file[: -4].split("_")
     return int(frame_lane[0][1:]), int(frame_lane[1][1:])
 
 

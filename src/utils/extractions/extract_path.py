@@ -18,9 +18,8 @@ def register_image(image_name, lane, frame):
 
 
 def get_frame_lane(image_name):
-    image_name = image_name[1: -4]
+    image_name = image_name[: -4]
     lane_frame = image_name.split("_")
-
     return [int(lane_frame[0][1:]), int(lane_frame[1][1:])]
 
 
