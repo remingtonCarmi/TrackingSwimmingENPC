@@ -42,11 +42,11 @@ def head_pointing(path_images, destination_csv=Path("../output/test/")):
         create_csv(name_csv, destination_csv)
 
     # Get the last line that was registered
-    (last_frame, last_lane) = last_line(csv_path)
+    (last_lane, last_frame) = last_line(csv_path)
 
     # Get the images
     print("Load the images ...")
-    (list_images, list_images_name) = extract_path(path_images, last_frame, last_lane)
+    (list_images, list_images_name) = extract_path(path_images, last_lane, last_frame)
 
     # Select the heads
     print("Head selection ...")

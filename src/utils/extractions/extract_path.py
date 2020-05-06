@@ -5,26 +5,26 @@ import numpy as np
 from src.utils.extractions.exception_classes import FindErrorExtraction, EmptyFolder, NoMoreFrame
 
 
-def register_image(image_name, frame, lane):
+def register_image(image_name, lane, frame):
     # Verify that it is a jpg
     if image_name[-4:] == ".jpg" or image_name[-4:] == ".JPG":
         # Get the image information
-        (image_frame, image_lane) = get_frame_lane(image_name)
-        if frame < image_frame:
+        (image_lane, image_frame) = get_frame_lane(image_name)
+        if lane < image_lane:
             return True
-        elif frame == image_frame:
-            return lane < image_lane
+        elif lane == image_lane:
+            return frame < image_frame
     return False
 
 
 def get_frame_lane(image_name):
     image_name = image_name[1: -4]
-    frame_lane = image_name.split("l")
+    lane_frame = image_name.split("_")
 
-    return [int(frame_lane[0][: -1]), int(frame_lane[1])]
+    return [int(lane_frame[0][1:]), int(lane_frame[1][1:])]
 
 
-def extract_path(path_file_images, frame, lane):
+def extract_path(path_file_images, lane, frame):
     if not path_file_images.exists():
         raise FindErrorExtraction(path_file_images)
 
@@ -42,7 +42,7 @@ def extract_path(path_file_images, frame, lane):
         raise EmptyFolder(path_file_images)
 
     for file in list_file:
-        if register_image(file, frame, lane):
+        if register_image(file, lane, frame):
             path_image = path_file_images / file
             list_images.append(cv2.imread(str(path_image)))
             list_images_name.append(get_frame_lane(file))
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     PATH_IMAGE = Path("../../../output/test/vid1/")
 
     try:
-        (LIST_IMAGES, LIST_IMAGES_NAME) = extract_path(PATH_IMAGE, frame=21, lane=5)
+        (LIST_IMAGES, LIST_IMAGES_NAME) = extract_path(PATH_IMAGE, lane=4, frame=5)
         print(LIST_IMAGES_NAME)
         print("Number of images", len(LIST_IMAGES))
     except FindErrorExtraction as find_error:

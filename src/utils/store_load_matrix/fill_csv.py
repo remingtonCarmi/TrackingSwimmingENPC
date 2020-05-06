@@ -14,11 +14,11 @@ def last_line(csv_path):
     data_frame = pd.read_csv(csv_path)
 
     if not data_frame.empty:
-        (frame, lane) = data_frame.index.values[-1]
+        (lane, frame) = data_frame.index.values[-1]
     else:
-        frame = -1
         lane = -1
-    return frame, lane
+        frame = -1
+    return lane, frame
 
 
 def create_csv(csv_name, destination_path=Path("../../../output/test/")):
@@ -38,12 +38,12 @@ def create_csv(csv_name, destination_path=Path("../../../output/test/")):
     keys.to_csv(csv_path, index=False)
 
 
-def fill_csv(csv_path, frame_lane, points):
+def fill_csv(csv_path, lane_frame, points):
     # Check that the folder exists
     if not csv_path.exists():
         raise FindErrorStore(csv_path)
 
-    if len(frame_lane) == 0:
+    if len(lane_frame) == 0:
         raise NothingToAdd(csv_path)
 
     with open(csv_path, 'a', newline='') as csv_file:
@@ -51,7 +51,7 @@ def fill_csv(csv_path, frame_lane, points):
         dictionary = {'x_head': points[:, 0], 'y_head': points[:, 1]}
 
         # Create the indexes
-        index = pd.MultiIndex.from_tuples(tuple(frame_lane))
+        index = pd.MultiIndex.from_tuples(tuple(lane_frame))
 
         # Create data frame
         new_points = pd.DataFrame(dictionary, index=index)
@@ -63,7 +63,7 @@ def fill_csv(csv_path, frame_lane, points):
 if __name__ == "__main__":
     CVS_NAME = "test0.csv"
     CVS_PATH = Path("../../../output/test/") / CVS_NAME
-    LIST_IMAGE_NAME = np.array([[0, 5], [34, 8]])
+    LIST_IMAGE_NAME = np.array([[1, 5], [4, 89]])
     LIST_POINTS = np.array([[4, 4.9], [9, 2.9]])
     try:
         # create_csv(CVS_NAME)
