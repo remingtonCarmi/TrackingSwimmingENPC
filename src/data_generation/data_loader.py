@@ -22,7 +22,7 @@ class DataLoader(Sequence):
         self.access_path = access_path
 
     def __len__(self):
-        return len(self.data)
+        return np.ceil(len(self.data) / self.batch_size)
 
     def __getitem__(self, idx):
         batch_path = self.samples[idx * self.batch_size: (idx + 1) * self.batch_size]

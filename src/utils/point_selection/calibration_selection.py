@@ -20,15 +20,16 @@ def array_to_qpixmap(image):
     Transform an array in a QPixmap.
 
     Args:
-        image (array, 2 dimensions, rgb format): the image.
+        image (array, 2 dimensions, bgr format): the image.
 
     Returns:
         (QPixmap, brg format): the QPixmap.
     """
-    (height, width) = image.shape[:2]
+    height, width, channel = image.shape
     bytes_per_line = 3 * width
-    # If the format is not good : put Format_RGB888
-    qimage = QImage(image.data, width, height, bytes_per_line, QImage.Format_BGR888)
+    # If the format is not good : put Format_BGR888
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    qimage = QImage(image_rgb.data, width, height, bytes_per_line, QImage.Format_RGB888)
 
     return QPixmap.fromImage(qimage)
 
