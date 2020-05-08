@@ -5,6 +5,15 @@ from PyQt5.QtWidgets import QHBoxLayout, QGridLayout
 from PyQt5.QtCore import QSize
 from src.utils.point_selection.information_points.edit_point.edit_point import EditPoint
 from src.utils.point_selection.information_points.text_point.text_point import TextPoint
+from PyQt5.QtCore import Qt
+
+
+INSTRUCTIONS = "INSTRUCTIONS : \n \n"
+INSTRUCTIONS += "   Select a point : left click. \n \n"
+INSTRUCTIONS += "   Zoom in : keep left click, move and release. \n \n"
+INSTRUCTIONS += "   Zoom out : click anywhere. \n \n"
+INSTRUCTIONS += "   Withdraw a point : press 'w'. \n \n"
+INSTRUCTIONS += "   Quit : press space bar."
 
 
 class CalibrationPoints(QGridLayout):
@@ -27,9 +36,11 @@ class CalibrationPoints(QGridLayout):
         self.colors = colors
         self.nb_points = len(colors)
         self.size = size
-        self.size.setHeight(self.size.height() / (2 * self.nb_points))
-        self.size_text = QSize(self.size.width() / 4, self.size.height())
-        self.size_edit = QSize(self.size.width() / 4, self.size.height() / 4)
+        smallest_height = size.height() / (2 * self.nb_points + 4)  # + 4 for the instructions
+        self.size_text = QSize(self.size.width(), smallest_height)
+        self.size_edit_text = QSize(self.size.width() / 4, smallest_height)
+        self.size_edit = QSize(self.size.width() / 4, smallest_height / 2)
+        self.size_instructions = QSize(self.size.width(), 4 * smallest_height)
         self.points = points
 
         self.set_raw_labels()
@@ -42,15 +53,15 @@ class CalibrationPoints(QGridLayout):
             color = self.colors[index_color]
             point_layout = QHBoxLayout()
 
-            color_point = TextPoint("Point {}".format(index_color + 1), self.size)
+            color_point = TextPoint("Point {}".format(index_color + 1), self.size_text)
 
             edit_meter = EditPoint(self.size_edit, color, self.points, index_color, 0)
             point_layout.addWidget(edit_meter)
 
-            text_meter = TextPoint("meters", self.size_text)
+            text_meter = TextPoint("meters", self.size_edit_text)
             point_layout.addWidget(text_meter)
 
-            text_line = TextPoint("n° line", self.size_text)
+            text_line = TextPoint("n° line", self.size_edit_text)
             point_layout.addWidget(text_line)
 
             edit_line = EditPoint(self.size_edit, color, self.points, index_color, 1)
@@ -58,3 +69,7 @@ class CalibrationPoints(QGridLayout):
 
             self.addWidget(color_point, 2 * index_color, 0)
             self.addLayout(point_layout, 2 * index_color + 1, 0)
+
+        instructions = TextPoint(INSTRUCTIONS, self.size_instructions)
+        instructions.setAlignment(Qt.AlignLeft)
+        self.addWidget(instructions, 2 * self.nb_points + 1, 0)

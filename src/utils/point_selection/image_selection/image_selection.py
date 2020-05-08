@@ -105,10 +105,10 @@ class ImageSelection(QLabel):
         Skip a point if self.skip = True and control is pressed.
         Quit if space bar is pressed.
         """
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Qt.Key_W:
             self.erase_point()
 
-        if self.skip and event.key() == Qt.Key_Control:
+        if self.skip and event.key() == Qt.Key_P:
             # Skip point only if a point can be registered
             if self.nb_points < len(self.colors):
                 self.skip_points()
@@ -193,6 +193,7 @@ class ImageSelection(QLabel):
                 q_painter.drawEllipse(x_point - 1, y_point - 1, 2, 2)
                 q_painter.drawEllipse(x_point - 2, y_point - 2, 4, 4)
                 q_painter.drawEllipse(x_point - 4, y_point - 4, 8, 8)
+                q_painter.drawEllipse(x_point - 8, y_point - 8, 16, 16)
 
     def zoom(self):
         """

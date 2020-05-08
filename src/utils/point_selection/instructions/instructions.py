@@ -3,17 +3,9 @@ Gives the instruction to the user to tell the possibilities.
 """
 from PyQt5.QtWidgets import QMessageBox, QApplication
 
-# Information about the point selection
-INSTRUCTIONS_SELECTION = "Select a point : left click. \n"
-INSTRUCTIONS_SELECTION += "Zoom in : keep left click, move and release. \n"
-INSTRUCTIONS_SELECTION += "Zoom out : click anywhere. \n"
-INSTRUCTIONS_SELECTION += "Withdraw a point : press escape button. \n"
-
 
 # Information about the calibration points
 INSTRUCTIONS_CALIBRATION = "YOU ARE ABOUT TO SELECT FOUR POINTS AND WRITE THEIR REAL COORDINATES ! \n \n"
-
-INSTRUCTIONS_CALIBRATION += INSTRUCTIONS_SELECTION + "Quit : press space bar. \n \n"
 
 INSTRUCTIONS_CALIBRATION += "WARNINGS ! \n"
 INSTRUCTIONS_CALIBRATION += "Only numbers are accepted to write the coordinates. \n"
@@ -22,10 +14,6 @@ INSTRUCTIONS_CALIBRATION += "The color of a selected point should have the same 
 
 # Information about the head points
 INSTRUCTIONS_HEAD = "YOU ARE ABOUT TO SELECT HEAD POINTS ! \n \n"
-
-INSTRUCTIONS_HEAD += INSTRUCTIONS_SELECTION + "If you don't see the head : press control. \n"
-INSTRUCTIONS_HEAD += "Skip a point : press space bar. \n"
-INSTRUCTIONS_HEAD += "Stop selection : press the 's' button. \n \n"
 
 INSTRUCTIONS_HEAD += "WARNINGS ! \n"
 INSTRUCTIONS_HEAD += "Do not press the scpace bar twice it will not register the information."

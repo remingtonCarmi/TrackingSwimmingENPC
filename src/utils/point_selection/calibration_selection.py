@@ -66,8 +66,8 @@ def calibration_selection(image):
     # Get the sizes
     screen_size = QDesktopWidget().screenGeometry()
     screen_ration = 4 / 5
-    image_size = QSize(screen_size.width() * screen_ration - 115, screen_size.height() - 150)
-    point_size = QSize(screen_size.width() * (1 - screen_ration) - 115, screen_size.height() - 150)
+    image_size = QSize(screen_size.width() * screen_ration - 50, screen_size.height() - 150)
+    point_size = QSize(screen_size.width() * (1 - screen_ration) - 50, screen_size.height() - 150)
 
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)

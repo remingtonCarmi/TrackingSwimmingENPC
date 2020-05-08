@@ -43,7 +43,7 @@ class EditPoint(QTextEdit):
         """
         self.setTextColor(self.color)
 
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Qt.Key_W:
             self.parentWidget().erase_point()
 
         if event.key() == Qt.Key_Space:

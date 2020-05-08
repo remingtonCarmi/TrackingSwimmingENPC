@@ -9,9 +9,11 @@ class MainWidget(QWidget):
     """
     Highest class for points selection.
     """
-    def __init__(self):
+    def __init__(self, index_close=1):
         super().__init__()
         self.setFocusPolicy(True)
+        # The index of the child that is the image selection widget
+        self.index_close = index_close
 
     def keyReleaseEvent(self, event):
         """
@@ -25,7 +27,7 @@ class MainWidget(QWidget):
         Close the image selection widget in order to register the points.
         """
         children = self.children()
-        children[1].close()
+        children[self.index_close].close()
 
     def erase_point(self):
         """
