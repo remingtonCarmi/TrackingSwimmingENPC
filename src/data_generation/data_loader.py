@@ -3,6 +3,7 @@ import random as rd
 import numpy as np
 import cv2
 from src.data_generation.data_generator import DataGenerator
+from src.data_generation.transformations import transform
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -34,9 +35,9 @@ class DataLoader(Sequence):
         # Get the images
         for idx_img in range(length_batch):
             image_path = self.access_path / batch_path[idx_img]
-            batch_img.append(cv2.imread(str(image_path)))
+            batch_img.append(transform(image_path))
 
-        return batch_img, batch_labels
+        return np.array(batch_img, dtype=np.float32), np.array(batch_labels, dtype=np.float32)
 
     def on_epoch_end(self):
         if self.for_train:
@@ -58,4 +59,7 @@ if __name__ == "__main__":
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
     TRAIN_SET = GENERATOR.train
     LOADER = DataLoader(TRAIN_SET)
-    print(LOADER[0])
+    (BATCH, LABELS) = LOADER[0]
+
+    print(BATCH.shape)
+    print(LABELS.shape)
