@@ -2,15 +2,31 @@ import cv2
 import numpy as np
 
 
-def transform(image_path):
+# --- Transformation for the images --- #
+def transform_image(image_path):
     image = cv2.imread(str(image_path))
-    return normalize(image)
+    return standardize(image)
 
 
-def normalize(image):
+def standardize(image):
     """
     Normalize between -1 and 1.
     """
-    min_image = np.min(image)
-    return 2 * (image - min_image) / (np.max(image) - min_image) - 1
+    mean = np.mean(image)
+    std = np.std(image)
+    return (image - mean) / std
 
+
+# --- Transformation for the labels --- #
+def transform_label(label, nb_classes, image_size):
+    length_class = image_size / nb_classes
+
+    return label[0] // length_class
+
+
+if __name__ == "__main__":
+    IMAGE = np.array([[[19, 3, 0], [12, 3, 2]], [[10, 31, 2], [2, 23, 28]]])
+    LABEL = np.array([450, 12])
+
+    print(standardize(IMAGE))
+    print(transform_label(LABEL, 10, 1000))

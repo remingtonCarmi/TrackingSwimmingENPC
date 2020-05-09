@@ -1,6 +1,6 @@
 from src.data_generation.data_loader import DataLoader
 from src.data_generation.data_generator import DataGenerator
-from src.loss.loss import MyCrossentropy3
+from src.loss.loss_maxime import MyCrossentropy3
 
 from pathlib import Path
 
@@ -91,7 +91,3 @@ if __name__ == "__main__":
     model = EasyModel()
     output = model(np.array(TRAIN_DATA[0][0]))
     print(output)
-
-    # optimizer = optimizers.Adam()
-
-    # model.compile(optimizer=optimizer, loss=MyCrossentropy3(), metrics=['accuracy'])

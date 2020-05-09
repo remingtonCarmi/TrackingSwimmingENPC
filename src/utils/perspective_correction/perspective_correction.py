@@ -3,7 +3,7 @@ import numpy as np
 
 
 def get_homography(src, dst):
-    # we find the transform matrix thanks to the matching of the four points
+    # we find the transform_image matrix thanks to the matching of the four points
     src = np.float32(src)
     dst = np.float32(dst)
     return cv2.getPerspectiveTransform(src, dst)

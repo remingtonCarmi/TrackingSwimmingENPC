@@ -42,7 +42,7 @@ def plot_graphs(rect, rectangles_to_plot, parameter="x_front"):
     n = len(rect)
     x = np.arange(n)
 
-    # transform to a numpy array
+    # transform_image to a numpy array
     rect_np = np.array(rect)
 
     dic = {"x_size": x_size,
