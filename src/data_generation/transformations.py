@@ -21,7 +21,7 @@ def standardize(image):
 def transform_label(label, nb_classes, image_size):
     length_class = image_size / nb_classes
 
-    return label[0] // length_class
+    return int(label[0] // length_class)
 
 
 if __name__ == "__main__":
