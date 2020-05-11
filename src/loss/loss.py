@@ -15,12 +15,12 @@ def create_label(labels):
 def evaluate(model, inputs, labels):
     full_labels = create_label(labels)
     with GradientTape() as tape:
-        loss_value = cross_loss(model, inputs, full_labels, training=True)
+        loss_value = cross_loss(model, inputs, full_labels)
 
     return loss_value, tape.gradient(loss_value, model.trainable_variables)
 
 
-def cross_loss(model, inputs, full_labels, training):
+def cross_loss(model, inputs, full_labels, training=True):
     outputs = model(inputs, training=training)
 
     return norm(outputs - full_labels) ** 2
