@@ -20,8 +20,8 @@ def evaluate(model, inputs, labels):
     return loss_value, tape.gradient(loss_value, model.trainable_variables)
 
 
-def cross_loss(model, inputs, full_labels, training=True):
-    outputs = model(inputs, training=training)
+def cross_loss(model, inputs, full_labels):
+    outputs = model(inputs)
 
     return norm(outputs - full_labels) ** 2
 
