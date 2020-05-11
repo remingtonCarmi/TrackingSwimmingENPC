@@ -3,21 +3,31 @@ from tensorflow import math, norm, convert_to_tensor, cast
 import numpy as np
 
 
+def create_label(labels):
+    nb_labels = len(labels)
+    full_labels = np.zeros((len(labels), 10))
+    for idx_label in range(nb_labels):
+        full_labels[idx_label, int(labels[idx_label])] = 1
+
+    return convert_to_tensor(full_labels, dtype=np.float32)
+
+
 def evaluate(model, inputs, labels):
+    full_labels = create_label(labels)
     with GradientTape() as tape:
-        loss_value = cross_loss(model, inputs, labels, training=True)
+        loss_value = cross_loss(model, inputs, full_labels, training=True)
 
     return loss_value, tape.gradient(loss_value, model.trainable_variables)
 
 
-def cross_loss(model, inputs, labels, training):
+def cross_loss(model, inputs, full_labels, training):
     outputs = model(inputs, training=training)
 
-    # Get the guess position of the head
-    # estimated_pos = math.argmax(outputs, axis=1)
-    # estimated_pos_tf = cast(estimated_pos, dtype=np.float32)
+    return norm(outputs - full_labels) ** 2
 
-    # Transform the label
-    # labels_tf = convert_to_tensor(labels)
 
-    return outputs[0][0]  # norm(estimated_pos_tf - labels_tf, ord=2) ** 2
+if __name__ == "__main__":
+    LABELS = [2, 3]
+    FULL_LABELS = create_label(LABELS)
+
+    print(FULL_LABELS)
