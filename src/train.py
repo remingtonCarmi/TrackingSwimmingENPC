@@ -49,5 +49,6 @@ for epoch in range(NB_EPOCHS):
         # Register statistics
         LOSSES[idx_batch + epoch * NB_BATCHES] = loss_value
 
+print(MODEL(TRAIN_DATA[0][0]))
 plt.plot(LOSSES)
 plt.show()

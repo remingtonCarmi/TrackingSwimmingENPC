@@ -14,10 +14,10 @@ def cross_loss(model, inputs, labels, training):
     outputs = model(inputs, training=training)
 
     # Get the guess position of the head
-    estimated_pos = math.argmax(outputs, axis=1)
-    estimated_pos_tf = cast(estimated_pos, dtype=np.float32)
+    # estimated_pos = math.argmax(outputs, axis=1)
+    # estimated_pos_tf = cast(estimated_pos, dtype=np.float32)
 
     # Transform the label
-    labels_tf = convert_to_tensor(labels)
+    # labels_tf = convert_to_tensor(labels)
 
-    return norm(estimated_pos_tf - labels_tf, ord=2) ** 2
+    return outputs[0][0]  # norm(estimated_pos_tf - labels_tf, ord=2) ** 2
