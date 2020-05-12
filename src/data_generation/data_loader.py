@@ -2,8 +2,8 @@ from pathlib import Path
 import random as rd
 import numpy as np
 import cv2
-from src.data_generation.data_generator import DataGenerator
-from src.data_generation.transformations import transform_image, transform_label
+from data_generation.data_generator import DataGenerator
+from data_generation.transformations import transform_image, transform_label
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 

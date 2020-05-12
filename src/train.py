@@ -1,10 +1,10 @@
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
-from src.network_theo import EasyModel
-from src.loss.loss import evaluate
+from data_generation.data_loader import DataLoader
+from data_generation.data_generator import DataGenerator
+from network_theo import EasyModel
+from loss.loss import evaluate
 from tensorflow.keras.optimizers import Adam
 
 

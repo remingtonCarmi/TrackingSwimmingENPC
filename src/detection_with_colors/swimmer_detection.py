@@ -18,7 +18,6 @@ def edges(image, threshold=8, sigma=3, method=2, figures=False):
         image (numpy array): input image
         sigma (integer): parameter for the gradient calculation, see compute_gradient docstring
         threshold (integer): parameter of the method
-
         method (integer): method of extraction of colors. See load_red docstring
         figures (boolean): if True, plot the returned image
 
@@ -31,12 +30,16 @@ def edges(image, threshold=8, sigma=3, method=2, figures=False):
 
     if figures:
         plt.figure()
+        plt.imshow(red_image)
+        plt.figure()
+        plt.imshow(gradient)
+        plt.figure()
         plt.imshow(threshold_gradient)
     return threshold_gradient
 
 
 if __name__ == "__main__":
-    NAME = "..\\..\\test\\Figure_2.jpg"
+    NAME = "..\\..\\test\\l4_f.jpg"
 
     IMAGE = plt.imread(NAME)
     plt.figure()
