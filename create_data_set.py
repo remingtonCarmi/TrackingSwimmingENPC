@@ -10,7 +10,7 @@ from pathlib import Path
 from src.calibration import calibrate_video
 from src.create_data import create_data
 from src.head_pointing import head_pointing
-from src.utils.extractions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
+from src.utils.extractions.exceptions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
 from src.utils.save_data.exception_classes import FolderAlreadyExists
 from src.utils.store_load_matrix.exception_classes import AlreadyExistError, NothingToAdd, FindErrorStore
 
@@ -40,7 +40,7 @@ try:
     print(" --- Create the lanes as jpg files --- ")
     MARGIN = 0
 
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=5, time_end=6)
+    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=0, time_end=11)
 except FolderAlreadyExists as already_exists:
     print(already_exists.__repr__())
 except TimeError as time_error:

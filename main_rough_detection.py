@@ -2,8 +2,8 @@ from pathlib import Path
 from src.vizualisation_red_boxes import animation_red_boxes
 from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
 from src.utils.draw_rectangle.exception_classes import VideoAlreadyExists
-from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindErrorExtraction
+from src.utils.extractions.exceptions.exception_classes import TimeError
+from src.utils.extractions.exceptions.exception_classes import FindErrorExtraction
 
 
 PATH_VIDEO = Path("data/videos/vid0.mp4")
