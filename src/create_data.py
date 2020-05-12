@@ -32,7 +32,7 @@ def create_data(path_video, path_txt, margin, nb_lines=10,
     # Save the data
     for i in range(n):
         corrected_images[i] = cv2.cvtColor(corrected_images[i], cv2.COLOR_BGR2RGB)
-        split_and_save(corrected_images[i], margin, path_directory, i, nb_lines)
+        split_and_save(corrected_images[i], margin, path_directory, time_begin * 25 + i, nb_lines)
 
 
 if __name__ == "__main__":
