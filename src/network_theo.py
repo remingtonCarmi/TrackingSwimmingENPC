@@ -1,6 +1,5 @@
 from data_generation.data_loader import DataLoader
 from data_generation.data_generator import DataGenerator
-from loss.loss_maxime import MyCrossentropy3
 
 from pathlib import Path
 
