@@ -10,8 +10,10 @@ from pathlib import Path
 from src.calibration import calibrate_video
 from src.create_data import create_data
 from src.head_pointing import head_pointing
-from src.utils.extractions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
 from src.utils.save_data.exception_classes import FileAlreadyExists
+
+from src.utils.extractions.exceptions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
+
 from src.utils.store_load_matrix.exception_classes import AlreadyExistError, NothingToAdd, FindErrorStore
 
 
