@@ -1,36 +1,25 @@
 from src.data_generation.data_loader import DataLoader
 from src.data_generation.data_generator import DataGenerator
+
 from pathlib import Path
 
+import tensorflow as tf
+from tensorflow.keras import Model
 import numpy as np
+import matplotlib.pyplot as plt
+
+from tensorflow.python.keras import optimizers, losses
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
     Dense,
     Conv2D,
     Flatten,
     MaxPooling2D,
+    MaxPooling3D,
+    Input,
+    Reshape,
+    Lambda
 )
-
-
-def compute_dimension(input_size, kernel_size, stride, padding, dilation):
-    """
-    Computes the output size of an image that goes through a layer.
-
-    Args:
-        input_size (int): the size of the input.
-
-        kernel_size (int): the size of the layer's kernel.
-
-        stride (int): the stride of the layer.
-
-        padding (int): the size of the layer's padding.
-
-        dilation (int): the dilation of the layer.
-
-    Returns:
-        output_size (int): the size of the output.
-    """
-    return np.floor((input_size + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
 
 
 class EasyModel(Model):

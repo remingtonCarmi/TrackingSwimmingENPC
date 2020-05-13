@@ -31,7 +31,7 @@ GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
 TRAIN_SET = GENERATOR.train
 VAL_SET = GENERATOR.valid
 TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=BATCH_SIZE)
-VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET))
+VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), for_train=False)
 (VALID_SAMPLES, VALID_LABELS) = VALID_DATA[0]
 
 
@@ -75,10 +75,12 @@ for epoch in range(NB_EPOCHS):
 
         # Register statistics
         sum_loss += loss_value
+    TRAIN_DATA.on_epoch_end()
+
     # Register the loss on train
-    LOSSES_ON_TRAIN[epoch] = sum_loss
+    LOSSES_ON_TRAIN[epoch] = sum_loss / len(TRAIN_DATA)
     # Register the loss on val
-    LOSSES_ON_VAL[epoch] = evaluate(MODEL, VALID_SAMPLES, VALID_LABELS)
+    LOSSES_ON_VAL[epoch] = evaluate(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
 
 # --- Save the weights --- #
 if EASY_MODEL:
@@ -89,6 +91,6 @@ MODEL.save_weights(str(PATH_TRAINING))
 
 
 plt.plot(LOSSES_ON_TRAIN, label="Loss on train set")
-plt.plot(LOSSES_ON_TRAIN, label="Loss on validation set")
+plt.plot(LOSSES_ON_VAL, label="Loss on validation set")
 plt.legend()
 plt.show()

@@ -2,8 +2,8 @@ from pathlib import Path
 import random as rd
 import numpy as np
 import cv2
-from data_generation.data_generator import DataGenerator
-from data_generation.transformations import transform_image, transform_label
+from src.data_generation.data_generator import DataGenerator
+from src.data_generation.transformations import transform_image, transform_label
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -64,6 +64,8 @@ if __name__ == "__main__":
     TRAIN_SET = GENERATOR.train
     LOADER = DataLoader(TRAIN_SET)
     (BATCH, LABELS) = LOADER[0]
+    for (idx_batch, batch) in enumerate(LOADER):
+        print(1)
 
     print(BATCH.shape)
     print(LABELS.shape)

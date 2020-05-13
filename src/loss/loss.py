@@ -1,6 +1,7 @@
+import numpy as np
 from tensorflow import GradientTape
 from tensorflow import norm, convert_to_tensor
-import numpy as np
+from tensorflow.keras.losses import binary_crossentropy
 
 
 def create_label(labels):
@@ -28,11 +29,11 @@ def get_loss(model, inputs, labels):
 
 def cross_loss(model, inputs, full_labels):
     """
-    Get the loss of the model : This function is followed by the GradientTape function for back propagation.
+    Get the loss of the model.
     """
     outputs = model(inputs)
 
-    return norm(outputs - full_labels) ** 2
+    return norm(binary_crossentropy(outputs, full_labels)) ** 2
 
 
 def evaluate(model, inputs, labels):
