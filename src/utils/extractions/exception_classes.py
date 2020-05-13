@@ -68,4 +68,4 @@ class NoMoreFrame(Exception):
         self.path_folder = path_folder
 
     def __repr__(self):
-        return "All the frames is {} have been labeled.".format(self.path_folder)
+        return "All the frames in {} have been labeled.".format(self.path_folder)

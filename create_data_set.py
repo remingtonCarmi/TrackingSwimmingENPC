@@ -10,13 +10,19 @@ from pathlib import Path
 from src.calibration import calibrate_video
 from src.create_data import create_data
 from src.head_pointing import head_pointing
+from src.utils.save_data.exception_classes import FileAlreadyExists
+
 from src.utils.extractions.exceptions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
-from src.utils.save_data.exception_classes import FolderAlreadyExists
+
 from src.utils.store_load_matrix.exception_classes import AlreadyExistError, NothingToAdd, FindErrorStore
 
 
 # The name of the video
-NAME_VIDEO = "vid1"
+NAME_VIDEO = "vid0"
+
+# Time range for pointing
+POINTING_STARTING_TIME = 11
+POINTING_ENDING_TIME = 12
 
 
 # --- Create the txt file --- #
@@ -24,7 +30,7 @@ PATH_VIDEO = Path("data/videos/{}.mp4".format(NAME_VIDEO))
 DESTINATION_TXT = Path("data/calibration/")
 try:
     print(" --- Create the txt file for calibration --- ")
-    calibrate_video(PATH_VIDEO, destination_txt=DESTINATION_TXT, create_txt=True, time_begin=0, time_end=1)
+    calibrate_video(PATH_VIDEO, destination_txt=DESTINATION_TXT, create_txt=True, time_begin=3, time_end=4)
 except FindErrorExtraction as video_find_error:
     print(video_find_error.__repr__())
 except TimeError as time_error:
@@ -37,11 +43,13 @@ except AlreadyExistError as exist_error:
 PATH_TXT = Path("data/calibration/{}.txt".format(NAME_VIDEO))
 DESTINATION_LANES = Path("data/lanes/")
 try:
-    print(" --- Create the lanes as jpg files --- ")
+    print(" --- Save the lanes as jpg files --- ")
     MARGIN = 0
 
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=0, time_end=11)
-except FolderAlreadyExists as already_exists:
+    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES,
+                time_begin=POINTING_STARTING_TIME,
+                time_end=POINTING_ENDING_TIME)
+except FileAlreadyExists as already_exists:
     print(already_exists.__repr__())
 except TimeError as time_error:
     print(time_error.__repr__())

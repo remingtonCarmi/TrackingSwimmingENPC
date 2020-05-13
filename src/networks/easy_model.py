@@ -1,6 +1,5 @@
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
-from src.loss.loss_maxime import MyCrossentropy3
+from data_generation.data_loader import DataLoader
+from data_generation.data_generator import DataGenerator
 
 from pathlib import Path
 
@@ -55,6 +54,7 @@ class EasyModel(Model):
         self.dense10 = Dense(10, activation="relu")
 
     def call(self, inputs):
+
         # Size, without batch size
         # 108 x 1920 x 3
         x = self.c32(inputs)
@@ -89,5 +89,6 @@ if __name__ == "__main__":
     BATCH = np.array(TRAIN_DATA[0][0])
 
     model = EasyModel()
-    output = model(np.array(TRAIN_DATA[0][0]))
+
+    output = model(BATCH)
     print(output)
