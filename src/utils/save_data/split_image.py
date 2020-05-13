@@ -1,7 +1,4 @@
 import cv2
-import matplotlib.pyplot as plt
-from pathlib import Path
-
 from src.utils.save_data.crop_lines import crop
 
 
