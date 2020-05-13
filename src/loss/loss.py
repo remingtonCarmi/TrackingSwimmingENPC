@@ -4,6 +4,9 @@ import numpy as np
 
 
 def create_label(labels):
+    """
+    Transform the labels' batch that are integers to list of zeros where there is a one in the right place.
+    """
     nb_labels = len(labels)
     full_labels = np.zeros((len(labels), 10))
     for idx_label in range(nb_labels):
@@ -12,7 +15,10 @@ def create_label(labels):
     return convert_to_tensor(full_labels, dtype=np.float32)
 
 
-def evaluate(model, inputs, labels):
+def get_loss(model, inputs, labels):
+    """
+    Get the loss and the gradient of every layer.
+    """
     full_labels = create_label(labels)
     with GradientTape() as tape:
         loss_value = cross_loss(model, inputs, full_labels)
@@ -21,9 +27,23 @@ def evaluate(model, inputs, labels):
 
 
 def cross_loss(model, inputs, full_labels):
+    """
+    Get the loss of the model : This function is followed by the GradientTape function for back propagation.
+    """
     outputs = model(inputs)
 
     return norm(outputs - full_labels) ** 2
+
+
+def evaluate(model, inputs, labels):
+    """
+    Evaluate the model without back propagation.
+    """
+    full_labels = create_label(labels)
+
+    loss_value = cross_loss(model, inputs, full_labels)
+
+    return loss_value
 
 
 if __name__ == "__main__":
