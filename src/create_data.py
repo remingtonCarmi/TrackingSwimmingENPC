@@ -25,6 +25,9 @@ def create_data(path_video, path_txt, margin, nb_lines=10,
         first_frame_path = Path(str(path_directory / first_frame_name))
         if os.path.exists(first_frame_path):
             raise FileAlreadyExists(first_frame_path)
+        else:
+            print("Caution! You already have other saved lines in the folder. "
+                  "\nThe new ones are added with the previous ones.")
     else:
         # Create the directory where to save the data
         os.makedirs(path_directory)

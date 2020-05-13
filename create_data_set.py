@@ -18,7 +18,11 @@ from src.utils.store_load_matrix.exception_classes import AlreadyExistError, Not
 
 
 # The name of the video
-NAME_VIDEO = "vid1"
+NAME_VIDEO = "vid0"
+
+# Time range for pointing
+POINTING_STARTING_TIME = 11
+POINTING_ENDING_TIME = 12
 
 
 # --- Create the txt file --- #
@@ -42,7 +46,9 @@ try:
     print(" --- Save the lanes as jpg files --- ")
     MARGIN = 0
 
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES, time_begin=5, time_end=6)
+    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES,
+                time_begin=POINTING_STARTING_TIME,
+                time_end=POINTING_ENDING_TIME)
 except FileAlreadyExists as already_exists:
     print(already_exists.__repr__())
 except TimeError as time_error:
