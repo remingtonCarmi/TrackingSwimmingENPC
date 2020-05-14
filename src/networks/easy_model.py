@@ -64,15 +64,15 @@ class EasyModel(Model):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../output/test/vid1/")
-    PATH_LABEL = Path("../output/test/vid1.csv")
-    POURCENTAGE = [0.5, 0.5]
+    PATH_DATA = Path("../../output/test/vid1/")
+    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PERCENTAGE = [0.5, 0.5]
 
     # (input_size, kernel_size, stride, padding, dilation)
     # print(compute_dimension(42, 2, 2, 0, 1))
 
     # Generate and load the data
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
+    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
     TRAIN_SET = GENERATOR.train
     TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA)
 

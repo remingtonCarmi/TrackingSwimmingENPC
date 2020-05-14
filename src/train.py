@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from src.data_generation.data_loader import DataLoader
 from src.data_generation.data_generator import DataGenerator
 from src.networks.easy_model import EasyModel
+from src.networks.hard_model import HardModel
 from src.loss.loss import get_loss, evaluate
 from tensorflow.keras.optimizers import Adam
 
@@ -11,11 +12,11 @@ from tensorflow.keras.optimizers import Adam
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid1"
-POURCENTAGE = [0.8, 0.2]  # [Training set, Validation set]
+PERCENTAGE = [0.8, 0.2]  # [Training set, Validation set]
 
 # Parameters for the training
 NUMBER_TRAINING = 0
-EASY_MODEL = True
+EASY_MODEL = False
 NB_EPOCHS = 5
 BATCH_SIZE = 2
 
@@ -27,7 +28,7 @@ PATH_LABEL = Path("../output/test/{}.csv".format(VIDEO_NAME))
 
 
 # --- Generate and load the data --- #
-GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
+GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
 TRAIN_SET = GENERATOR.train
 VAL_SET = GENERATOR.valid
 TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=BATCH_SIZE)
@@ -39,7 +40,7 @@ VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), for_train=F
 if EASY_MODEL:
     MODEL = EasyModel()
 else:
-    MODEL = EasyModel()
+    MODEL = HardModel()
 # Get the weights of the previous trainings
 PATH_WEIGHT = Path("../trained_weights/")
 if NUMBER_TRAINING > 0:
@@ -48,7 +49,7 @@ if NUMBER_TRAINING > 0:
     if EASY_MODEL:
         PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING - 1)
     else:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_{}.h5".format(NUMBER_TRAINING - 1)
     # Load the weights
     MODEL.load_weights(str(PATH_FORMER_TRAINING))
 # Optimizer
@@ -86,7 +87,7 @@ for epoch in range(NB_EPOCHS):
 if EASY_MODEL:
     PATH_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING)
 else:
-    PATH_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING)
+    PATH_TRAINING = PATH_WEIGHT / "hard_model_{}.h5".format(NUMBER_TRAINING)
 MODEL.save_weights(str(PATH_TRAINING))
 
 

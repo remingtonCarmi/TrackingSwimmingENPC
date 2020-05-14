@@ -40,10 +40,12 @@ def evaluate(model, inputs, labels):
     """
     Evaluate the model without back propagation.
     """
+    model.trainable = False
     full_labels = create_label(labels)
 
     loss_value = cross_loss(model, inputs, full_labels)
 
+    model.trainable = True
     return loss_value
 
 

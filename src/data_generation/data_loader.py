@@ -60,7 +60,7 @@ if __name__ == "__main__":
     PATH_LABEL = Path("../../output/test/vid1.csv")
     POURCENTAGE = [0.5, 0.5]
 
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
+    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=POURCENTAGE)
     TRAIN_SET = GENERATOR.train
     LOADER = DataLoader(TRAIN_SET)
     (BATCH, LABELS) = LOADER[0]

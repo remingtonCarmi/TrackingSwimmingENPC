@@ -11,14 +11,14 @@ def get_frame_lane(name_file):
 
 
 class DataGenerator:
-    def __init__(self, path_data, path_label, pourcentage=[0.8, 0.2]):
+    def __init__(self, path_data, path_label, percentage=[0.8, 0.2]):
         # Data and labels
         self.data = listdir(path_data)
         self.labels = pd.read_csv(path_label)
 
         # Manage the numbers of samples
         self.nb_samples = len(self.data)
-        self.nb_trains = int(self.nb_samples * pourcentage[0])
+        self.nb_trains = int(self.nb_samples * percentage[0])
         self.nb_valids = self.nb_samples - self.nb_trains
 
         # Get the full data_set
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # THE PATH_DATA IS EMPTY
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
-    POURCENTAGE = [0.5, 0.5]
+    PERCENTAGE = [0.5, 0.5]
 
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, pourcentage=POURCENTAGE)
+    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
     print(GENERATOR.train)
