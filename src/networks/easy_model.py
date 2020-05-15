@@ -34,14 +34,14 @@ def compute_dimension(input_size, kernel_size, stride, padding, dilation):
 
 
 class EasyModel(Model):
-    def __init__(self):
+    def __init__(self, nb_classes=10):
         super(EasyModel, self).__init__()
         self.c32 = Conv2D(32, kernel_size=(3, 3), strides=3, padding="valid", activation="relu")
         self.max_poolc32 = MaxPooling2D(pool_size=(4, 5), strides=(4, 5), padding="valid")
         self.c64 = Conv2D(64, kernel_size=(3, 3), strides=3, padding="valid", activation="relu")
         self.max_poolc64 = MaxPooling2D(pool_size=(3, 2), strides=(3, 2), padding="valid")
         self.flatten = Flatten()
-        self.dense10 = Dense(10, activation="relu")
+        self.dense = Dense(nb_classes, activation="relu")
 
     def call(self, inputs):
 
@@ -57,7 +57,7 @@ class EasyModel(Model):
         # 1 x 21 x 64
         x = self.flatten(x)
         # 1344
-        x = self.dense10(x)
+        x = self.dense(x)
         # 10
 
         return x
@@ -67,6 +67,7 @@ if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
     PERCENTAGE = [0.5, 0.5]
+    NB_CLASSES = 10
 
     # (input_size, kernel_size, stride, padding, dilation)
     # print(compute_dimension(42, 2, 2, 0, 1))
@@ -74,11 +75,11 @@ if __name__ == "__main__":
     # Generate and load the data
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
     TRAIN_SET = GENERATOR.train
-    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA)
+    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, nb_classes=5)
 
     BATCH = np.array(TRAIN_DATA[0][0])
 
-    model = EasyModel()
-
+    model = EasyModel(nb_classes=NB_CLASSES)
     output = model(BATCH)
+    model.summary()
     print(output)

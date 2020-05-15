@@ -5,7 +5,7 @@ from src.data_generation.data_loader import DataLoader
 from src.data_generation.data_generator import DataGenerator
 from src.networks.easy_model import EasyModel
 from src.networks.hard_model import HardModel
-from src.loss.loss import get_loss, evaluate
+from src.loss.loss import get_loss, evaluate_loss, evaluate_accuracy
 from tensorflow.keras.optimizers import Adam
 
 
@@ -16,8 +16,8 @@ PERCENTAGE = [0.8, 0.2]  # [Training set, Validation set]
 
 # Parameters for the training
 NUMBER_TRAINING = 0
-EASY_MODEL = False
-NB_EPOCHS = 5
+EASY_MODEL = True
+NB_EPOCHS = 20
 BATCH_SIZE = 2
 
 
@@ -34,7 +34,8 @@ VAL_SET = GENERATOR.valid
 TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=BATCH_SIZE)
 VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), for_train=False)
 (VALID_SAMPLES, VALID_LABELS) = VALID_DATA[0]
-
+print("The training set is composed of {} images".format(len(TRAIN_SET)))
+print("The validation set is composed of {} images".format(len(VALID_SAMPLES)))
 
 # --- Define the MODEL --- #
 if EASY_MODEL:
@@ -57,14 +58,16 @@ OPTIMIZER = Adam()
 
 
 # --- For statistics --- #
-NB_BATCHES = len(TRAIN_DATA)
 LOSSES_ON_TRAIN = np.zeros(NB_EPOCHS)
 LOSSES_ON_VAL = np.zeros(NB_EPOCHS)
+ACCURACIES_ON_TRAIN = np.zeros(NB_EPOCHS)
+ACCURACIES_ON_VAL = np.zeros(NB_EPOCHS)
 
 
 # --- Training --- #
 for epoch in range(NB_EPOCHS):
     sum_loss = 0
+    sum_accuracy = 0
     for (idx_batch, batch) in enumerate(TRAIN_DATA):
         (inputs, labels) = batch
 
@@ -75,13 +78,19 @@ for epoch in range(NB_EPOCHS):
         OPTIMIZER.apply_gradients(zip(grads, MODEL.trainable_variables))
 
         # Register statistics
-        sum_loss += loss_value
+        sum_loss += loss_value / len(labels)
+        sum_accuracy += evaluate_accuracy(MODEL, inputs, labels)
     TRAIN_DATA.on_epoch_end()
 
     # Register the loss on train
     LOSSES_ON_TRAIN[epoch] = sum_loss / len(TRAIN_DATA)
     # Register the loss on val
-    LOSSES_ON_VAL[epoch] = evaluate(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
+    LOSSES_ON_VAL[epoch] = evaluate_loss(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
+    # Register the accuracy on train
+    ACCURACIES_ON_TRAIN[epoch] = sum_accuracy / len(TRAIN_DATA)
+    # Register the accuracy on val
+    ACCURACIES_ON_VAL[epoch] = evaluate_accuracy(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
+
 
 # --- Save the weights --- #
 if EASY_MODEL:
@@ -93,5 +102,12 @@ MODEL.save_weights(str(PATH_TRAINING))
 
 plt.plot(LOSSES_ON_TRAIN, label="Loss on train set")
 plt.plot(LOSSES_ON_VAL, label="Loss on validation set")
+plt.xlabel("Number of epoch")
+plt.legend()
+
+plt.figure()
+plt.plot(ACCURACIES_ON_TRAIN, label="Accuracy on train set")
+plt.plot(ACCURACIES_ON_VAL, label="Accuracy on validation set")
+plt.xlabel("Number of epoch")
 plt.legend()
 plt.show()

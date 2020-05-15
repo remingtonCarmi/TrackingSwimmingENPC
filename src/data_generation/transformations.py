@@ -24,6 +24,12 @@ def transform_label(label, nb_classes, image_size):
     return int(label[0] // length_class)
 
 
+# --- Data augmenting --- #
+def augmenting(images, labels, random_seed):
+    if random_seed == 0:
+        return images, labels
+
+
 if __name__ == "__main__":
     IMAGE = np.array([[[19, 3, 0], [12, 3, 2]], [[10, 31, 2], [2, 23, 28]]])
     LABEL = np.array([450, 12])

@@ -22,7 +22,7 @@ from tensorflow.python.keras.layers import (
 
 
 class HardModel(Model):
-    def __init__(self):
+    def __init__(self, nb_classes=10):
         super(HardModel, self).__init__()
         self.c32 = Conv2D(32, kernel_size=(3, 3), strides=2, padding="valid")
         self.batch_norm32 = BatchNormalization()
@@ -42,7 +42,7 @@ class HardModel(Model):
 
         self.flatten = Flatten()
         self.dropout = Dropout(0.1)
-        self.dense10 = Dense(10, activation="relu")
+        self.dense = Dense(nb_classes, activation="relu")
 
     def call(self, inputs):
 
@@ -85,7 +85,7 @@ class HardModel(Model):
 
         # Fourth layer
         # 2944
-        x = self.dense10(x)
+        x = self.dense(x)
         # 10
 
         return x
@@ -95,15 +95,18 @@ if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
     PERCENTAGE = [0.5, 0.5]
+    NB_CLASSES = 10
 
     # Generate and load the data
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
     TRAIN_SET = GENERATOR.train
-    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA)
+    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, nb_classes=NB_CLASSES)
 
     BATCH = np.array(TRAIN_DATA[0][0])
 
-    model = HardModel()
+    model = HardModel(nb_classes=NB_CLASSES)
 
     output = model(BATCH)
+    model.summary()
+
     print(output)

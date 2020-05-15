@@ -36,7 +36,7 @@ def cross_loss(model, inputs, full_labels):
     return norm(binary_crossentropy(outputs, full_labels)) ** 2
 
 
-def evaluate(model, inputs, labels):
+def evaluate_loss(model, inputs, labels):
     """
     Evaluate the model without back propagation.
     """
@@ -47,6 +47,25 @@ def evaluate(model, inputs, labels):
 
     model.trainable = True
     return loss_value
+
+
+def get_accuracy(model, inputs, labels):
+    outputs = model(inputs)
+    predictions = np.argmax(outputs, axis=1)
+
+    return np.mean(predictions == labels)
+
+
+def evaluate_accuracy(model, inputs, labels):
+    """
+    Evaluate the model without back propagation.
+    """
+    model.trainable = False
+
+    acc_value = get_accuracy(model, inputs, labels)
+
+    model.trainable = True
+    return acc_value
 
 
 if __name__ == "__main__":
