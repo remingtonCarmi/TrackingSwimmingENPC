@@ -5,6 +5,7 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 - The first one used computer vision techniques to catch the arms motion frequency of each swimmer.
 - The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video.
 
+<td><img width="400px" src="output/gif/first_method_detection.gif"></td>
 
 ## Prerequisites & Installation:
 
