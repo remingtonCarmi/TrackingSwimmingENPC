@@ -27,19 +27,16 @@ class DataGenerator:
         # Training and validation sets
         (self.train, self.valid) = self.fill_sets()
 
-    def get_label(self, path):
-        (frame, lane) = get_frame_lane(path)
-        if (frame, lane) in self.labels.index:
-            return self.labels.loc[[(frame, lane)]].to_numpy()[0]
-        else:
-            return np.array([-2, -2])
-
     def fill_full_data(self):
         full_data = []
         for ((lane, frame), label) in self.labels.iterrows():
+            # Add to the list only if the image has been labeled with a right position
             if label[0] >= 0:
                 name_image = "l{}_f{}.jpg".format(lane, str(frame).zfill(4))
-                full_data.append([name_image, label[0], label[1]])
+                path_image = self.path_data / name_image
+                # Add to the list only if the image is in the computer
+                if path_image.exists():
+                    full_data.append([name_image, label[0], label[1]])
 
         return full_data
 

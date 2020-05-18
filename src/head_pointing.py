@@ -3,7 +3,7 @@ This code calibrates an entire video by withdrawing the distortion and the persp
 """
 from pathlib import Path
 import numpy as np
-from src.utils.extractions.exception_classes import EmptyFolder, NoMoreFrame
+from src.utils.extractions.exceptions.exception_classes import EmptyFolder, NoMoreFrame
 from src.utils.point_selection.head_selection import head_selection
 from src.utils.store_load_matrix.exception_classes import AlreadyExistError, NothingToAdd, FindErrorStore
 from src.utils.extractions.extract_path import extract_path

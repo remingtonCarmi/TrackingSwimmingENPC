@@ -4,23 +4,23 @@ from tensorflow import norm, convert_to_tensor
 from tensorflow.keras.losses import binary_crossentropy
 
 
-def create_label(labels):
+def create_label(labels, nb_classes):
     """
     Transform the labels' batch that are integers to list of zeros where there is a one in the right place.
     """
     nb_labels = len(labels)
-    full_labels = np.zeros((len(labels), 10))
+    full_labels = np.zeros((len(labels), nb_classes))
     for idx_label in range(nb_labels):
         full_labels[idx_label, int(labels[idx_label])] = 1
 
     return convert_to_tensor(full_labels, dtype=np.float32)
 
 
-def get_loss(model, inputs, labels):
+def get_loss(model, inputs, labels, nb_classes):
     """
     Get the loss and the gradient of every layer.
     """
-    full_labels = create_label(labels)
+    full_labels = create_label(labels, nb_classes)
     with GradientTape() as tape:
         loss_value = cross_loss(model, inputs, full_labels)
 
@@ -36,12 +36,12 @@ def cross_loss(model, inputs, full_labels):
     return norm(binary_crossentropy(outputs, full_labels)) ** 2
 
 
-def evaluate_loss(model, inputs, labels):
+def evaluate_loss(model, inputs, labels, nb_classes):
     """
     Evaluate the model without back propagation.
     """
     model.trainable = False
-    full_labels = create_label(labels)
+    full_labels = create_label(labels, nb_classes)
 
     loss_value = cross_loss(model, inputs, full_labels)
 

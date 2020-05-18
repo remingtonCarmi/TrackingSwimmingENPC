@@ -3,7 +3,7 @@ This code allows the user to load an image that is in a video.
 """
 from pathlib import Path
 import cv2
-from src.utils.extractions.exception_classes import TimeError, FindErrorExtraction
+from src.utils.extractions.exceptions.exception_classes import TimeError, FindErrorExtraction
 
 
 def extract_image_video(path_video, time_begin, time_end, register=False, destination=Path("../../output/test/")):

@@ -13,15 +13,16 @@ import tensorflow as tf
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid1"
-PERCENTAGE = [0.8, 0.2]  # [Training set, Validation set]
-FROM_COLAB = True
+PERCENTAGE = 0.8  # percentage of the training set
+FROM_COLAB = False
+NB_CLASSES = 10
 
 # Parameters for the training
-NUMBER_TRAINING = 0
+NUMBER_TRAINING = 1
 EASY_MODEL = True
 NB_EPOCHS = 20
 BATCH_SIZE = 2
-
+DATA_AUGMENTING = False
 
 # -- Verify that a GPU is used -- #
 print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical_devices('GPU'))
@@ -41,26 +42,26 @@ PATH_LABEL = Path(PATH_BEGIN + "output/test/{}.csv".format(VIDEO_NAME))
 GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
 TRAIN_SET = GENERATOR.train
 VAL_SET = GENERATOR.valid
-TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=BATCH_SIZE)
-VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), for_train=False)
+TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=BATCH_SIZE, data_augmenting=DATA_AUGMENTING, nb_classes=NB_CLASSES)
+VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), nb_classes=NB_CLASSES)
 (VALID_SAMPLES, VALID_LABELS) = VALID_DATA[0]
 print("The training set is composed of {} images".format(len(TRAIN_SET)))
 print("The validation set is composed of {} images".format(len(VALID_SAMPLES)))
 
 # --- Define the MODEL --- #
 if EASY_MODEL:
-    MODEL = EasyModel()
+    MODEL = EasyModel(NB_CLASSES)
 else:
-    MODEL = HardModel()
+    MODEL = HardModel(NB_CLASSES)
 # Get the weights of the previous trainings
 PATH_WEIGHT = Path(PATH_BEGIN + "trained_weights/")
 if NUMBER_TRAINING > 0:
     # Build the model to load the weights
     MODEL.build(TRAIN_DATA[0][0].shape)
     if EASY_MODEL:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     else:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_{}.h5".format(NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     # Load the weights
     MODEL.load_weights(str(PATH_FORMER_TRAINING))
 # Optimizer
@@ -83,7 +84,7 @@ for epoch in range(NB_EPOCHS):
         (inputs, labels) = batch
 
         # Compute the loss and the gradients
-        (loss_value, grads) = get_loss(MODEL, inputs, labels)
+        (loss_value, grads) = get_loss(MODEL, inputs, labels, NB_CLASSES)
 
         # Optimize
         OPTIMIZER.apply_gradients(zip(grads, MODEL.trainable_variables))
@@ -95,7 +96,7 @@ for epoch in range(NB_EPOCHS):
     # Register the loss on train
     LOSSES_ON_TRAIN[epoch] = sum_loss / len(TRAIN_DATA)
     # Register the loss on val
-    LOSSES_ON_VAL[epoch] = evaluate_loss(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
+    LOSSES_ON_VAL[epoch] = evaluate_loss(MODEL, VALID_SAMPLES, VALID_LABELS, NB_CLASSES) / len(VALID_SAMPLES)
     # Register the accuracy on train
     ACCURACIES_ON_TRAIN[epoch] = sum_accuracy / len(TRAIN_DATA)
     # Register the accuracy on val
@@ -104,9 +105,9 @@ for epoch in range(NB_EPOCHS):
 
 # --- Save the weights --- #
 if EASY_MODEL:
-    PATH_TRAINING = PATH_WEIGHT / "easy_model_{}.h5".format(NUMBER_TRAINING)
+    PATH_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING)
 else:
-    PATH_TRAINING = PATH_WEIGHT / "hard_model_{}.h5".format(NUMBER_TRAINING)
+    PATH_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING)
 MODEL.save_weights(str(PATH_TRAINING))
 
 
