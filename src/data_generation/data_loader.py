@@ -2,8 +2,7 @@ from pathlib import Path
 import random as rd
 import numpy as np
 import cv2
-from src.data_generation.data_generator import DataGenerator
-from src.data_generation.transformations.transformations import transform_image, transform_label, augmenting
+from transformations.transformations import transform_image, transform_label, augmenting
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -75,11 +74,3 @@ if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
     PERCENTAGE = [0.5, 0.5]
-
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
-    TRAIN_SET = GENERATOR.train
-    LOADER = DataLoader(TRAIN_SET)
-    (BATCH, LABELS) = LOADER[0]
-
-    print(BATCH.shape)
-    print(LABELS.shape)
