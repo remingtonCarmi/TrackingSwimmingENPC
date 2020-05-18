@@ -1,3 +1,6 @@
+from pathlib import Path
+from src.data_generation.data_generator import DataGenerator
+from src.data_generation.data_loader import DataLoader
 import numpy as np
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
@@ -57,3 +60,25 @@ class EasyModel(Model):
         # 10
 
         return x
+
+
+if __name__ == "__main__":
+    PATH_DATA = Path("../../output/test/vid1/")
+    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PERCENTAGE = [0.5, 0.5]
+    NB_CLASSES = 10
+
+    # (input_size, kernel_size, stride, padding, dilation)
+    # print(compute_dimension(42, 2, 2, 0, 1))
+
+    # Generate and load the data
+    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
+    TRAIN_SET = GENERATOR.train
+    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, nb_classes=5)
+
+    BATCH = np.array(TRAIN_DATA[0][0])
+
+    model = EasyModel(nb_classes=NB_CLASSES)
+    output = model(BATCH)
+    model.summary()
+    print(output)
