@@ -1,11 +1,11 @@
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
-from src.networks.easy_model import EasyModel
-from src.networks.hard_model import HardModel
-from src.loss.loss import get_loss, evaluate_loss, evaluate_accuracy
+from data_generation.data_loader import DataLoader
+from data_generation.data_generator import DataGenerator
+from networks.easy_model import EasyModel
+from networks.hard_model import HardModel
+from loss.loss import get_loss, evaluate_loss, evaluate_accuracy
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 
