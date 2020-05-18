@@ -8,7 +8,8 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 <td><img width="400px" src="output/gif/first_method_detection.gif"></td>
 </DIV>
 
-- The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video.
+- The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video. 
+To achieve our goal, we built an application to label videos, and then create our own dataset.
 
 
 
@@ -47,6 +48,11 @@ Before, feel free to modify the line 22 if you want the graph of more swimmers
 **To test the second method**, run
 ```bash
 python ????????
+```
+
+**To label a video**, run
+```bash
+python create_data_set.py
 ```
 ## Contributors
 Victoria Brami, Maxime Brisinger, Rémi Carmigniani, and Théo Vincent 
