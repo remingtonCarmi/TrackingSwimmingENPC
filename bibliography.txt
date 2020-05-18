@@ -26,3 +26,6 @@ https://www.fina.org/sites/default/files/2017_2021_facilities_06102017_full_medi
 
 To create an application to correct the perspective:
 https://doc.qt.io/qt-5/qtwidgets-layouts-basiclayouts-example.html
+
+To use Google Colab:
+https://medium.com/@ashwindesilva/how-to-use-google-colaboratory-to-clone-a-github-repository-e07cf8d3d22b

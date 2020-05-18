@@ -7,12 +7,14 @@ from src.networks.easy_model import EasyModel
 from src.networks.hard_model import HardModel
 from src.loss.loss import get_loss, evaluate_loss, evaluate_accuracy
 from tensorflow.keras.optimizers import Adam
+import tensorflow as tf
 
 
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid1"
 PERCENTAGE = [0.8, 0.2]  # [Training set, Validation set]
+FROM_COLAB = True
 
 # Parameters for the training
 NUMBER_TRAINING = 0
@@ -21,10 +23,18 @@ NB_EPOCHS = 20
 BATCH_SIZE = 2
 
 
+# -- Verify that a GPU is used -- #
+print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical_devices('GPU'))
+
+
 # --- Parameters --- #
 # Parameters to get the data
-PATH_DATA = Path("../output/test/{}/".format(VIDEO_NAME))
-PATH_LABEL = Path("../output/test/{}.csv".format(VIDEO_NAME))
+if FROM_COLAB:
+    PATH_BEGIN = ""
+else:
+    PATH_BEGIN = "../"
+PATH_DATA = Path(PATH_BEGIN + "output/test/{}/".format(VIDEO_NAME))
+PATH_LABEL = Path(PATH_BEGIN + "output/test/{}.csv".format(VIDEO_NAME))
 
 
 # --- Generate and load the data --- #
@@ -43,7 +53,7 @@ if EASY_MODEL:
 else:
     MODEL = HardModel()
 # Get the weights of the previous trainings
-PATH_WEIGHT = Path("../trained_weights/")
+PATH_WEIGHT = Path(PATH_BEGIN + "trained_weights/")
 if NUMBER_TRAINING > 0:
     # Build the model to load the weights
     MODEL.build(TRAIN_DATA[0][0].shape)
