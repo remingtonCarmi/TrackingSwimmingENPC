@@ -1,6 +1,6 @@
 # SWIMMER TRACKING
 
-The aim of this code is to provide two different methods of swimmer tracking. The inputs video are filmed with a fixed camera.
+The aim of this code is to provide two different methods of swimmer tracking. The input videos are filmed with a fixed camera.
 
 - The first one used computer vision techniques to catch the arms motion frequency of each swimmer.
 
@@ -9,7 +9,7 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 </DIV>
 
 - The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video. 
-To achieve our goal, we built an application to label videos, and then create our own dataset.
+To achieve our goal, we built an application to label videos, and then created our own dataset.
 
 
 
