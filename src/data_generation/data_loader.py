@@ -2,7 +2,7 @@ from pathlib import Path
 import random as rd
 import numpy as np
 import cv2
-from transformations.transformations import transform_image, transform_label, augmenting
+from data_generation.transformations.transformations import transform_image, transform_label, augmenting
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
