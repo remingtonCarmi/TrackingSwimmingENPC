@@ -1,14 +1,3 @@
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
-
-from pathlib import Path
-
-import tensorflow as tf
-from tensorflow.keras import Model
-import numpy as np
-import matplotlib.pyplot as plt
-
-from tensorflow.python.keras import optimizers, losses
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
     Dense,
@@ -89,24 +78,3 @@ class HardModel(Model):
         # 10
 
         return x
-
-
-if __name__ == "__main__":
-    PATH_DATA = Path("../../output/test/vid1/")
-    PATH_LABEL = Path("../../output/test/vid1.csv")
-    PERCENTAGE = [0.5, 0.5]
-    NB_CLASSES = 10
-
-    # Generate and load the data
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
-    TRAIN_SET = GENERATOR.train
-    TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, nb_classes=NB_CLASSES)
-
-    BATCH = np.array(TRAIN_DATA[0][0])
-
-    model = HardModel(nb_classes=NB_CLASSES)
-
-    output = model(BATCH)
-    model.summary()
-
-    print(output)

@@ -17,8 +17,8 @@ from src.utils.draw_rectangle.draw_rectangle import draw_rectangle
 from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
 from src.utils.draw_rectangle.exception_classes import VideoAlreadyExists
 
-from src.utils.extractions.exception_classes import TimeError
-from src.utils.extractions.exception_classes import FindErrorExtraction
+from src.utils.extractions.exceptions.exception_classes import TimeError
+from src.utils.extractions.exceptions.exception_classes import FindErrorExtraction
 
 from src.utils.make_video import make_video
 

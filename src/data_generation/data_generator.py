@@ -1,13 +1,6 @@
 from pathlib import Path
-from os import listdir
 import pandas as pd
 import numpy as np
-import random as rd
-
-
-def get_frame_lane(name_file):
-    frame_lane = name_file[: -4].split("_")
-    return int(frame_lane[0][1:]), int(frame_lane[1][1:])
 
 
 class DataGenerator:

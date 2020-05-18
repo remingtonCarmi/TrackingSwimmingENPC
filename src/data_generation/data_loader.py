@@ -2,7 +2,6 @@ from pathlib import Path
 import random as rd
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 from src.data_generation.data_generator import DataGenerator
 from src.data_generation.transformations.transformations import transform_label, augmenting, standardize
 from tensorflow.keras.utils import Sequence
