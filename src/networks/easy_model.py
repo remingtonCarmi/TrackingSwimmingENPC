@@ -1,7 +1,6 @@
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
 from pathlib import Path
-
+from src.data_generation.data_generator import DataGenerator
+from src.data_generation.data_loader import DataLoader
 import numpy as np
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (

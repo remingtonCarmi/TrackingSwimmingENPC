@@ -2,7 +2,7 @@ from pathlib import Path
 from os import listdir
 import cv2
 import numpy as np
-from src.utils.extractions.exception_classes import FindErrorExtraction, EmptyFolder, NoMoreFrame
+from src.utils.extractions.exceptions.exception_classes import FindErrorExtraction, EmptyFolder, NoMoreFrame
 
 
 def register_image(image_name, lane, frame):

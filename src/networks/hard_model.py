@@ -7,8 +7,6 @@ import tensorflow as tf
 from tensorflow.keras import Model
 import numpy as np
 import matplotlib.pyplot as plt
-
-from tensorflow.python.keras import optimizers, losses
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
     Dense,
