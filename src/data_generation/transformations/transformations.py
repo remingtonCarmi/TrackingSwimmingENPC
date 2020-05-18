@@ -3,11 +3,6 @@ import numpy as np
 
 
 # --- Transformation for the images --- #
-def transform_image(image_path):
-    image = cv2.imread(str(image_path))
-    return standardize(image)
-
-
 def standardize(image):
     """
     Normalize between -1 and 1.
@@ -25,8 +20,17 @@ def transform_label(label, nb_classes, image_size):
 
 
 # --- Data augmenting --- #
-def augmenting(images, labels, random_seed):
+def augmenting(images, labels, random_seed, data_manager, nb_classes):
     if random_seed == 0:
+        return data_manager.apply_transform(images, {"channel_shift_intensity": 10}), labels
+    if random_seed == 1:
+        return data_manager.apply_transform(images, {"flip_horizontal": True}), nb_classes - labels - 1
+    if random_seed == 2:
+        return data_manager.apply_transform(images, {"flip_vertical": True}), labels
+    if random_seed == 3:
+        image = data_manager.apply_transform(images, {"flip_vertical": True})
+        return data_manager.apply_transform(image, {"flip_horizontal": True}), nb_classes - labels - 1
+    else:
         return images, labels
 
 

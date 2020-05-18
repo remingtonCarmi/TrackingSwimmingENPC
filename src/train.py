@@ -78,6 +78,7 @@ ACCURACIES_ON_VAL = np.zeros(NB_EPOCHS)
 for epoch in range(NB_EPOCHS):
     sum_loss = 0
     sum_accuracy = 0
+    TRAIN_DATA.on_epoch_end()
     for (idx_batch, batch) in enumerate(TRAIN_DATA):
         (inputs, labels) = batch
 
@@ -90,7 +91,6 @@ for epoch in range(NB_EPOCHS):
         # Register statistics
         sum_loss += loss_value / len(labels)
         sum_accuracy += evaluate_accuracy(MODEL, inputs, labels)
-    TRAIN_DATA.on_epoch_end()
 
     # Register the loss on train
     LOSSES_ON_TRAIN[epoch] = sum_loss / len(TRAIN_DATA)
