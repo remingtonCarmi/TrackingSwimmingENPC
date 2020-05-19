@@ -1,2 +1,3 @@
 
 *.h5
+!easy_model_nb_classes_10_0_trained.h5
