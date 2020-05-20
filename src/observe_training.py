@@ -10,9 +10,8 @@ from src.utils.visualization_deep import visualize
 
 # --- TO MODIFY --- #
 # Parameters for data
-VIDEO_NAME = "vid1"
-PERCENTAGE = 0.8  # percentage of the training set
-FROM_COLAB = False
+VIDEO_NAME = "vid0"
+PERCENTAGE = 0.9  # percentage of the training set
 NB_CLASSES = 10
 
 # Parameters for the training
@@ -23,12 +22,9 @@ DATA_AUGMENTING = False
 
 # --- Parameters --- #
 # Parameters to get the data
-if FROM_COLAB:
-    PATH_BEGIN = ""
-else:
-    PATH_BEGIN = "../"
-PATH_DATA = Path(PATH_BEGIN + "output/test/{}/".format(VIDEO_NAME))
-PATH_LABEL = Path(PATH_BEGIN + "output/test/{}.csv".format(VIDEO_NAME))
+PATH_BEGIN = "../"
+PATH_DATA = Path(PATH_BEGIN + "data/lanes/{}/".format(VIDEO_NAME))
+PATH_LABEL = Path(PATH_BEGIN + "data/head_points/{}.csv".format(VIDEO_NAME))
 
 
 # --- Generate and load the data --- #
@@ -59,13 +55,13 @@ if NUMBER_TRAINING > 0:
 # --- Evaluation --- #
 OUTPUTS = MODEL(VALID_SAMPLES)
 PREDICTIONS = np.argmax(OUTPUTS, axis=1)
+print(PREDICTIONS)
 
-
-# --- Visualisation --- #
+"""# --- Visualisation --- #
 FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
 
 for FRAME in FRAMES:
     plt.figure()
     plt.imshow(FRAME)
 
-plt.show()
+plt.show()"""
