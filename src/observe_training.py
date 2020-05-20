@@ -45,23 +45,25 @@ if NUMBER_TRAINING > 0:
     # Build the model to load the weights
     MODEL.build(VALID_SAMPLES.shape)
     if EASY_MODEL:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}_trained.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     else:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}_trained.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     # Load the weights
     MODEL.load_weights(str(PATH_FORMER_TRAINING))
 
 
 # --- Evaluation --- #
+MODEL.trainable = False
 OUTPUTS = MODEL(VALID_SAMPLES)
 PREDICTIONS = np.argmax(OUTPUTS, axis=1)
 print(PREDICTIONS)
+print(VALID_LABELS)
 
-"""# --- Visualisation --- #
+# --- Visualisation --- #
 FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
 
 for FRAME in FRAMES:
     plt.figure()
     plt.imshow(FRAME)
 
-plt.show()"""
+plt.show()
