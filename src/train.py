@@ -18,7 +18,7 @@ FROM_COLAB = False
 NB_CLASSES = 10
 
 # Parameters for the training
-NUMBER_TRAINING = 1
+NUMBER_TRAINING = 0
 EASY_MODEL = True
 NB_EPOCHS = 20
 BATCH_SIZE = 2
@@ -111,14 +111,30 @@ else:
 MODEL.save_weights(str(PATH_TRAINING))
 
 
+# To save the plots
+PATH_SAVE_FIG = Path(PATH_BEGIN + "output/model_stats/")
+if EASY_MODEL:
+    PATH_SAVE_LOSS = PATH_SAVE_FIG / "loss_easy_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "accuracy_easy_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+
+else:
+    PATH_SAVE_LOSS = PATH_SAVE_FIG / "loss_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "accuracy_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+
+
+# Plot the results
 plt.plot(LOSSES_ON_TRAIN, label="Loss on train set")
 plt.plot(LOSSES_ON_VAL, label="Loss on validation set")
 plt.xlabel("Number of epoch")
 plt.legend()
+plt.savefig(PATH_SAVE_LOSS)
+# plt.show()
+plt.close()
 
-plt.figure()
+
 plt.plot(ACCURACIES_ON_TRAIN, label="Accuracy on train set")
 plt.plot(ACCURACIES_ON_VAL, label="Accuracy on validation set")
 plt.xlabel("Number of epoch")
 plt.legend()
-plt.show()
+plt.savefig(PATH_SAVE_ACCURACY)
+# plt.show()
