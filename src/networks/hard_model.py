@@ -15,7 +15,8 @@ from tensorflow.python.keras.layers import (
     MaxPooling2D,
     BatchNormalization,
     ReLU,
-    Dropout
+    Dropout,
+    Softmax
 )
 
 
@@ -41,6 +42,7 @@ class HardModel(Model):
         self.flatten = Flatten()
         self.dropout = Dropout(0.1)
         self.dense = Dense(nb_classes, activation="relu")
+        self.soft_max = Softmax()
 
     def call(self, inputs):
 
@@ -85,6 +87,7 @@ class HardModel(Model):
         # 2944
         x = self.dense(x)
         # 10
+        x = self.soft_max(x)
 
         return x
 
@@ -92,7 +95,7 @@ class HardModel(Model):
 if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
-    PERCENTAGE = [0.5, 0.5]
+    PERCENTAGE = 0.5
     NB_CLASSES = 10
 
     # Generate and load the data

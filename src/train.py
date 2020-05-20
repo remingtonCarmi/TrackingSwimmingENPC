@@ -13,16 +13,16 @@ import tensorflow as tf
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid1"
-PERCENTAGE = 0.8  # percentage of the training set
+PERCENTAGE = 0.9  # percentage of the training set
 FROM_COLAB = False
 NB_CLASSES = 10
 
 # Parameters for the training
 NUMBER_TRAINING = 0
 EASY_MODEL = True
-NB_EPOCHS = 20
-BATCH_SIZE = 2
-DATA_AUGMENTING = False
+NB_EPOCHS = 10
+BATCH_SIZE = 10
+DATA_AUGMENTING = True
 
 # -- Verify that a GPU is used -- #
 print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical_devices('GPU'))
@@ -100,7 +100,7 @@ for epoch in range(NB_EPOCHS):
     # Register the accuracy on train
     ACCURACIES_ON_TRAIN[epoch] = sum_accuracy / len(TRAIN_DATA)
     # Register the accuracy on val
-    ACCURACIES_ON_VAL[epoch] = evaluate_accuracy(MODEL, VALID_SAMPLES, VALID_LABELS) / len(VALID_SAMPLES)
+    ACCURACIES_ON_VAL[epoch] = evaluate_accuracy(MODEL, VALID_SAMPLES, VALID_LABELS)
 
 
 # --- Save the weights --- #
@@ -122,13 +122,22 @@ else:
     PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "accuracy_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
 
 
+# Observe results
+MODEL.trainable = False
+for (idx_batch, batch) in enumerate(TRAIN_DATA):
+    (inputs, labels) = batch
+    PREDICTIONS = MODEL(inputs)
+    print("Predictions", np.argmax(PREDICTIONS, axis=1))
+    print("labels", labels)
+
+
 # Plot the results
 plt.plot(LOSSES_ON_TRAIN, label="Loss on train set")
 plt.plot(LOSSES_ON_VAL, label="Loss on validation set")
 plt.xlabel("Number of epoch")
 plt.legend()
 plt.savefig(PATH_SAVE_LOSS)
-# plt.show()
+plt.show()
 plt.close()
 
 
@@ -137,4 +146,4 @@ plt.plot(ACCURACIES_ON_VAL, label="Accuracy on validation set")
 plt.xlabel("Number of epoch")
 plt.legend()
 plt.savefig(PATH_SAVE_ACCURACY)
-# plt.show()
+plt.show()

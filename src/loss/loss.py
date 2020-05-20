@@ -1,6 +1,6 @@
 import numpy as np
 from tensorflow import GradientTape
-from tensorflow import norm, convert_to_tensor
+from tensorflow import norm, convert_to_tensor, reduce_sum
 from tensorflow.keras.losses import binary_crossentropy
 
 
@@ -23,7 +23,6 @@ def get_loss(model, inputs, labels, nb_classes):
     full_labels = create_label(labels, nb_classes)
     with GradientTape() as tape:
         loss_value = cross_loss(model, inputs, full_labels)
-
     return loss_value, tape.gradient(loss_value, model.trainable_variables)
 
 
@@ -33,7 +32,7 @@ def cross_loss(model, inputs, full_labels):
     """
     outputs = model(inputs)
 
-    return norm(binary_crossentropy(outputs, full_labels)) ** 2
+    return reduce_sum(binary_crossentropy(outputs, full_labels))
 
 
 def evaluate_loss(model, inputs, labels, nb_classes):

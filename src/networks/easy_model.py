@@ -8,6 +8,8 @@ from tensorflow.python.keras.layers import (
     Conv2D,
     Flatten,
     MaxPooling2D,
+    ReLU,
+    Softmax
 )
 
 
@@ -35,28 +37,39 @@ def compute_dimension(input_size, kernel_size, stride, padding, dilation):
 class EasyModel(Model):
     def __init__(self, nb_classes=10):
         super(EasyModel, self).__init__()
-        self.c32 = Conv2D(32, kernel_size=(3, 3), strides=3, padding="valid", activation="relu")
-        self.max_poolc32 = MaxPooling2D(pool_size=(4, 5), strides=(4, 5), padding="valid")
-        self.c64 = Conv2D(64, kernel_size=(3, 3), strides=3, padding="valid", activation="relu")
-        self.max_poolc64 = MaxPooling2D(pool_size=(3, 2), strides=(3, 2), padding="valid")
+        self.c32 = Conv2D(32, kernel_size=(7, 7), strides=(2, 4), padding="valid", activation="relu")
+        self.relu32 = ReLU()
+
+        self.max_poolc32 = MaxPooling2D(pool_size=(2, 4), strides=(2, 4), padding="valid")
+
+        self.c64 = Conv2D(64, kernel_size=(4, 7), strides=(3, 5), padding="valid", activation="relu")
+        self.relu64 = ReLU()
+
+        self.max_poolc64 = MaxPooling2D(pool_size=(4, 5), strides=(4, 5), padding="valid")
+
         self.flatten = Flatten()
         self.dense = Dense(nb_classes, activation="relu")
+        self.soft_max = Softmax()
 
     def call(self, inputs):
 
         # Size, without batch size
         # 108 x 1920 x 3
         x = self.c32(inputs)
-        # 36 x 640 x 32
+        x = self.relu32(x)
+        # 51 x 479 x 32
         x = self.max_poolc32(x)
-        # 9 x 128 x 32
+        # 25 x 119 x 32
         x = self.c64(x)
-        # 3 x 42 x 64
+        x = self.relu64(x)
+        # 8 x 23 x 64
         x = self.max_poolc64(x)
-        # 1 x 21 x 64
+        # 2 x 4 x 64
         x = self.flatten(x)
-        # 1344
+        # 512
         x = self.dense(x)
+        # 10
+        x = self.soft_max(x)
         # 10
 
         return x
@@ -65,11 +78,11 @@ class EasyModel(Model):
 if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
-    PERCENTAGE = [0.5, 0.5]
+    PERCENTAGE = 0.5
     NB_CLASSES = 10
 
     # (input_size, kernel_size, stride, padding, dilation)
-    # print(compute_dimension(42, 2, 2, 0, 1))
+    # print(compute_dimension(23, 5, 5, 0, 1))
 
     # Generate and load the data
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
