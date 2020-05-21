@@ -6,9 +6,9 @@ from src.utils.merge_lanes.merge_lanes import merge
 
 def darken_box(image, yc, xc, width, length):
     y1 = yc - length//2
-    x1 = xc - width//2
+    x1 = xc
     y2 = yc + length // 2
-    x2 = xc + width // 2
+    x2 = xc + width
     image[y1: y2 + 1, x1: x2 + 1, 1] -= 10
     image[y1: y2 + 1, x1: x2 + 1, 1] -= 40
     image[y1: y2 + 1, x1: x2 + 1, 2] -= 40
@@ -51,7 +51,8 @@ def sort_data(x, y):
 
 def visualize(names, predictions, path, nb_classes, length=0.7):
     names, predictions = sort_data(names, predictions)
-
+    print(names)
+    print(predictions)
     nb_frames = int(len(names) / 8)
     frames = []
 
@@ -101,6 +102,16 @@ if __name__ == '__main__':
          'l6_f0001.jpg', 'l6_f0002.jpg',
          'l7_f0001.jpg', 'l7_f0002.jpg',
          'l8_f0001.jpg', 'l8_f0002.jpg'
+         ])
+    X = np.array(
+        ['l1_f0001.jpg', 'l1_f0002.jpg',
+         'l1_f0003.jpg', 'l1_f0015.jpg',
+         'l1_f0004.jpg', 'l1_f0014.jpg',
+         'l1_f0005.jpg', 'l1_f0013.jpg',
+         'l1_f0006.jpg', 'l1_f0012.jpg',
+         'l1_f0001.jpg', 'l1_f0011.jpg',
+         'l1_f0007.jpg', 'l1_f0010.jpg',
+         'l1_f0008.jpg', 'l1_f0009.jpg'
          ])
     Y = np.array([np.random.randint(0, NB_CLASSES) for i in range(16)])
 
