@@ -19,7 +19,7 @@ NB_CLASSES = 10
 
 # Parameters for the training
 NUMBER_TRAINING = 0
-EASY_MODEL = True
+EASY_MODEL = False
 NB_EPOCHS = 10
 BATCH_SIZE = 10
 DATA_AUGMENTING = True
@@ -115,11 +115,11 @@ MODEL.save_weights(str(PATH_TRAINING))
 PATH_SAVE_FIG = Path(PATH_BEGIN + "output/model_stats/")
 if EASY_MODEL:
     PATH_SAVE_LOSS = PATH_SAVE_FIG / "loss_easy_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
-    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "accuracy_easy_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "mean_error_easy_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
 
 else:
     PATH_SAVE_LOSS = PATH_SAVE_FIG / "loss_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
-    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "accuracy_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
+    PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "mean_error_hard_model_nb_classes_{}_{}.jpg".format(NB_CLASSES, NUMBER_TRAINING)
 
 
 # Observe results

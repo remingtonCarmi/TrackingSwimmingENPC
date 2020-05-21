@@ -45,7 +45,7 @@ class DataLoader(Sequence):
 
             # Perform data augmenting
             if self.data_augmenting:
-                random_augmenting = np.random.randint(0, 6)
+                random_augmenting = np.random.randint(0, 5)
             else:
                 random_augmenting = 0
             (augmented_image, augmented_label) = augmenting(image_batch, label_batch, random_augmenting, self.data_manager, self.nb_classes)

@@ -4,10 +4,16 @@ import numpy as np
 
 
 class DataGenerator:
-    def __init__(self, path_data, path_label, percentage=0.8):
+    def __init__(self, path_data, path_label, percentage=0.8, for_visu=False):
+        self.for_visu = for_visu
         # Data and labels
         self.path_data = path_data
         self.labels = pd.read_csv(path_label)
+
+        # Sort full data_set
+        self.labels.index = self.labels.index.swaplevel(0, 1)
+        self.labels = self.labels.sort_index()
+        self.labels.index = self.labels.index.swaplevel(0, 1)
 
         # Get the full data_set
         self.full_data = self.fill_full_data()
@@ -24,7 +30,7 @@ class DataGenerator:
         full_data = []
         for ((lane, frame), label) in self.labels.iterrows():
             # Add to the list only if the image has been labeled with a right position
-            if label[0] >= 0:
+            if label[0] >= 0 or self.for_visu:
                 name_image = "l{}_f{}.jpg".format(lane, str(frame).zfill(4))
                 path_image = self.path_data / name_image
                 # Add to the list only if the image is in the computer
@@ -44,8 +50,8 @@ if __name__ == "__main__":
     # THE PATH_DATA IS EMPTY
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
-    PERCENTAGE = 0.5
+    PERCENTAGE = 0.9
 
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
+    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu=True)
     print(GENERATOR.train)
     print(GENERATOR.valid)
