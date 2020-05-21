@@ -19,8 +19,8 @@ NB_CLASSES = 10
 
 # Parameters for the training
 NUMBER_TRAINING = 0
-EASY_MODEL = False
-NB_EPOCHS = 10
+EASY_MODEL = True
+NB_EPOCHS = 20
 BATCH_SIZE = 10
 DATA_AUGMENTING = True
 

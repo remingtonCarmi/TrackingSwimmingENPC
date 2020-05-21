@@ -28,8 +28,9 @@ PATH_LABEL = Path(PATH_BEGIN + "data/head_points/{}.csv".format(VIDEO_NAME))
 
 
 # --- Generate and load the data --- #
-GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
+GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu=True)
 VAL_SET = GENERATOR.valid
+
 VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), nb_classes=NB_CLASSES)
 (VALID_SAMPLES, VALID_LABELS) = VALID_DATA[0]
 print("The validation set is composed of {} images".format(len(VALID_SAMPLES)))
