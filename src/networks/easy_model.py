@@ -82,7 +82,7 @@ if __name__ == "__main__":
     NB_CLASSES = 10
 
     # (input_size, kernel_size, stride, padding, dilation)
-    # print(compute_dimension(23, 5, 5, 0, 1))
+    print(compute_dimension(23, 5, 5, 0, 1))
 
     # Generate and load the data
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
