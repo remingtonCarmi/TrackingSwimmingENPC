@@ -141,8 +141,8 @@ plt.show()
 plt.close()
 
 
-plt.plot(ACCURACIES_ON_TRAIN, label="Accuracy on train set")
-plt.plot(ACCURACIES_ON_VAL, label="Accuracy on validation set")
+plt.plot(ACCURACIES_ON_TRAIN, label="Mean error on train set")
+plt.plot(ACCURACIES_ON_VAL, label="Mean error on validation set")
 plt.xlabel("Number of epoch")
 plt.legend()
 plt.savefig(PATH_SAVE_ACCURACY)

@@ -62,7 +62,7 @@ print(VALID_LABELS)
 # --- Visualisation --- #
 FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
 
-for FRAME in FRAMES:
+for FRAME in FRAMES[:10]:
     plt.figure()
     plt.imshow(FRAME)
 
