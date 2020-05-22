@@ -16,30 +16,34 @@ from tensorflow.python.keras.layers import (
     BatchNormalization,
     ReLU,
     Dropout,
-    Softmax
+    Softmax,
+    GlobalAveragePooling2D
 )
 
 
 class HardModel(Model):
     def __init__(self, nb_classes=10):
         super(HardModel, self).__init__()
-        self.c32 = Conv2D(32, kernel_size=(7, 9), strides=(1, 2), padding="valid")
+        self.c32 = Conv2D(32, kernel_size=(7, 9), strides=2, padding="valid")
         self.batch_norm32 = BatchNormalization()
         self.relu32 = ReLU()
 
-        self.c64 = Conv2D(64, kernel_size=(5, 7), strides=2, padding="valid")
+        self.max_pool32 = MaxPooling2D(pool_size=2, strides=2, padding="valid")
+
+        self.c64 = Conv2D(64, kernel_size=(5, 7), strides=(1, 2), padding="valid")
         self.batch_norm64 = BatchNormalization()
         self.relu64 = ReLU()
 
-        self.max_pool64 = MaxPooling2D(pool_size=4, strides=4, padding="valid")
+        self.max_pool64 = MaxPooling2D(pool_size=(2, 4), strides=(2, 4), padding="valid")
 
-        self.c128 = Conv2D(128, kernel_size=(5, 7), strides=(2, 4), padding="valid", )
+        self.c128 = Conv2D(128, kernel_size=(5, 7), strides=(1, 2), padding="valid", )
         self.batch_norm128 = BatchNormalization()
         self.relu128 = ReLU()
 
-        self.max_pool128 = MaxPooling2D(pool_size=(2, 4), strides=(2, 4), padding="valid")
+        self.max_pool128 = MaxPooling2D(pool_size=2, strides=2, padding="valid")
 
-        self.flatten = Flatten()
+        self.gap = GlobalAveragePooling2D()
+
         self.dropout = Dropout(0.1)
         self.dense = Dense(nb_classes, activation="relu")
         self.soft_max = Softmax()
@@ -50,41 +54,45 @@ class HardModel(Model):
         # First layer
         # 108 x 1920 x 3
         x = self.c32(inputs)
-        # 102 x 956 x 32
+        # 51 x 956 x 32
         x = self.batch_norm32(x)
         x = self.relu32(x)
 
+        # 51 x 956 x 32
+        x = self.max_pool32(x)
+        # 25 x 478 x 32
+
         # Second layer
-        # 102 x 956 x 32
+        # 25 x 478 x 32
         x = self.c64(x)
-        # 49 x 475 x 64
+        # 21 x 236 x 64
         x = self.batch_norm64(x)
         x = self.relu64(x)
 
-        # 49 x 475 x 64
+        # 21 x 236 x 64
         x = self.max_pool64(x)
-        # 12 x 118 x 64
+        # 10 x 59 x 64
 
         # Third layer
-        # 12 x 118 x 64
+        # 10 x 59 x 64
         x = self.c128(x)
-        # 4 x 28 x 128
+        # 6 x 27 x 64
         x = self.batch_norm128(x)
         x = self.relu128(x)
 
-        # 4 x 28 x 128
+        # 6 x 27 x 64
         x = self.max_pool128(x)
-        # 2 x 7 x 128
+        # 3 x 13 x 128
 
-        # 2 x 7 x 128
-        x = self.flatten(x)
-        # 1792
+        # 3 x 13 x 128
+        x = self.gap(x)
+        # 128
 
         if self.trainable:
             x = self.dropout(x)
 
         # Fourth layer
-        # 1792
+        # 128
         x = self.dense(x)
         # number classes
         x = self.soft_max(x)
