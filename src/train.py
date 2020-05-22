@@ -17,9 +17,16 @@ PERCENTAGE = 0.9  # percentage of the training set
 FROM_COLAB = False
 NB_CLASSES = 10
 
+
+# To avoid memory problems
+TF_CONFIG_ = tf.ConfigProto()
+TF_CONFIG_.gpu_options.allow_growth = True
+sess = tf.Session(config=TF_CONFIG_)
+
+
 # Parameters for the training
 NUMBER_TRAINING = 0
-EASY_MODEL = True
+EASY_MODEL = False
 NB_EPOCHS = 20
 BATCH_SIZE = 10
 DATA_AUGMENTING = True
