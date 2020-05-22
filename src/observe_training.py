@@ -17,7 +17,6 @@ NB_CLASSES = 10
 # Parameters for the training
 NUMBER_TRAINING = 1
 EASY_MODEL = True
-DATA_AUGMENTING = False
 
 
 # --- Parameters --- #
@@ -46,9 +45,9 @@ if NUMBER_TRAINING > 0:
     # Build the model to load the weights
     MODEL.build(VALID_SAMPLES.shape)
     if EASY_MODEL:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}_trained.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}_trained_second.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     else:
-        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}_trained.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
+        PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}_trained_second.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     # Load the weights
     MODEL.load_weights(str(PATH_FORMER_TRAINING))
 
