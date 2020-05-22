@@ -1,3 +1,4 @@
 
 *.h5
-!easy_model_nb_classes_10_0_trained.h5
+!easy_model_nb_classes_10_0_trained_first.h5
+!easy_model_nb_classes_10_0_trained_second.h5
