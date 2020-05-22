@@ -19,16 +19,16 @@ NB_CLASSES = 10
 
 
 # To avoid memory problems
-TF_CONFIG_ = tf.ConfigProto()
+TF_CONFIG_ = tf.compat.v1.ConfigProto()
 TF_CONFIG_.gpu_options.allow_growth = True
-sess = tf.Session(config=TF_CONFIG_)
+sess = tf.compat.v1.Session(config=TF_CONFIG_)
 
 
 # Parameters for the training
 NUMBER_TRAINING = 0
 EASY_MODEL = False
 NB_EPOCHS = 20
-BATCH_SIZE = 10
+BATCH_SIZE = 30
 DATA_AUGMENTING = True
 
 # -- Verify that a GPU is used -- #
