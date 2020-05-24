@@ -11,6 +11,12 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 - The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video. 
 To achieve our goal, we built an application to label videos, and then created our own dataset.
 
+<DIV ALIGN="CENTER">
+<td><img width="400px" src="output/gif/second_method_detection_10_classes.gif"></td>
+<td><img width="400px" src="output/gif/second_method_detection_30_classes.gif"></td>
+</DIV>
+
+
 
 
 ## Prerequisites & Installation:
@@ -42,12 +48,12 @@ python main_rough_detection.py
 Before, feel free to modify the line 22 if you want the graph of more swimmers
 ```python
     # lanes we want to plot the swim frequency
-    LINES_TO_PLOT = [1]
+    LANES_TO_PLOT = [1]
 ```
 
 **To test the second method**, run
 ```bash
-python ????????
+python main_classification.py
 ```
 
 **To label a video**, run
