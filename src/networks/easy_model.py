@@ -42,7 +42,7 @@ class EasyModel(Model):
 
         self.max_poolc32 = MaxPooling2D(pool_size=(2, 4), strides=(2, 4), padding="valid")
 
-        self.c64 = Conv2D(64, kernel_size=(4, 7), strides=(3, 5), padding="valid", activation="relu")
+        self.c64 = Conv2D(64, kernel_size=(4, 4), strides=(3, 5), padding="valid", activation="relu")
         self.relu64 = ReLU()
 
         self.max_poolc64 = MaxPooling2D(pool_size=(4, 5), strides=(4, 5), padding="valid")
@@ -62,27 +62,28 @@ class EasyModel(Model):
         # 25 x 119 x 32
         x = self.c64(x)
         x = self.relu64(x)
-        # 8 x 23 x 64
+        # 8 x 24 x 64
         x = self.max_poolc64(x)
         # 2 x 4 x 64
         x = self.flatten(x)
         # 512
         x = self.dense(x)
         # 10
-        x = self.soft_max(x)
+        if not self.trainable:
+            x = self.soft_max(x)
         # 10
 
         return x
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../output/test/vid1/")
-    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PATH_DATA = Path("../../output/test/vid0/")
+    PATH_LABEL = Path("../../output/test/vid0.csv")
     PERCENTAGE = 0.5
     NB_CLASSES = 10
 
     # (input_size, kernel_size, stride, padding, dilation)
-    print(compute_dimension(23, 5, 5, 0, 1))
+    # print(compute_dimension(23, 5, 5, 0, 1))
 
     # Generate and load the data
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
@@ -92,6 +93,7 @@ if __name__ == "__main__":
     BATCH = np.array(TRAIN_DATA[0][0])
 
     model = EasyModel(nb_classes=NB_CLASSES)
+    model.trainable = False
     output = model(BATCH)
     model.summary()
     print(output)

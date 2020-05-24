@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # plt.imshow(IMAGE)
 
     # ------------one lane----------------
-    # PATH_IMAGE2 = Path("../../output/test/vid1/l1_f0008.jpg")
+    # PATH_IMAGE2 = Path("../../output/test/vid0/l1_f0008.jpg")
     # IMAGE2 = np.copy(plt.imread(PATH_IMAGE2))
     # PREDICTION = 4
     # IMAGE2 = visualize_one_lane(IMAGE2, PREDICTION, nb_class=NB_CLASSES)
@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     # ------------several frames----------------
 
-    # run create_data_set.py with vid1 and time range = (0, 1)
+    # run create_data_set.py with vid0 and time range = (0, 1)
     X = np.array(
         ['l1_f0001.jpg', 'l1_f0002.jpg',
          'l2_f0001.jpg', 'l2_f0002.jpg',
@@ -115,7 +115,7 @@ if __name__ == '__main__':
          ])
     Y = np.array([np.random.randint(0, NB_CLASSES) for i in range(16)])
 
-    PATH = Path("../../data/lanes/vid1/")
+    PATH = Path("../../data/lanes/vid0/")
 
     FRAMES = visualize(X, Y, PATH, NB_CLASSES)
 

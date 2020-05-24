@@ -19,7 +19,7 @@ class DataLoader(Sequence):
         self.labels = data[:, 1:]
         self.batch_size = batch_size
         if access_path is None:
-            self.access_path = Path("../../output/test/vid1/")
+            self.access_path = Path("../../output/test/vid0/")
         else:
             self.access_path = access_path
         self.nb_classes = nb_classes
@@ -68,8 +68,8 @@ class DataLoader(Sequence):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../output/test/vid1/")
-    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PATH_DATA = Path("../../output/test/vid0/")
+    PATH_LABEL = Path("../../output/test/vid0.csv")
     PERCENTAGE = 1
     BATCH_SIZE = 1
 

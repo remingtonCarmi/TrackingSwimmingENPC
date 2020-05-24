@@ -11,7 +11,7 @@ from src.utils.visualization_deep import visualize
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid0"
-PERCENTAGE = 0.9  # percentage of the training set
+PERCENTAGE = 0.8959  # percentage of the training set
 NB_CLASSES = 10
 
 # Parameters for the training
@@ -27,12 +27,11 @@ PATH_LABEL = Path(PATH_BEGIN + "data/head_points/{}.csv".format(VIDEO_NAME))
 
 
 # --- Generate and load the data --- #
-GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu=True)
+GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu=False)
 VAL_SET = GENERATOR.valid
 
-VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=len(VAL_SET), nb_classes=NB_CLASSES)
-(VALID_SAMPLES, VALID_LABELS) = VALID_DATA[0]
-print("The validation set is composed of {} images".format(len(VALID_SAMPLES)))
+VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=1, nb_classes=NB_CLASSES)
+print("The validation set is composed of {} images".format(len(VAL_SET)))
 
 # --- Define the MODEL --- #
 if EASY_MODEL:
@@ -43,7 +42,7 @@ else:
 PATH_WEIGHT = Path(PATH_BEGIN + "trained_weights/")
 if NUMBER_TRAINING > 0:
     # Build the model to load the weights
-    MODEL.build(VALID_SAMPLES.shape)
+    MODEL.build(VALID_DATA[0][0].shape)
     if EASY_MODEL:
         PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}_trained_second.h5".format(NB_CLASSES, NUMBER_TRAINING - 1)
     else:
@@ -54,16 +53,22 @@ if NUMBER_TRAINING > 0:
 
 # --- Evaluation --- #
 MODEL.trainable = False
-OUTPUTS = MODEL(VALID_SAMPLES)
-PREDICTIONS = np.argmax(OUTPUTS, axis=1)
+PREDICTIONS = np.zeros(len(VALID_DATA))
+VALID_LABELS = np.zeros(len(VALID_DATA))
+
+for (idx, (batch, label)) in enumerate(VALID_DATA):
+    OUTPUTS = MODEL(batch)
+    PREDICTIONS[idx] = np.argmax(OUTPUTS, axis=1)
+    VALID_LABELS[idx] = int(label)
+
 print(PREDICTIONS)
 print(VALID_LABELS)
 
 # --- Visualisation --- #
-FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
+"""FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
 
 for FRAME in FRAMES[:10]:
     plt.figure()
     plt.imshow(FRAME)
 
-plt.show()
+plt.show()"""
