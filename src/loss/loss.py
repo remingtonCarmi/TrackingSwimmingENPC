@@ -32,7 +32,6 @@ def cross_loss(model, inputs, labels):
     Get the loss of the model.
     """
     outputs = model(inputs)
-
     return reduce_sum(sparse_categorical_crossentropy(labels, outputs, from_logits=True))
 
 

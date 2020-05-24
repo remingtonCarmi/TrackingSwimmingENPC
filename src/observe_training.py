@@ -6,17 +6,24 @@ from src.data_generation.data_generator import DataGenerator
 from src.networks.easy_model import EasyModel
 from src.networks.hard_model import HardModel
 from src.utils.visualization_deep import visualize
+from src.utils.visualization_deep import animation_one_lane
+from src.utils.make_video import make_video
 
 
 # --- TO MODIFY --- #
 # Parameters for data
 VIDEO_NAME = "vid0"
 PERCENTAGE = 0.8959  # percentage of the training set
+
 NB_CLASSES = 10
 
 # Parameters for the training
 NUMBER_TRAINING = 1
 EASY_MODEL = True
+
+# To build a visualization video
+CREATE_VIDEO = False
+SIZE_VIDEO = 3
 
 
 # --- Parameters --- #
@@ -32,6 +39,7 @@ VAL_SET = GENERATOR.valid
 
 VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=1, nb_classes=NB_CLASSES)
 print("The validation set is composed of {} images".format(len(VAL_SET)))
+
 
 # --- Define the MODEL --- #
 if EASY_MODEL:
@@ -65,10 +73,17 @@ print(PREDICTIONS)
 print(VALID_LABELS)
 
 # --- Visualisation --- #
-"""FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
 
-for FRAME in FRAMES[:10]:
+# FRAMES = visualize(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
+FRAMES = animation_one_lane(VAL_SET[:, 0], PREDICTIONS, PATH_DATA, NB_CLASSES)
+
+for FRAME in FRAMES[-5:]:
     plt.figure()
     plt.imshow(FRAME)
 
-plt.show()"""
+plt.show()
+
+if CREATE_VIDEO:
+    make_video("prediction" + VIDEO_NAME + ".mp4", FRAMES)
+
+plt.show()

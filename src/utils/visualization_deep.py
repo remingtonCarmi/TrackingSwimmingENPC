@@ -1,5 +1,6 @@
 import numpy as np
 from pathlib import Path
+import cv2
 import matplotlib.pyplot as plt
 from src.utils.merge_lanes.merge_lanes import merge
 
@@ -50,9 +51,8 @@ def sort_data(x, y):
 
 
 def visualize(names, predictions, path, nb_classes, length=0.7):
+    """Create the list of the frames, annotated with the prediction, sorted correctly"""
     names, predictions = sort_data(names, predictions)
-    print(names)
-    print(predictions)
     nb_frames = int(len(names) / 8)
     frames = []
 
@@ -69,6 +69,22 @@ def visualize(names, predictions, path, nb_classes, length=0.7):
 
         frame = merge(lanes)
         frames.append(frame)
+    return frames
+
+
+def animation_one_lane(names, predictions, path, nb_classes, length=0.7):
+    names, predictions = sort_data(names, predictions)
+    nb_frames = int(len(names))
+    frames = []
+
+    for i in range(nb_frames):
+        prediction = predictions[i]
+        image = np.copy(plt.imread(Path(path / names[i])))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        image = visualize_one_lane(image, prediction, nb_classes, length)
+        frames.append(image)
+
     return frames
 
 
