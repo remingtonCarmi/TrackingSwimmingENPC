@@ -15,7 +15,7 @@ LINES = [115, 227, 336, 443, 550, 659, 763, 871, 981]
 MARGIN = 15
 
 try:
-    RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 11, 17, True,
+    RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 11, 19, True,
                                      destination_video=Path("output/videos/"), path_txt=Path("data/calibration"))
 
     # lanes we want to plot the swim frequency
