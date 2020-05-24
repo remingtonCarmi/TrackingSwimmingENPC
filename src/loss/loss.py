@@ -54,7 +54,7 @@ def cross_loss(model, inputs, full_labels):
     """
     outputs = model(inputs)
 
-    return reduce_sum(mean_squared_error(outputs, full_labels))
+    return reduce_sum(binary_crossentropy(outputs, full_labels))
 
 
 def evaluate_loss(model, inputs, labels, nb_classes):
