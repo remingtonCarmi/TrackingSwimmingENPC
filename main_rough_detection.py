@@ -8,14 +8,14 @@ from src.utils.extractions.exceptions.exception_classes import FindErrorExtracti
 
 PATH_VIDEO = Path("data/videos/vid0.mp4")
 
-# lines for vid0
+# lines for vid0. Here, we point it manually for better precision.
 LINES = [115, 227, 336, 443, 550, 659, 763, 871, 981]
 
 # number of lines of pixels we ignore for each lane
 MARGIN = 15
 
 try:
-    RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 11, 13, True,
+    RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 11, 17, True,
                                      destination_video=Path("output/videos/"), path_txt=Path("data/calibration"))
 
     # lanes we want to plot the swim frequency
