@@ -1,5 +1,5 @@
 *.jpg
 !loss_easy_model_nb_classes_10_0_trained_first.jpg
 !accuracy_easy_model_nb_classes_10_0_trained_first.jpg
-!loss_easy_model_nb_classes_10_0_trained_second.jpg
-!mean_error_easy_model_nb_classes_10_0_trained_second.jpg
+!loss_easy_model_nb_classes_10_0_first_train.jpg
+!mean_error_easy_model_nb_classes_10_0_first_train.jpg
