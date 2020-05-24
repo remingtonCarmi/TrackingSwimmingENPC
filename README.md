@@ -12,7 +12,7 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 To achieve our goal, we built an application to label videos, and then created our own dataset.
 
 <DIV ALIGN="CENTER">
-<td><img width="400px" src="output/gif/second_method_detection_10_classes.gif"></td>
+<td><img width="400px" src="output/gif/second_method_detection_10_classes.gif"></td> <br>
 <td><img width="400px" src="output/gif/second_method_detection_30_classes.gif"></td>
 </DIV>
 
