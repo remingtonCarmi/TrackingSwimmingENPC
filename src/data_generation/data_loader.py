@@ -1,5 +1,6 @@
 from pathlib import Path
 import random as rd
+import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 from src.data_generation.data_generator import DataGenerator
@@ -45,9 +46,9 @@ class DataLoader(Sequence):
 
             # Perform data augmenting
             if self.data_augmenting:
-                random_augmenting = np.random.randint(0, 5)
+                random_augmenting = np.random.randint(0, 6)
             else:
-                random_augmenting = 0
+                random_augmenting = 3
             (augmented_image, augmented_label) = augmenting(image_batch, label_batch, random_augmenting, self.data_manager, self.nb_classes)
             # Fill the list
             batch_img.append(standardize(augmented_image))
@@ -70,10 +71,14 @@ if __name__ == "__main__":
     PATH_DATA = Path("../../output/test/vid1/")
     PATH_LABEL = Path("../../output/test/vid1.csv")
     PERCENTAGE = 1
+    BATCH_SIZE = 1
 
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
     TRAIN_SET = GENERATOR.train
-    LOADER = DataLoader(TRAIN_SET, data_augmenting=True)
+    LOADER = DataLoader(TRAIN_SET, data_augmenting=True, batch_size=BATCH_SIZE)
     for (BATCH, LABELS) in LOADER:
-        print(BATCH.shape)
-        print(LABELS)
+        b, g, r = cv2.split(BATCH[0])  # get b,g,r
+        rgb_img = cv2.merge([r, g, b])
+        plt.imshow(rgb_img.astype(int))
+        print(LABELS[0])
+        plt.show()

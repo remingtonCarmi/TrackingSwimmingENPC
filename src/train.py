@@ -86,7 +86,6 @@ ACCURACIES_ON_VAL = np.zeros(NB_EPOCHS)
 for epoch in range(NB_EPOCHS):
     sum_loss = 0
     sum_accuracy = 0
-    TRAIN_DATA.on_epoch_end()
     for (idx_batch, batch) in enumerate(TRAIN_DATA):
         (inputs, labels) = batch
 
@@ -108,6 +107,9 @@ for epoch in range(NB_EPOCHS):
     ACCURACIES_ON_TRAIN[epoch] = sum_accuracy / len(TRAIN_DATA)
     # Register the accuracy on val
     ACCURACIES_ON_VAL[epoch] = evaluate_accuracy(MODEL, VALID_SAMPLES, VALID_LABELS)
+
+    # Shuffle data
+    TRAIN_DATA.on_epoch_end()
 
 
 # --- Save the weights --- #
