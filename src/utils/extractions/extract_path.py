@@ -53,7 +53,7 @@ def extract_path(path_file_images, lane, frame):
 
 
 if __name__ == "__main__":
-    PATH_IMAGE = Path("../../../output/test/vid1/")
+    PATH_IMAGE = Path("../../../output/test/vid0/")
 
     try:
         (LIST_IMAGES, LIST_IMAGES_NAME) = extract_path(PATH_IMAGE, lane=4, frame=5)

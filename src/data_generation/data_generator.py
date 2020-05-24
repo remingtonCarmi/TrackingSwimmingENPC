@@ -11,9 +11,9 @@ class DataGenerator:
         self.labels = pd.read_csv(path_label)
 
         # Sort full data_set
-        self.labels.index = self.labels.index.swaplevel(0, 1)
+        # self.labels.index = self.labels.index.swaplevel(0, 1)
         self.labels = self.labels.sort_index()
-        self.labels.index = self.labels.index.swaplevel(0, 1)
+        # self.labels.index = self.labels.index.swaplevel(0, 1)
 
         # Get the full data_set
         self.full_data = self.fill_full_data()
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     # THE INPUT PATHS DO NOT EXIST
     # THE INPUT PATHS DO NOT MATCH
     # THE PATH_DATA IS EMPTY
-    PATH_DATA = Path("../../output/test/vid1/")
-    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PATH_DATA = Path("../../output/test/vid0/")
+    PATH_LABEL = Path("../../output/test/vid0.csv")
     PERCENTAGE = 0.9
 
     GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu=True)

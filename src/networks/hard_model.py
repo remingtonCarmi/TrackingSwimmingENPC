@@ -101,8 +101,8 @@ class HardModel(Model):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../output/test/vid1/")
-    PATH_LABEL = Path("../../output/test/vid1.csv")
+    PATH_DATA = Path("../../output/test/vid0/")
+    PATH_LABEL = Path("../../output/test/vid0.csv")
     PERCENTAGE = 0.5
     NB_CLASSES = 10
 
