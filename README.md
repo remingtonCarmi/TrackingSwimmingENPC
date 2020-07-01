@@ -5,15 +5,15 @@ The aim of this code is to provide two different methods of swimmer tracking. Th
 - The first one used computer vision techniques to catch the arms motion frequency of each swimmer.
 
 <DIV ALIGN="CENTER">
-<td><img width="600px" src="output/gif/first_method_detection.gif"></td>
+<td><img width="600px" src="data/4_model_output/gif/first_method_detection.gif"></td>
 </DIV>
 
 - The second is a Deep Learning model. With a simple CNN architecture, we find the (discrete) position of each swimmer, at each time of the video. 
 To achieve our goal, we built an application to label videos, and then created our own dataset.
 
 <DIV ALIGN="CENTER">
-<td><img width="600px" src="output/gif/second_method_detection_10_classes.gif"></td> <br>
-<td><img width="600px" src="output/gif/second_method_detection_30_classes.gif"></td>
+<td><img width="600px" src="data/4_model_output/gif/second_method_detection_10_classes.gif"></td> <br>
+<td><img width="600px" src="data/4_model_output/gif/second_method_detection_30_classes.gif"></td>
 </DIV>
 
 
