@@ -18,7 +18,7 @@ from src.utils.store_load_matrix.exception_classes import AlreadyExistError, Not
 
 
 # The name of the video
-NAME_VIDEO = "vid0"
+NAME_VIDEO = "vid1"
 
 # Time range for pointing
 POINTING_STARTING_TIME = 5

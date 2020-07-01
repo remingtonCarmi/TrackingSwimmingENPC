@@ -1,3 +1,14 @@
+"""
+This script creates a video that is the same video as the input but with red boxes around swimmers.
+
+To modify:
+    PATH_VIDEO
+    LINES
+    MARGIN
+    time_begin (11)
+    time_end (19)
+"""
+
 from pathlib import Path
 from src.vizualisation_red_boxes import animation_red_boxes
 from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs

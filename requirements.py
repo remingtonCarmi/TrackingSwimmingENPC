@@ -12,8 +12,3 @@ os.system("conda install python")
 os.system("pip install opencv-python")
 os.system("pip install PyQt5")
 
-# create needed folders 
-
-"""if not os.path.exists("test"):
-    os.makedirs("test")"""
-
