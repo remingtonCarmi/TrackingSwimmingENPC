@@ -2,8 +2,8 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
+from src.d4_modelling_neural.data_generation import DataLoader
+from src.d4_modelling_neural.data_generation import DataGenerator
 
 
 # --- TO MODIFY --- #
