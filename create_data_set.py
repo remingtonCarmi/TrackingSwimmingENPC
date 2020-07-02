@@ -7,32 +7,40 @@ That is to say, the user can create:
     - a csv file that registers the information about the position of the swimmers
 """
 from pathlib import Path
-from src.calibration import calibrate_video
-from src.create_data import create_data
-from src.head_pointing import head_pointing
-from src.utils.save_data.exception_classes import FileAlreadyExists
 
-from src.utils.extractions.exceptions.exception_classes import TimeError, EmptyFolder, NoMoreFrame, FindErrorExtraction
+# Exceptions
+from src.d0_utils.extractions.exceptions.exception_classes import FindPathExtractError, TimeError, EmptyFolder, NoMoreFrame
+from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathError, AlreadyExistError, NothingToAddError
 
-from src.utils.store_load_matrix.exception_classes import AlreadyExistError, NothingToAdd, FindErrorStore
+# To calibrate the video
+from src.d2_intermediate_calibration import calibrate_video_text
+
+# To create the image lanes
+from src.d2_intermediate_lanes import create_data
+
+# To point at the heads of the swimmers
+from src.d3_processing_head_pointing import head_pointing
 
 
+# BEGIN : !! TO MODIFY !! #
 # The name of the video
-NAME_VIDEO = "vid1"
+NAME_VIDEO = "100NL_FAF"
 
 # Time range for pointing
-POINTING_STARTING_TIME = 5
-POINTING_ENDING_TIME = 6
+POINTING_STARTING_TIME = 13
+POINTING_ENDING_TIME = 14
+# END : !! TO MODIFY !! #
 
 
 # --- Create the txt file --- #
-PATH_VIDEO = Path("data/videos/{}.mp4".format(NAME_VIDEO))
-DESTINATION_TXT = Path("data/calibration/")
+PATH_VIDEO = Path("data/0_raw_videos/{}.mp4".format(NAME_VIDEO))
+DESTINATION_TXT = Path("data/1_intermediate_top_down_lanes/calibration")
+
 try:
     print(" --- Create the txt file for calibration --- ")
-    calibrate_video(PATH_VIDEO, destination_txt=DESTINATION_TXT, create_txt=True, time_begin=3, time_end=4)
-except FindErrorExtraction as video_find_error:
-    print(video_find_error.__repr__())
+    calibrate_video_text(PATH_VIDEO, 2, DESTINATION_TXT)  # The calibration is done on an image at second 1.
+except FindPathExtractError as video_find_extract_error:
+    print(video_find_extract_error.__repr__())
 except TimeError as time_error:
     print(time_error.__repr__())
 except AlreadyExistError as exist_error:
@@ -40,8 +48,9 @@ except AlreadyExistError as exist_error:
 
 
 # --- Create the lanes images --- #
-PATH_TXT = Path("data/calibration/{}.txt".format(NAME_VIDEO))
-DESTINATION_LANES = Path("data/lanes/")
+PATH_TXT = Path("data/1_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
+DESTINATION_LANES = Path("data/1_intermediate_top_down_lanes/lanes")
+
 try:
     print(" --- Save the lanes as jpg files --- ")
     MARGIN = 0
@@ -49,27 +58,28 @@ try:
     create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES,
                 time_begin=POINTING_STARTING_TIME,
                 time_end=POINTING_ENDING_TIME)
-except FileAlreadyExists as already_exists:
+except FindPathError as find_error:
+    print(find_error.__repr__())
+except AlreadyExistError as already_exists:
     print(already_exists.__repr__())
 except TimeError as time_error:
     print(time_error.__repr__())
-except FindErrorStore as find_error:
-    print(find_error.__repr__())
 
 
 # --- Create the csv file --- #
 PATH_LANES = DESTINATION_LANES / NAME_VIDEO
-DESTINATION_CSV = Path("data/head_points")
+DESTINATION_CSV = Path("data/2_processed_positions")
+
 try:
     print(" --- Create the csv file for pointing --- ")
     LIST_HEAD = head_pointing(PATH_LANES, destination_csv=DESTINATION_CSV)
-except FindErrorStore as find_error:
+except FindPathError as find_error:
     print(find_error.__repr__())
 except EmptyFolder as empty_folder:
     print(empty_folder.__repr__())
 except AlreadyExistError as exist_error:
     print(exist_error.__repr__())
-except NothingToAdd as nothing_to_add:
+except NothingToAddError as nothing_to_add:
     print(nothing_to_add.__repr__())
 except NoMoreFrame as no_more_frame:
     print(no_more_frame.__repr__())

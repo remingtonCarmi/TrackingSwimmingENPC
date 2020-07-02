@@ -2,15 +2,13 @@
 
 from pathlib import Path
 import numpy as np
-import matplotlib.pyplot as plt
-from src.data_generation.data_loader import DataLoader
-from src.data_generation.data_generator import DataGenerator
-from src.networks.easy_model import EasyModel
-from src.networks.hard_model import HardModel
-from src.utils.visualization_deep import visualize
-from src.utils.visualization_deep import animation_one_lane
-from src.utils.make_video import make_video
-from src.utils.store_load_matrix.exception_classes import AlreadyExistError, FindErrorStore
+from src.d4_modelling_neural.data_generation import DataLoader
+from src.d4_modelling_neural.data_generation import DataGenerator
+from src.d4_modelling_neural.networks import EasyModel
+from src.d4_modelling_neural.networks import HardModel
+from src.d7_visualisation.visualization_deep import animation_one_lane
+from src.d0_utils.store_load_matrix.make_video import make_video
+from src.d0_utils.store_load_matrix import AlreadyExistError, FindErrorStore
 
 
 # Parameters for data

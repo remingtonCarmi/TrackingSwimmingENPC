@@ -10,11 +10,11 @@ To modify:
 """
 
 from pathlib import Path
-from src.vizualisation_red_boxes import animation_red_boxes
-from src.utils.draw_rectangle.plot_evolution_graph import plot_graphs
-from src.utils.draw_rectangle.exception_classes import VideoAlreadyExists
-from src.utils.extractions.exceptions.exception_classes import TimeError
-from src.utils.extractions.exceptions.exception_classes import FindErrorExtraction
+from src.d4_modelling_rough import animation_red_boxes
+from src.d4_modelling_rough.draw_rectangle.plot_evolution_graph import plot_graphs
+from src.d4_modelling_rough.draw_rectangle import VideoAlreadyExists
+from src.d0_utils.extractions.exceptions import TimeError
+from src.d0_utils.extractions.exceptions import FindErrorExtraction
 
 
 PATH_VIDEO = Path("data/videos/vid0.mp4")
