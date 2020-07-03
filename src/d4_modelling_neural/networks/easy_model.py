@@ -1,6 +1,6 @@
 from pathlib import Path
-from src.d4_modelling_neural.data_generation import DataGenerator
-from src.d4_modelling_neural.data_generation import DataLoader
+from src.d4_modelling_neural.data_generation.data_generator import DataGenerator
+from src.d4_modelling_neural.data_generation.data_loader import DataLoader
 import numpy as np
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
@@ -77,8 +77,8 @@ class EasyModel(Model):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../output/tries/vid0/")
-    PATH_LABEL = Path("../../output/tries/vid0.csv")
+    PATH_DATA = Path("../../../data/1_intermediate_top_down_lanes/lanes/vid0/")
+    PATH_LABEL = Path("../../../data/2_processed_positions/vid0.csv")
     PERCENTAGE = 0.5
     NB_CLASSES = 10
 

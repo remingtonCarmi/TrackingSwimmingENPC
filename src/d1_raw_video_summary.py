@@ -5,7 +5,7 @@ that has to be in the file data/videos.
 """
 from pathlib import Path
 import os
-from src.d0_utils.store_load_matrix import store_matrix
+from src.d0_utils.store_load_data.store_matrix import store_matrix
 
 
 def update_video_file(path_videos, path_begin):
@@ -21,6 +21,6 @@ def update_video_file(path_videos, path_begin):
 
 
 if __name__ == "__main__":
-    PATH_VIDEOS = Path("../../data/0_raw_videos")
-    PATH_BEGIN = Path("../../data/0_raw_videos")
+    PATH_VIDEOS = Path("../data/0_raw_videos")
+    PATH_BEGIN = Path("../data/0_raw_videos")
     update_video_file(PATH_VIDEOS, PATH_BEGIN)

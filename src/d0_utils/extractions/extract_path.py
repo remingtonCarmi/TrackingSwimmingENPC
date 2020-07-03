@@ -24,7 +24,7 @@ def have_to_point_image(file_name, lane, frame):
     # Verify that it is a jpg
     if file_name[-4:] == ".jpg" or file_name[-4:] == ".JPG":
         # Get the image information
-        (image_lane, image_frame) = get_frame_lane(file_name)
+        (image_lane, image_frame) = get_lane_frame(file_name)
         if lane < image_lane:
             return True
         elif lane == image_lane:
@@ -34,7 +34,7 @@ def have_to_point_image(file_name, lane, frame):
     return False
 
 
-def get_frame_lane(image_name):
+def get_lane_frame(image_name):
     """
     Get the indexes of the image
 
@@ -86,7 +86,7 @@ def extract_path(path_file_images, lane, frame):
     for file_name in list_file:
         if have_to_point_image(file_name, lane, frame):
             list_images_path.append(path_file_images / file_name)
-            list_lanes_frames.append(get_frame_lane(file_name))
+            list_lanes_frames.append(get_lane_frame(file_name))
 
     if len(list_images_path) == 0:
         raise NoMoreFrame(path_file_images)

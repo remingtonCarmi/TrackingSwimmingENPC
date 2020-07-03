@@ -3,8 +3,8 @@ import random as rd
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-from src.d4_modelling_neural.data_generation import DataGenerator
-from src.d4_modelling_neural.data_generation import transform_label, augmenting, standardize
+from src.d4_modelling_neural.data_generation.data_generator import DataGenerator
+from src.d4_modelling_neural.data_generation.transformations.transformations import transform_label, augmenting, standardize
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 

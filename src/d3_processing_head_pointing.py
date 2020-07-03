@@ -10,7 +10,7 @@ from src.d0_utils.extractions.exceptions.exception_classes import EmptyFolder, N
 from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathError, AlreadyExistError, NothingToAddError
 
 # To extract the path of the images
-from src.d0_utils.extractions.extract_path import extract_path
+from src.d0_utils.extractions.extract_path import extract_path, get_lane_frame
 
 # To point at the head of the swimmers
 from src.d0_utils.point_selection.instructions.instructions import instructions_head
@@ -44,8 +44,12 @@ def heads_selection(images_paths):
         # Load the image
         image = cv2.imread(str(images_paths[index_image]))
 
+        # Get the name of the image
+        image_name = images_paths[index_image].parts[-1]
+        (lane, frame) = get_lane_frame(image_name)
+
         # Plot the image and select the head
-        (point_head, stop) = head_selection(image)
+        (point_head, stop) = head_selection(image, lane, frame)
 
         # Register if the user wants to continue
         if not stop:

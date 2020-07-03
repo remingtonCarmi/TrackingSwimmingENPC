@@ -26,7 +26,7 @@ INSTRUCTIONS += "   Zoom in : keep left click, move and release. \n \n"
 INSTRUCTIONS += "   Zoom out : click anywhere. \n \n"
 INSTRUCTIONS += "   Quit and Save : press 's'."
 
-BLANK = " \n \n \n \n \n \n \n \n \n "
+BLANK = " \n \n \n "
 
 
 def array_to_qpixmap(image):
@@ -48,12 +48,16 @@ def array_to_qpixmap(image):
     return QPixmap.fromImage(qimage)
 
 
-def head_selection(image):
+def head_selection(image, lane, frame):
     """
     Plot the image and ask to point at the head of the swimmer.
 
     Args:
         image (array): the image to point at.
+
+        lane (integer): the index of the lane to selection.
+
+        frame (integer): the index of the frame to selection.
 
     Returns:
         points_image (array of shape : (1, 2)): the coordinates of the selected point.
@@ -79,7 +83,8 @@ def head_selection(image):
     image_selection = ImageSelection(pix_map, image_size, points_image, colors, skip=True, can_stop=True)
 
     # Calibration points
-    blank = QLabel(BLANK)
+    blank_frame_lane = BLANK + "Lane n° {} \n \n Frame n° {}".format(lane, frame) + BLANK
+    blank = QLabel(blank_frame_lane)
     information_points = QLabel(INSTRUCTIONS)
 
     # Add widgets to layout
@@ -101,4 +106,4 @@ if __name__ == "__main__":
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     # Select the points
-    print(head_selection(IMAGE))
+    print(head_selection(IMAGE, 1, 2))

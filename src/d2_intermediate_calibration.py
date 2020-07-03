@@ -213,7 +213,6 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
 
     # Get the images
     image = extract_image_video(path_video, calibration_time, calibration_time)[0]
-    nb_images = len(image)
 
     # Selection of the 8 points in a random image
     print("Point selection for calibration ...")
@@ -231,7 +230,7 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../data/0_raw_videos/vid0.mp4")
+    PATH_VIDEO = Path("../data/0_raw_videos/vid1.mp4")
     try:
         # calibrate_video(PATH_VIDEO, time_begin=0, time_end=5)
         calibrate_video_text(PATH_VIDEO, 10)
