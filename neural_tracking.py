@@ -2,8 +2,8 @@
 
 from pathlib import Path
 import numpy as np
-from src.d4_modelling_neural.data_generation import DataLoader
-from src.d4_modelling_neural.data_generation import DataGenerator
+from src.d4_modelling_neural.loading_data import DataLoader
+from src.d4_modelling_neural.loading_data import DataGenerator
 from src.d4_modelling_neural.networks import EasyModel
 from src.d4_modelling_neural.networks import HardModel
 from src.d7_visualisation.visualization_deep import animation_one_lane

@@ -1,5 +1,5 @@
-from src.d4_modelling_neural.data_generation import DataLoader
-from src.d4_modelling_neural.data_generation import DataGenerator
+from src.d4_modelling_neural.loading_data import DataLoader
+from src.d4_modelling_neural.loading_data import DataGenerator
 
 from pathlib import Path
 
