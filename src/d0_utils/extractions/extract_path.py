@@ -1,5 +1,5 @@
 """
-This module takes the path of the images that have not been labelled.
+This module takes the path of the image that have not been labelled.
 """
 from pathlib import Path
 from os import listdir
@@ -52,19 +52,19 @@ def get_lane_frame(image_name):
 
 def extract_path(path_file_images, lane, frame):
     """
-    Extract the path of the images that have not been labelled.
+    Extract the path of the image that have not been labelled.
 
     Args:
-        path_file_images (WindowsPath): the path that leads to the images of lanes.
+        path_file_images (WindowsPath): the path that leads to the image of lanes.
 
         lane (integer): the index of the last lane pointed.
 
         frame (integer): the index of the last frame pointed.
 
     Returns:
-        (array): the list of the path that leads to the images that have not been pointed.
+        (array): the list of the path that leads to the image that have not been pointed.
 
-        (array): the list of the lanes and the frames of the images that have not been pointed.
+        (array): the list of the lanes and the frames of the image that have not been pointed.
     """
     if not path_file_images.exists():
         raise FindPathExtractError(path_file_images)
@@ -101,7 +101,7 @@ if __name__ == "__main__":
         (LIST_IMAGES_PATH, LIST_LANES_FRAMES) = extract_path(PATH_IMAGE, 1, 525)
         print(LIST_IMAGES_PATH)
         print(LIST_LANES_FRAMES)
-        print("Number of images", len(LIST_IMAGES_PATH))
+        print("Number of image", len(LIST_IMAGES_PATH))
     except FindPathExtractError as find_error:
         print(find_error.__repr__())
     except EmptyFolder as empty_folder:

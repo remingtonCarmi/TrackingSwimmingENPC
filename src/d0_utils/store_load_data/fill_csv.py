@@ -73,9 +73,9 @@ def fill_csv(csv_path, lanes_frames, points):
     Args:
         csv_path (WindowsPath): the path that leads to the csv path.
 
-        lanes_frames (array): the list of the indexes of the pointed images.
+        lanes_frames (array): the list of the indexes of the pointed image.
 
-        points (array): the list of the points linked with the pointed images.
+        points (array): the list of the points linked with the pointed image.
     """
     # Check that the folder exists
     if not csv_path.exists():

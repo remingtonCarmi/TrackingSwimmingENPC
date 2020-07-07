@@ -12,7 +12,7 @@ from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathEr
 # To calibrate an image from a txt file
 from src.d0_utils.calibration_from_txt import calibrate_from_txt
 
-# To split the images into lanes and save them
+# To split the image into lanes and save them
 from src.d0_utils.split_and_save_data.split_image import split_and_save
 
 
@@ -66,7 +66,7 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
 
     # Save the image second per second
     for time in range(time_begin, time_end):
-        # Calibrate and extract images from the corrected video
+        # Calibrate and extract image from the corrected video
         corrected_images = calibrate_from_txt(path_video, path_txt, time, time + 1)
 
         # fps = frame per second

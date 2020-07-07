@@ -14,7 +14,7 @@ def split_and_save(image, margin, destination, frame, nb_lines):
 
         margin (integer): the margin to take to be sure not to lose information.
 
-        destination (WindowsPath): the path to the folder where the images will be stored.
+        destination (WindowsPath): the path to the folder where the image will be stored.
 
         frame (integer): the number of the frame.
 
@@ -27,7 +27,7 @@ def split_and_save(image, margin, destination, frame, nb_lines):
     # Crop the image
     list_images = crop(image, list_y, margin)
 
-    # Save the cropped images except the first and the last one
+    # Save the cropped image except the first and the last one
     for idx_lane in range(1, nb_lines - 1):
         name = 'l%d' % idx_lane + '_f' + '0' * (4 - (len(str(frame)))) + str(frame) + '.jpg'
         cv2.imwrite(str(destination / name), list_images[idx_lane - 1])

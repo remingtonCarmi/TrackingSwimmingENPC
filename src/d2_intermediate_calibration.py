@@ -9,7 +9,7 @@ import random as rd
 import numpy as np
 import cv2
 
-# To extract images from videos
+# To extract image from videos
 from src.d0_utils.extractions.extract_image import extract_image_video
 
 # Exception classes
@@ -142,8 +142,8 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Non
     if path_txt.exists():
         raise AlreadyExistError(path_txt)
 
-    # Get the images
-    print("Get the images ...")
+    # Get the image
+    print("Get the image ...")
     list_images = extract_image_video(path_video, time_begin, time_end)
     nb_images = len(list_images)
 
@@ -157,8 +157,8 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Non
     # Get the homography matrix
     homography = get_homography(points_src, points_dst)
 
-    # Transform the images
-    print("Correction of images ...")
+    # Transform the image
+    print("Correction of image ...")
     for index_image in range(nb_images):
         list_images[index_image] = get_top_down_image(list_images[index_image], homography)
 
@@ -211,7 +211,7 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
     if path_txt.exists():
         raise AlreadyExistError(path_txt)
 
-    # Get the images
+    # Get the image
     image = extract_image_video(path_video, calibration_time, calibration_time)[0]
 
     # Selection of the 8 points in a random image

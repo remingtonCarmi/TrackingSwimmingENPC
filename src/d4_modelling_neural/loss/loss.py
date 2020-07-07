@@ -8,7 +8,7 @@ from tensorflow.keras.losses import mean_squared_error
 
 def create_label(labels, nb_classes):
     """
-    Transform the labels' batch that are integers to list of zeros where there is a one in the right place.
+    Transform the label' batch that are integers to list of zeros where there is a one in the right place.
     """
     nb_labels = len(labels)
     full_labels = np.zeros((len(labels), nb_classes))

@@ -41,8 +41,8 @@ if SHOW_SETS:
 TRAIN_DATA = DataLoader(TRAIN_SET, PATH_DATA, batch_size=1, nb_classes=NB_CLASSES, data_augmenting=DATA_AUGMENTING)
 VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=1, nb_classes=NB_CLASSES)
 
-print("The training set is composed of {} images".format(len(TRAIN_SET)))
-print("The validation set is composed of {} images".format(len(VAL_SET)))
+print("The training set is composed of {} image".format(len(TRAIN_SET)))
+print("The validation set is composed of {} image".format(len(VAL_SET)))
 
 
 if SHOW_REPARTITION_TRAIN and not FOR_VISU:

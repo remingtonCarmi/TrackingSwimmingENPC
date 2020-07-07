@@ -1,5 +1,5 @@
 """
-This file makes a video with a list of images.
+This file makes a video with a list of image.
 """
 from pathlib import Path
 import cv2
@@ -8,12 +8,12 @@ from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExi
 
 def make_video(name_video, images, fps=25, destination=None):
     """
-    Makes a video with all the images in images.
+    Makes a video with all the image in image.
 
     Args:
         name_video (string): the name of the video.
 
-        images (list of array of 3 dimensions - height, width, layers): list of the images.
+        images (list of array of 3 dimensions - height, width, layers): list of the image.
 
         fps (int): the fps of the created video.
 

@@ -8,7 +8,7 @@ from src.d0_utils.extractions.exceptions.exception_classes import TimeError, Fin
 
 def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, destination=None):
     """
-    Extracts number_image images from path_images and
+    Extracts number_image image from path_images and
     save them.
     This raises an exception if the duration is not possible regarding the video.
     If time_end is bigger than the duration of the video,
@@ -22,15 +22,15 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
         time_end (integer in second): the final time at which we can_stop to register the video.
             if time_end == -1, the video is registered until the end.
 
-        register (boolean): if True, the images will be registered.
+        register (boolean): if True, the image will be registered.
             Default value = False
 
-        destination (WindowsPath): the destination of the registered images.
+        destination (WindowsPath): the destination of the registered image.
             Default value = None.
 
     Returns:
-        images (list of array of 3 dimensions: height, width, layers):
-            list of the extracted images.
+        image (list of array of 3 dimensions: height, width, layers):
+            list of the extracted image.
     """
     if destination is None:
         destination = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
@@ -60,7 +60,7 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
     if number_image == 0:
         number_image = 1
 
-    # Check if the time or the number of images asked is possible
+    # Check if the time or the number of image asked is possible
     if time_begin > time_end or nb_image_wait > frame_count:
         raise TimeError(path_video, time_begin, time_end)
 
@@ -69,7 +69,7 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
     (success, image) = video.read()
 
     count_image = 0
-    # We register the interesting images
+    # We register the interesting image
     while success and count_image < number_image:
         images.append(image)
         nb_count_image = nb_image_wait + count_image

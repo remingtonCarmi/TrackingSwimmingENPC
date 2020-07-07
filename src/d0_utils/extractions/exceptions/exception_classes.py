@@ -23,7 +23,7 @@ class FindPathExtractError(Exception):
 
 class TimeError(Exception):
     """The exception class error to tell that the time
-    or the number of images is not possible"""
+    or the number of image is not possible"""
     def __init__(self, name, time_begin, time_end):
         """
         Args:

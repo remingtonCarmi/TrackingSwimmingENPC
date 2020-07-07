@@ -8,9 +8,9 @@ import numpy as np
 
 def merge(images):
     """
-    To vertically merge 10 images into a single image. The first image will be on the top.
+    To vertically merge 10 image into a single image. The first image will be on the top.
     Args:
-        images (list of numpy arrays): list of images, all with the same length, not necessarily the same high
+        images (list of numpy arrays): list of image, all with the same length, not necessarily the same high
 
     Returns:
         merged_image(numpy array): the merged image

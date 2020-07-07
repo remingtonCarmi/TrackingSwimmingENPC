@@ -1,36 +1,36 @@
 """
-This module generate an object that holds the paths to the images
-and the labels of these images.
+This module generate an object that holds the paths to the image
+and the label of these image.
 """
 from pathlib import Path
 import pandas as pd
 import numpy as np
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.transformation_tools.exceptions import FindPathDataError
+from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError
 
 
 def generate_data(paths_label, starting_data_paths=None, starting_calibration_paths=None, take_all=False):
     """
-    Produce a list of list of 3 elements : path_to_image, x_head, y_head.
-    We look in the labels and if the image is in the computer, we add it to the list.
+    Produce a list of list of 4 elements : path_to_image, y_head, x_head, video_length.
+    We look in the label and if the image is in the computer, we add it to the list.
 
     Args:
-        paths_label (List of WindowsPath): the list of paths to the labels.
+        paths_label (List of WindowsPath): the list of paths to the label.
 
-        starting_data_paths (WindowsPath): the beginning of the path to the images.
+        starting_data_paths (WindowsPath): the beginning of the path to the image.
             Default value = None
 
         starting_calibration_paths (WindowsPath): the beginning of the path to the calibration file.
             Default value = None
 
-        take_all (boolean): if True, all the images are taken. Otherwise, only the images
+        take_all (boolean): if True, all the image are taken. Otherwise, only the image
             with a positive label is taken.
             Default value = False
 
     Returns:
-        full_data (list of list of 3 elements : (WindowsPath, integer, integer, float):
-            list of elements like (path_to_image, x_head, y_head, length_image) for the training
+        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, float):
+            list of elements like (path_to_image, y_head, x_head, length_image) for the training.
     """
     if starting_data_paths is None:
         starting_data_paths = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
@@ -45,7 +45,7 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
     paths_calibration = np.zeros(nb_videos, dtype=Path)
     for idx_video in range(nb_videos):
         video_name = paths_label[idx_video].parts[-1][: -4]
-        # Path for images
+        # Path for image
         paths_data[idx_video] = starting_data_paths / video_name
 
         # Path for calibration
@@ -64,7 +64,7 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
     full_data = []
 
     for idx_video in range(nb_videos):
-        # Get the labels
+        # Get the label
         labels = pd.read_csv(paths_label[idx_video])
 
         # Get the length of the image
@@ -76,27 +76,27 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
         # Add the data
         full_data.extend(data)
 
-    return full_data
+    return np.array(full_data)
 
 
 def get_full_data(path_data, labels, length_image, take_all):
     """
-    Produce a list of list of 3 elements : path_to_image, x_head, y_head, length_image.
-    We look in the labels and if the image is in the computer, we add it to the list.
+    Produce a list of list of 4 elements : path_to_image, y_head, x_head, length_image.
+    We look in the label and if the image is in the computer, we add it to the list.
 
     Args:
-        path_data (WindowsPath): path to the images.
+        path_data (WindowsPath): path to the image.
 
-        labels (DataFrame): table that contains the labels.
+        labels (DataFrame): table that contains the label.
 
         length_image (float): the length of the image in meters.
 
-        take_all (boolean): if True, all the images are taken. Otherwise, only the images
+        take_all (boolean): if True, all the image are taken. Otherwise, only the image
             with a positive label is taken.
 
     Returns:
-        full_data (list of list of 4 elements : (WindowsPath, integer, integer, float):
-            list of elements like (path_to_image, x_head, y_head, length_image) for the training.
+        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, float):
+            list of elements like (path_to_image, y_head, x_head, length_image) for the training.
     """
     full_data = []
     for ((lane, frame), label) in labels.iterrows():
@@ -106,9 +106,9 @@ def get_full_data(path_data, labels, length_image, take_all):
             path_image = path_data / name_image
             # Add to the list only if the image is in the computer
             if path_image.exists():
-                full_data.append([path_image, label[0], label[1], length_image])
+                full_data.append([path_image, label[1], label[0], length_image])
 
-    return full_data
+    return np.array(full_data)
 
 
 def get_length_image(path_calibration):

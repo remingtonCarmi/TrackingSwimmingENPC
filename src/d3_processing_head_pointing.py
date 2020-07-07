@@ -9,7 +9,7 @@ import cv2
 from src.d0_utils.extractions.exceptions.exception_classes import EmptyFolder, NoMoreFrame
 from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathError, AlreadyExistError, NothingToAddError
 
-# To extract the path of the images
+# To extract the path of the image
 from src.d0_utils.extractions.extract_path import extract_path, get_lane_frame
 
 # To point at the head of the swimmers
@@ -22,10 +22,10 @@ from src.d0_utils.store_load_data.fill_csv import create_csv, last_line, fill_cs
 
 def heads_selection(images_paths):
     """
-    Allow the user to select the head on the images.
+    Allow the user to select the head on the image.
 
     Args:
-        images_paths (list of WindowsPath): list of the paths that lead to the images.
+        images_paths (list of WindowsPath): list of the paths that lead to the image.
 
     Returns:
         (array): the list of point that where pointed.
@@ -66,7 +66,7 @@ def head_pointing(path_images, destination_csv=None):
     Allows the user to point at the head of the swimmers and save the data.
 
     Args:
-        path_images (WindowsPath): the path that leads to the images.
+        path_images (WindowsPath): the path that leads to the image.
 
         destination_csv (WindowsPath): the path where the csv file is/will be  registered.
 
@@ -92,7 +92,7 @@ def head_pointing(path_images, destination_csv=None):
     # Get the last line that was registered
     (last_lane, last_frame) = last_line(csv_path)
 
-    # Get the images
+    # Get the image
     (list_images_path, list_lanes_frames) = extract_path(path_images, last_lane, last_frame)
 
     # Select the heads

@@ -1,11 +1,11 @@
 """
-This code separates an image in several images, delimited by given lines.
+This code separates an image in several image, delimited by given lines.
 """
 
 
 def crop(image, list_y, margin=0):
     """
-    To vertically crop an images at given positions.
+    To vertically crop an image at given positions.
     Args:
         margin (integer): number of lines of pixels
             - we remove (if margin > 0)
@@ -16,7 +16,7 @@ def crop(image, list_y, margin=0):
         list_y(list of integers): list of vertical positions where we crop.
 
     Returns:
-        images_crop(list of numpy arrays): list of cropped images.
+        images_crop(list of numpy arrays): list of cropped image.
     """
 
     images_crop = []
@@ -29,7 +29,7 @@ def crop(image, list_y, margin=0):
             y_prev = y
     else:
         y = list_y[1]
-        images_crop.append(image[y_prev: y - 2 * margin, :])  # * 2 so that the images have the same size
+        images_crop.append(image[y_prev: y - 2 * margin, :])  # * 2 so that the image have the same size
         y_prev = y
 
         for y in list_y[2:-1]:
@@ -37,17 +37,17 @@ def crop(image, list_y, margin=0):
             y_prev = y
 
         y = list_y[-1]
-        images_crop.append(image[y_prev + 2 * margin: y, :])  # * 2 so that the images have the same size
+        images_crop.append(image[y_prev + 2 * margin: y, :])  # * 2 so that the image have the same size
 
     return images_crop
 
 
 def crop_list(list_images, points, margin=0):
     """
-    Crop a list of images.
+    Crop a list of image.
 
     Args:
-        list_images (list of array): list of the images.
+        list_images (list of array): list of the image.
 
         points (list of integers): list of vertical positions where we crop.
 
@@ -56,7 +56,7 @@ def crop_list(list_images, points, margin=0):
             - we add (if margin < 0)
 
     Returns:
-        list_images_crop (list of array): list of the cropped images.
+        list_images_crop (list of array): list of the cropped image.
     """
     list_images_crop = []
 

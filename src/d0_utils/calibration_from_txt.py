@@ -1,12 +1,12 @@
 """
-This module serves to calibrate images of a video thanks to a txt file.
+This module serves to calibrate image of a video thanks to a txt file.
 """
 import numpy as np
 
 # Exceptions
 from src.d0_utils.extractions.exceptions.exception_classes import FindPathExtractError
 
-# To extract images from a video
+# To extract image from a video
 from src.d0_utils.extractions.extract_image import extract_image_video
 
 # To transform image to get the top-down view
@@ -15,7 +15,7 @@ from src.d0_utils.perspective_correction.perspective_correction import get_top_d
 
 def calibrate_from_txt(path_video, path_txt, time_begin=0, time_end=-1):
     """
-    Extract the images and transform them to get the top-down view.
+    Extract the image and transform them to get the top-down view.
 
     Args:
         path_video (WindowsPath): the path that leads to the video.
@@ -30,7 +30,7 @@ def calibrate_from_txt(path_video, path_txt, time_begin=0, time_end=-1):
             if time_end == -1, the video is viewed until the end.
 
     Returns:
-        list_images (list of array): list of the calibrated images.
+        list_images (list of array): list of the calibrated image.
     """
     # Check that the paths exists
     if not path_video.exists():
@@ -46,11 +46,11 @@ def calibrate_from_txt(path_video, path_txt, time_begin=0, time_end=-1):
 
     homography = np.reshape(homography, (3, 3))
 
-    # Get the images
+    # Get the image
     list_images = extract_image_video(path_video, time_begin, time_end)
     nb_images = len(list_images)
 
-    # Transform the images
+    # Transform the image
     for index_image in range(nb_images):
         list_images[index_image] = get_top_down_image(list_images[index_image], homography)
 
