@@ -36,7 +36,7 @@ GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE, for_visu
 VAL_SET = GENERATOR.valid
 
 VALID_DATA = DataLoader(VAL_SET, PATH_DATA, batch_size=1, nb_classes=NB_CLASSES)
-print("The validation set is composed of {} images".format(len(VAL_SET)))
+print("The validation set is composed of {} image".format(len(VAL_SET)))
 
 
 # --- Define the MODEL --- #

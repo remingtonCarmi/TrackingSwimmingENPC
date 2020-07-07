@@ -24,11 +24,11 @@ from src.d3_processing_head_pointing import head_pointing
 
 # BEGIN : !! TO MODIFY !! #
 # The name of the video
-NAME_VIDEO = "50_Br_M_SF_1"
+NAME_VIDEO = "vid1"
 
 # Time range for pointing
-POINTING_STARTING_TIME = 13
-POINTING_ENDING_TIME = 26
+POINTING_STARTING_TIME = 2
+POINTING_ENDING_TIME = 11
 # END : !! TO MODIFY !! #
 
 
@@ -47,7 +47,7 @@ except AlreadyExistError as exist_error:
     print(exist_error.__repr__())
 
 
-# --- Create the lanes images --- #
+# --- Create the lanes image --- #
 PATH_TXT = Path("data/1_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
 DESTINATION_LANES = Path("data/1_intermediate_top_down_lanes/lanes")
 
