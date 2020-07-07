@@ -230,10 +230,10 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../data/0_raw_videos/vid1.mp4")
+    PATH_VIDEO = Path("../data/0_raw_videos/DSC_6980.mp4")
     try:
         # calibrate_video(PATH_VIDEO, time_begin=0, time_end=5)
-        calibrate_video_text(PATH_VIDEO, 10)
+        calibrate_video_text(PATH_VIDEO, 1)
     except FindPathExtractError as video_find_error:
         print(video_find_error.__repr__())
     except TimeError as time_error:

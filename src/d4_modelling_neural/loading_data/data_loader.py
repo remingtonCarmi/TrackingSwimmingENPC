@@ -1,38 +1,60 @@
+"""
+This module loads the images one by one when the object is called. It can perform data augmenting.
+"""
 from pathlib import Path
 import random as rd
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
-from src.d4_modelling_neural.loading_data.data_generator import DataGenerator
+from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.transformations.transformations import transform_label, augmenting, standardize
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 class DataLoader(Sequence):
-    def __init__(self, data, access_path=None, batch_size=2, nb_classes=10, image_size=1920, data_augmenting=False):
+    """
+    The class to load the data.
+    """
+    def __init__(self, data, batch_size=2, window_size=100, recovery=0, scale=35, data_augmenting=False):
         """
-        data = list of [image_path, 'x_head', 'y_head']
+        Create the loader.
+
+        Args:
+            data (list of 4 : [WindowsPath, integer, integer, float):
+                List of [image_path, 'x_head', 'y_head', 'length_video]
+
+            batch_size (integer): the size of the batches
+                Default value = 2
+
+            nb_classes (integer): the
         """
+        # To transform the images
         self.data_manager = ImageDataGenerator()
+
+        # The data
         self.samples = data[:, 0]
-        self.labels = data[:, 1:]
+        self.labels = data[:, 1: -1]
+        self.lengths_video = data[:, -1]
+
+        # The parameters
         self.batch_size = batch_size
-        if access_path is None:
-            self.access_path = Path("../../output/tries/vid0/")
-        else:
-            self.access_path = access_path
-        self.nb_classes = nb_classes
-        self.image_size = image_size
         self.data_augmenting = data_augmenting
+
+        # The magnifying glass
+        self.window_size = window_size
+        self.recovery = recovery
+        self.scale = scale
 
     def __len__(self):
         return int(np.ceil(len(self.samples) / self.batch_size))
 
     def __getitem__(self, idx):
+        # Get the paths and the labels
         batch_path = self.samples[idx * self.batch_size: (idx + 1) * self.batch_size]
         batch_labels = self.labels[idx * self.batch_size: (idx + 1) * self.batch_size].astype(float)
 
+        # Get the specific size of the batch
         length_batch = len(batch_path)
         batch_img = []
         batch_labs = []
@@ -68,17 +90,21 @@ class DataLoader(Sequence):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../output/tries/vid0/")
-    PATH_LABEL = Path("../../output/tries/vid0.csv")
-    PERCENTAGE = 1
+    PATHS_LABEL = [Path("../../../data/2_processed_positions/tries/vid0.csv")]
     BATCH_SIZE = 1
 
-    GENERATOR = DataGenerator(PATH_DATA, PATH_LABEL, percentage=PERCENTAGE)
-    TRAIN_SET = GENERATOR.train
-    LOADER = DataLoader(TRAIN_SET, data_augmenting=True, batch_size=BATCH_SIZE)
+    # Data generator
+    TRAIN_SET = generate_data(PATHS_LABEL, take_all=False)
+
+    # Data loader
+    LOADER = DataLoader(TRAIN_SET, data_augmenting=False, batch_size=BATCH_SIZE)
+
     for (BATCH, LABELS) in LOADER:
+        # Get the image
         b, g, r = cv2.split(BATCH[0])  # get b,g,r
         rgb_img = cv2.merge([r, g, b])
+
+        # Show the image
         plt.imshow(rgb_img.astype(int))
         print(LABELS[0])
         plt.show()
