@@ -1,6 +1,7 @@
+"""
+This script trains a model with the magnifier concept.
+"""
 from pathlib import Path
-import numpy as np
-import matplotlib.pyplot as plt
 
 # To generate the data
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
@@ -9,169 +10,137 @@ from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 
 # The models
-from src.d4_modelling_neural.networks.easy_model import EasyModel
+from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 
 # To slice the lanes
-from src.d4_modelling_neural.magnifier.slice_lanes import slice_lanes
+from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
 
 # The loss
+from src.d4_modelling_neural.magnifier.loss import get_loss, evaluate_loss
 
 # The optimizer
 from tensorflow.keras.optimizers import Adam
 
-# The main module
-import tensorflow as tf
+# The metric's manager
+from src.d4_modelling_neural.magnifier.metrics import MetricsMagnifier
 
 
-# --- BEGIN : !! TO MODIFY !! --- #
-# Parameters for data
-VIDEO_NAMES_TRAIN = ["vid0"]
-VIDEO_NAMES_VALID = ["vid1"]
-FROM_COLAB = False
-NUMBER_TRAINING = 0
-DIMENSIONS = [110, 1820]
+def train_magnifier(data_param, loading_param, training_param, tries):
+    """
+    Train the model magnifier.
 
-# For loading the data
-SCALE = 35
-DATA_AUGMENTING = False
-# For the training
-NB_EPOCHS = 5
-BATCH_SIZE = 2
-WINDOW_SIZE = 200
-RECOVERY = 100
-# --- END : !! TO MODIFY !! --- #
+    Args:
+        data_param (list): (video_names_train, video_names_valid, number_training, dimensions)
 
+        loading_param (list): (scale, data_augmenting)
 
-"""# To avoid memory problems
-TF_CONFIG_ = tf.compat.v1.ConfigProto()
-TF_CONFIG_.gpu_options.allow_growth = True
-sess = tf.compat.v1.Session(config=TF_CONFIG_)"""
+        training_param (list): (nb_epochs, batch_size, window_size, recovery, trade_off)
 
+        tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
+    """
+    # Unpack the arguments
+    (video_names_train, video_names_valid, number_training, dimensions) = data_param
+    (scale, data_augmenting) = loading_param
+    (nb_epochs, batch_size, window_size, recovery, trade_off) = training_param
 
-# -- Verify that a GPU is used -- #
-print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical_devices('GPU'))
+    # -- Paths to the data -- #
+    paths_label_train = []
+    for video_name_train in video_names_train:
+        paths_label_train.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_train)))
 
+    paths_label_valid = []
+    for video_name_valid in video_names_valid:
+        paths_label_valid.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_valid)))
 
-# -- Paths to the data -- #
-if FROM_COLAB:
-    PATH_BEGIN = ""
-else:
-    PATH_BEGIN = "../"
+    starting_data_paths = Path("data/1_intermediate_top_down_lanes/lanes{}".format(tries))
+    starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
 
-PATHS_LABEL_TRAIN = []
-for video_name_train in VIDEO_NAMES_TRAIN:
-    PATHS_LABEL_TRAIN.append(Path(PATH_BEGIN + "data/2_processed_positions/tries/{}.csv".format(video_name_train)))
+    # --- Generate and load the sets--- #
+    train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
+    valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths)
 
-PATHS_LABEL_VALID = []
-for video_name_valid in VIDEO_NAMES_VALID:
-    PATHS_LABEL_VALID.append(Path(PATH_BEGIN + "data/2_processed_positions/tries/{}.csv".format(video_name_valid)))
+    train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, data_augmenting=data_augmenting)
+    valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, data_augmenting=data_augmenting)
+    print("The training set is composed of {} images".format(len(train_data)))
+    print("The validation set is composed of {} images".format(len(valid_data)))
 
-STARTING_DATA_PATHS = Path(PATH_BEGIN + "data/1_intermediate_top_down_lanes/lanes/tries")
-STARTING_CALIBRATION_PATHS = Path(PATH_BEGIN + "data/1_intermediate_top_down_lanes/calibration/tries")
+    # --- Define the MODEL --- #
+    model = ZoomModel()
 
-
-# --- Generate and load the sets--- #
-TRAIN_DATA = generate_data(PATHS_LABEL_TRAIN, STARTING_DATA_PATHS, STARTING_CALIBRATION_PATHS)
-VALID_DATA = generate_data(PATHS_LABEL_VALID, STARTING_DATA_PATHS, STARTING_CALIBRATION_PATHS)
-
-TRAIN_SET = DataLoader(TRAIN_DATA, batch_size=BATCH_SIZE, scale=SCALE, dimensions=DIMENSIONS, data_augmenting=DATA_AUGMENTING)
-VALID_SET = DataLoader(VALID_DATA, batch_size=BATCH_SIZE, scale=SCALE, dimensions=DIMENSIONS, data_augmenting=DATA_AUGMENTING)
-print("The training set is composed of {} image".format(len(TRAIN_SET)))
-print("The validation set is composed of {} image".format(len(VALID_SET)))
-
-# --- Define the MODEL --- #
-MODEL = EasyModel()
-
-# Get the weights of the previous trainings
-PATH_WEIGHT = Path(PATH_BEGIN + "data/3_models_weights")
-if NUMBER_TRAINING > 0:
-    # Build the model to load the weights
-    MODEL.build()
-    PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}.h5".format(0, NUMBER_TRAINING - 1)
-else:
-    PATH_FORMER_TRAINING = PATH_WEIGHT / "hard_model_nb_classes_{}_{}.h5".format(0, NUMBER_TRAINING - 1)
-
-# Load the weights
-MODEL.load_weights(str(PATH_FORMER_TRAINING))
-
-# Optimizer
-OPTIMIZER = Adam()
-
-
-# --- For statistics --- #
-LOSSES_ON_TRAIN = np.zeros(NB_EPOCHS)
-LOSSES_ON_VAL = np.zeros(NB_EPOCHS)
-ERRORS_ON_TRAIN = np.zeros(NB_EPOCHS)
-ERRORS_ON_VAL = np.zeros(NB_EPOCHS)
-
-
-# --- Training --- #
-for epoch in range(NB_EPOCHS):
-    sum_loss = 0
-    sum_errors = 0
-    for (idx_batch, batch) in enumerate(TRAIN_SET):
-        (lanes, labels) = batch
-
+    # Get the weights of the previous trainings
+    path_weight = Path("data/3_models_weights{}".format(tries))
+    if number_training > 1:
+        # Get the input shape to build the model
+        # Build the model to load the weights
+        (lanes, labels) = train_set[0]
         # Get the sub images
-        (sub_lanes, sub_labels) = slice_lanes(lanes, labels, WINDOW_SIZE, RECOVERY)
+        (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
-        # Compute the loss and the gradients
-        (loss_value, grads) = get_loss(MODEL, lanes, labels)
+        # Build the model
+        model.build(sub_lanes.shape)
 
-        # Optimize
-        OPTIMIZER.apply_gradients(zip(grads, MODEL.trainable_variables))
+        path_former_training = path_weight / "magnifier_{}.h5".format(number_training - 1)
 
-        # Register statistics
-        sum_loss += loss_value / len(labels)
-        sum_errors += get_mean_distance(MODEL, inputs, labels) / len(labels)
+        # Load the weights
+        model.load_weights(str(path_former_training))
 
-    # Register the loss on train
-    LOSSES_ON_TRAIN[epoch] = sum_loss / len(TRAIN_DATA)
-    # Register the loss on val
-    LOSSES_ON_VAL[epoch] = evaluate_loss(MODEL, VALID_DATA)
-    # Register the accuracy on train
-    ERRORS_ON_TRAIN[epoch] = sum_errors / len(TRAIN_DATA)
-    # Register the accuracy on val
-    ERRORS_ON_VAL[epoch] = evaluate_error(MODEL, VALID_DATA)
+    # Optimizer
+    optimizer = Adam()
 
-    # Shuffle data
-    TRAIN_DATA.on_epoch_end()
+    # --- For statistics --- #
+    metrics = MetricsMagnifier()
 
+    # --- Training --- #
+    for epoch in range(nb_epochs):
+        # - Train on the train set - #
+        print("Training, epoch n ° {}".format(epoch))
+        model.trainable = True
+        for (idx_batch, batch) in enumerate(train_set):
+            (lanes, labels) = batch
 
-# --- Save the weights --- #
-PATH_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}.h5".format(NB_CLASSES, NUMBER_TRAINING)
-MODEL.save_weights(str(PATH_TRAINING))
+            # Get the sub images
+            (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
+            # Compute the loss and the gradients
+            (grads, loss_value, predictions) = get_loss(model, sub_lanes, sub_labels, trade_off)
 
-# To save the plots
-PATH_SAVE_FIG = Path(PATH_BEGIN + "reports/figures_results/")
-PATH_SAVE_LOSS = PATH_SAVE_FIG / "loss_easy_model_nb_classes_{}_{}.jpg".format(0, NUMBER_TRAINING)
-PATH_SAVE_ACCURACY = PATH_SAVE_FIG / "mean_error_easy_model_nb_classes_{}_{}.jpg".format(0, NUMBER_TRAINING)
+            # Optimize
+            optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
+            # Register statistics
+            metrics.update_loss(loss_value, len(sub_labels))
+            metrics.update_acc(sub_labels[:, :2], predictions[:, :2])
+            metrics.update_mae(sub_labels[:, 2], predictions[:, 2])
+            metrics.update_nb_batches()
 
-# Observe results
-MODEL.trainable = False
-for (idx_batch, batch) in enumerate(TRAIN_DATA):
-    (inputs, labels) = batch
-    PREDICTIONS = MODEL(inputs)
-    print(PREDICTIONS)
-    print("Predictions", np.argmax(PREDICTIONS, axis=1))
-    print("label", labels)
+        # - Evaluate the validation set - #
+        print("Validation, epoch n° {}".format(epoch))
+        model.trainable = False
+        for (idx_batch, batch) in enumerate(valid_set):
+            (lanes, labels) = batch
 
+            # Get the sub images
+            (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
-# Plot the results
-plt.plot(LOSSES_ON_TRAIN, label="Loss on train set")
-plt.plot(LOSSES_ON_VAL, label="Loss on validation set")
-plt.xlabel("Number of epoch")
-plt.legend()
-plt.savefig(PATH_SAVE_LOSS)
-plt.show()
-plt.close()
+            # Compute the loss and the gradients
+            (loss_value, predictions) = evaluate_loss(model, sub_lanes, sub_labels, trade_off)
 
+            # Register statistics
+            metrics.update_loss(loss_value, len(sub_labels), train=False)
+            metrics.update_acc(sub_labels[:, :2], predictions[:, :2], train=False)
+            metrics.update_mae(sub_labels[:, 2], predictions[:, 2], train=False)
+            metrics.update_nb_batches(train=False)
 
-plt.plot(ERRORS_ON_TRAIN, label="Mean error on train set")
-plt.plot(ERRORS_ON_VAL, label="Mean error on validation set")
-plt.xlabel("Number of epoch")
-plt.legend()
-plt.savefig(PATH_SAVE_ACCURACY)
-plt.show()
+        # Update the metrics
+        metrics.on_epoch_end()
+
+        # Shuffle data
+        train_set.on_epoch_end()
+
+    # --- Save the weights --- #
+    path_training = path_weight / "magnifier_{}.h5".format(number_training)
+    model.save_weights(str(path_training))
+
+    # To save the plots
+    starting_path_save = Path("reports/figures_results{}".format(tries))
+    metrics.save(starting_path_save, number_training)

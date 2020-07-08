@@ -110,7 +110,7 @@ class DataLoader(Sequence):
 
         return np.array(batch_img, dtype=np.float32), np.array(batch_labs, dtype=np.float32)
 
-    def shuffle_data(self):
+    def on_epoch_end(self):
         """
         Shuffle the data set.
         """

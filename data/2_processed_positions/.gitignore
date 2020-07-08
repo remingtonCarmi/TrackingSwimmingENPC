@@ -1,4 +1,5 @@
 *.csv
+*tries
 !.gitignore
 !vid0.csv
 !vid1.csv
