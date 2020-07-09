@@ -16,7 +16,7 @@ REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 1
+NUMBER_TRAINING = 2
 DIMENSIONS = [110, 1820]
 
 # Parameters for loading the data
@@ -28,7 +28,7 @@ NB_EPOCHS = 4
 BATCH_SIZE = 2
 WINDOW_SIZE = 200
 RECOVERY = 100
-TRADE_OFF = 100
+TRADE_OFF = 0
 # --- END : !! TO MODIFY !! --- #
 
 

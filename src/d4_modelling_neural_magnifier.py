@@ -68,7 +68,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     model = ZoomModel()
 
     # Get the weights of the previous trainings
-    path_weight = Path("data/3_models_weights{}".format(tries))
+    path_weight = Path("data/3_models_weights{}/magnifier".format(tries))
     if number_training > 1:
         # Get the input shape to build the model
         # Build the model to load the weights
@@ -79,7 +79,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         # Build the model
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "magnifier_{}.h5".format(number_training - 1)
+        path_former_training = path_weight / "window_{}_{}.h5".format(window_size, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
@@ -113,6 +113,8 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             metrics.update_mae(sub_labels[:, 2], predictions[:, 2])
             metrics.update_nb_batches()
 
+        print("The loss on training is {}".format(metrics.loss_train))
+
         # - Evaluate the validation set - #
         print("Validation, epoch n° {}".format(epoch))
         model.trainable = False
@@ -131,6 +133,8 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             metrics.update_mae(sub_labels[:, 2], predictions[:, 2], train=False)
             metrics.update_nb_batches(train=False)
 
+        print("The loss on validation is {}".format(metrics.loss_valid))
+
         # Update the metrics
         metrics.on_epoch_end()
 
@@ -138,9 +142,9 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         train_set.on_epoch_end()
 
     # --- Save the weights --- #
-    path_training = path_weight / "magnifier_{}.h5".format(number_training)
+    path_training = path_weight / "window_{}_{}.h5".format(window_size, number_training)
     model.save_weights(str(path_training))
 
     # To save the plots
-    starting_path_save = Path("reports/figures_results{}".format(tries))
+    starting_path_save = Path("reports/figures_results/zoom_model{}".format(tries))
     metrics.save(starting_path_save, number_training)
