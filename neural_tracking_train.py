@@ -25,10 +25,10 @@ DATA_AUGMENTING = False
 
 # Parameters for the training
 NB_EPOCHS = 4
-BATCH_SIZE = 2
+BATCH_SIZE = 4
 WINDOW_SIZE = 200
 RECOVERY = 100
-TRADE_OFF = 0
+TRADE_OFF = 1
 # --- END : !! TO MODIFY !! --- #
 
 
