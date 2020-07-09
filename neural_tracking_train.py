@@ -12,11 +12,11 @@ import tensorflow as tf
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-TRIES = "/tries"
+REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 3
+NUMBER_TRAINING = 1
 DIMENSIONS = [110, 1820]
 
 # Parameters for loading the data
@@ -43,6 +43,11 @@ TF_CONFIG_ = tf.compat.v1.ConfigProto()
 TF_CONFIG_.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=TF_CONFIG_)"""
 
+# Set the parameter TRIES #
+if REAL_TRAINING:
+    TRIES = ""
+else:
+    TRIES = "/tries"
 
 # -- Verify that a GPU is used -- #
 print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical_devices('GPU'))
