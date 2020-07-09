@@ -27,7 +27,7 @@ CREATE_VIDEO = True
 
 # --- Parameters --- #
 # Parameters to get the data
-PATH_DATA = Path("data/lanes/{}/".format(VIDEO_NAME))
+PATH_DATA = Path("data/LANES/{}/".format(VIDEO_NAME))
 PATH_LABEL = Path("data/head_points/{}.csv".format(VIDEO_NAME))
 
 
@@ -47,7 +47,7 @@ else:
 # Get the weights of the previous trainings
 PATH_WEIGHT = Path("trained_weights/")
 if NUMBER_TRAINING > 0:
-    # Build the model to load the weights
+    # Build the MODEL to load the weights
     MODEL.build(VALID_DATA[0][0].shape)
     if EASY_MODEL:
         PATH_FORMER_TRAINING = PATH_WEIGHT / "easy_model_nb_classes_{}_{}_trained.h5".format(NB_CLASSES,

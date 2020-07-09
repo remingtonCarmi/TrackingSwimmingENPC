@@ -1,11 +1,11 @@
 """
-This script allows the user to train some model.
+This script allows the user to train some MODEL.
 """
 # Exceptions
 from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError, PaddingError
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError
 
-# To train the model
+# To train the MODEL
 from src.d4_modelling_neural_magnifier import train_magnifier
 
 # The main module

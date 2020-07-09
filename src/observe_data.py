@@ -24,7 +24,7 @@ SHOW_BY_IMAGE = False  # Withdraw standardization in data loader before
 # --- Parameters --- #
 # Parameters to get the data
 PATH_BEGIN = "../"
-PATH_DATA = Path(PATH_BEGIN + "data/lanes/{}/".format(VIDEO_NAME))
+PATH_DATA = Path(PATH_BEGIN + "data/LANES/{}/".format(VIDEO_NAME))
 PATH_LABEL = Path(PATH_BEGIN + "data/head_points/{}.csv".format(VIDEO_NAME))
 
 
@@ -69,8 +69,8 @@ if SHOW_BY_IMAGE:
         plt.show()
 
 
-# Percentage for the training set with FOR_VISU = False, to have the entire lane 8 : 0.8959
-# Percentage for the training set with FOR_VISU = True, to have the entire lane 8 : 0.875
+# Percentage for the training set with FOR_VISU = False, to have the entire lane_magnifier 8 : 0.8959
+# Percentage for the training set with FOR_VISU = True, to have the entire lane_magnifier 8 : 0.875
 # The repartition of the classes of the training set, with data augmenting is : (FOR_VISU = False)
     # [0.03116147 0.08038244 0.12252125 0.14164306 0.12322946 0.13456091, 0.1296034  0.12535411 0.08498584 0.02655807]
 # The repartition of the classes of the training set, without data augmenting is : (FOR_VISU = False)

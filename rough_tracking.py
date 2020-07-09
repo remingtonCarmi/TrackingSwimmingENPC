@@ -22,14 +22,14 @@ PATH_VIDEO = Path("data/videos/vid0.mp4")
 # lines for vid0. Here, we point it manually for better precision.
 LINES = [115, 227, 336, 443, 550, 659, 763, 871, 981]
 
-# number of lines of pixels we ignore for each lane
+# number of lines of pixels we ignore for each lane_magnifier
 MARGIN = 15
 
 try:
     RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 11, 19, True,
                                      destination_video=Path("output/videos/"), path_txt=Path("data/calibration"))
 
-    # lanes we want to plot the swim frequency
+    # LANES we want to plot the swim frequency
     LINES_TO_PLOT = [1]
 
     PARAMETER_TO_PLOT = "x_front"

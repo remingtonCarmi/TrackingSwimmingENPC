@@ -57,7 +57,7 @@ def plot_graphs(rect, rectangles_to_plot, parameter="x_front"):
         r = [dic[parameter](rect_np, i, j) for i in range(n)]
         plt.xlabel("frames")
         plt.ylabel(parameter)
-        # plt.plot(x, r, label="Swimmer from lane " + str(j + 1))
+        # plt.plot(x, r, label="Swimmer from lane_magnifier " + str(j + 1))
         plt.plot(x, r)
 
     # plt.legend()

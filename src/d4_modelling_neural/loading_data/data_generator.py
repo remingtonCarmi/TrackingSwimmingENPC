@@ -33,7 +33,7 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
             list of elements like (path_to_image, y_head, x_head, length_image) for the training.
     """
     if starting_data_paths is None:
-        starting_data_paths = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
+        starting_data_paths = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries")
 
     if starting_calibration_paths is None:
         starting_calibration_paths = Path("../../../data/1_intermediate_top_down_lanes/calibration/tries")

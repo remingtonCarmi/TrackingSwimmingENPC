@@ -16,8 +16,8 @@ def last_line(csv_path):
         csv_path (WindowsPath): the path that leads to the csv file.
 
     Returns:
-        lane (integer): the index of the lane.
-            lane = -1 if the csv file is empty.
+        lane_magnifier (integer): the index of the lane_magnifier.
+            lane_magnifier = -1 if the csv file is empty.
 
         frame (integer): the index of the frame.
             frame = -1 if the csv file is empty.

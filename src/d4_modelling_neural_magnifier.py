@@ -1,5 +1,5 @@
 """
-This script trains a model with the magnifier concept.
+This script trains a MODEL with the magnifier concept.
 """
 from pathlib import Path
 
@@ -15,7 +15,7 @@ from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 # The models
 from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 
-# To slice the lanes
+# To slice the LANES
 from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
 
 # The loss
@@ -30,7 +30,7 @@ from src.d4_modelling_neural.magnifier.metrics import MetricsMagnifier
 
 def train_magnifier(data_param, loading_param, training_param, tries):
     """
-    Train the model magnifier.
+    Train the MODEL magnifier.
 
     Args:
         data_param (list): (video_names_train, video_names_valid, number_training, dimensions)
@@ -55,7 +55,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     for video_name_valid in video_names_valid:
         paths_label_valid.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_valid)))
 
-    starting_data_paths = Path("data/1_intermediate_top_down_lanes/lanes{}".format(tries))
+    starting_data_paths = Path("data/1_intermediate_top_down_lanes/LANES{}".format(tries))
     starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
 
     # Verify that the weights path does not exists
@@ -79,13 +79,13 @@ def train_magnifier(data_param, loading_param, training_param, tries):
 
     # Get the weights of the previous trainings
     if number_training > 1:
-        # Get the input shape to build the model
-        # Build the model to load the weights
+        # Get the input shape to build the MODEL
+        # Build the MODEL to load the weights
         (lanes, labels) = train_set[0]
         # Get the sub images
         (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
-        # Build the model
+        # Build the MODEL
         model.build(sub_lanes.shape)
 
         path_former_training = path_weight / "window_{}_{}.h5".format(window_size, number_training - 1)
@@ -110,7 +110,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             # Get the sub images
             (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
-            # Compute the loss and the gradients
+            # Compute the loss, the gradients and the PREDICTIONS
             (grads, loss_value, predictions) = get_loss(model, sub_lanes, sub_labels, trade_off)
 
             # Optimize
@@ -133,7 +133,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             # Get the sub images
             (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
 
-            # Compute the loss and the gradients
+            # Compute the loss value and the PREDICTIONS
             (loss_value, predictions) = evaluate_loss(model, sub_lanes, sub_labels, trade_off)
 
             # Register statistics

@@ -66,8 +66,8 @@ class MetricsMagnifier:
                 Default value = True
         """
         # Get the guesses from logits
-        # if argmax(predictions) = 0 the model says the is a head in the ith sample
-        # if argmax(predictions) = 1 the model says there is not a head in the ith sample
+        # if argmax(PREDICTIONS) = 0 the MODEL says the is a head in the ith sample
+        # if argmax(PREDICTIONS) = 1 the MODEL says there is not a head in the ith sample
         pred_prob = 1 - np.argmax(predictions, axis=1)
 
         # Compute the accuracy
@@ -93,7 +93,7 @@ class MetricsMagnifier:
             train (boolean): says if the update is done during training.
                 Default value = True
         """
-        # Withdraw the labels where there was no head
+        # Withdraw the LABELS where there was no head
         only_labels = np.where(labels == -1, 0, labels)
         only_preds = np.where(labels == -1, 0, predictions)
         nb_heads = np.sum(np.where(labels == -1, 0, 1))

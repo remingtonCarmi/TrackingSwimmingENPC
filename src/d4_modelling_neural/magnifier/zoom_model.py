@@ -1,10 +1,10 @@
 """
-This class is the model of the magnifier.
+This class is the MODEL of the magnifier.
 """
 from pathlib import Path
 import numpy as np
 
-# For the model
+# For the MODEL
 from tensorflow.python.keras.models import Model
 from tensorflow.python.keras.layers import (
     Dense,
@@ -14,7 +14,7 @@ from tensorflow.python.keras.layers import (
     ReLU
 )
 
-# To test the model
+# To test the MODEL
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
@@ -85,14 +85,14 @@ if __name__ == "__main__":
     # (input_size, kernel_size, stride, padding, dilation)
     # print(compute_dimension(49, 3, 2, 0, 1))
 
-    # - To try the model - #
+    # - To try the MODEL - #
     # Parameters
     WINDOW_SIZE = 200
     RECOVERY = 100
 
     # Paths to data
     PATHS_LABEL = [Path("../../../data/2_processed_positions/tries/vid0.csv")]
-    START_DATA_PATHS = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
+    START_DATA_PATHS = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries")
     START_CALIB_PATHS = Path("../../../data/1_intermediate_top_down_lanes/calibration/tries")
 
     # Generate and load the data

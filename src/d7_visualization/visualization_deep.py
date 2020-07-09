@@ -40,7 +40,7 @@ def visualize_one_lane(image, prediction, nb_class=10, length=0.7):
 
 
 def sort_data(x, y):
-    """ Sort names and predictions to be taken one entire frame (8 lanes in the right order) by one entire frame"""
+    """ Sort names and PREDICTIONS to be taken one entire frame (8 LANES in the right order) by one entire frame"""
     data = np.block([[x], [y]])
     data = data.T
     data = sorted(data, key=lambda i: (i[0][3:] + i[0][:3]))
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # IMAGE = visualize_one_frame(IMAGE, PREDICTIONS, nb_class=NB_CLASSES)
     # plt.imshow(IMAGE)
 
-    # ------------one lane----------------
+    # ------------one lane_magnifier----------------
     # PATH_IMAGE2 = Path("../../output/tries/vid0/l1_f0008.jpg")
     # IMAGE2 = np.copy(plt.imread(PATH_IMAGE2))
     # PREDICTION = 4
@@ -133,7 +133,7 @@ if __name__ == '__main__':
          ])
     Y = np.array([np.random.randint(0, NB_CLASSES) for i in range(16)])
 
-    PATH = Path("../../data/lanes/vid0/")
+    PATH = Path("../../data/LANES/vid0/")
 
     FRAMES = visualize(X, Y, PATH, NB_CLASSES)
 

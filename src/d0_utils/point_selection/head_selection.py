@@ -1,5 +1,5 @@
 """
-This module plot a lane and ask the user to spot the head of the swimmer.
+This module plot a lane_magnifier and ask the user to spot the head of the swimmer.
 """
 from pathlib import Path
 import numpy as np
@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QDesktopWidget
 from PyQt5.QtCore import Qt, QSize
 import cv2
 
-# To plot the lane and select the head of the swimmer
+# To plot the lane_magnifier and select the head of the swimmer
 from src.d0_utils.point_selection.image_selection.image_selection import ImageSelection
 
 # To get the main widget
@@ -55,7 +55,7 @@ def head_selection(image, lane, frame):
     Args:
         image (array): the image to point at.
 
-        lane (integer): the index of the lane to selection.
+        lane (integer): the index of the lane_magnifier to selection.
 
         frame (integer): the index of the frame to selection.
 

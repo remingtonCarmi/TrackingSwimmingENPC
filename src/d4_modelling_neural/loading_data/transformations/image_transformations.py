@@ -89,7 +89,7 @@ def fill_with_black(image, dimensions, label):
     return padded_image, padded_label
 
 
-def transform_image(image_path, label, scale, video_length, dimensions):
+def transform_image(image_path, label, scale, video_length, dimensions, standardization=True):
     """
     Transform the image by standardizing, rescaling, padding the image and its label.
 
@@ -104,6 +104,9 @@ def transform_image(image_path, label, scale, video_length, dimensions):
 
         dimensions (list of 2 integers): the final dimensions of the image. [vertical, horizontal]
 
+        standardization (boolean): standardize the lane_magnifier if standardization = True.
+            Default value = True
+
     Returns:
         (array): the image that have been standardized, rescaled and padded.
 
@@ -111,15 +114,16 @@ def transform_image(image_path, label, scale, video_length, dimensions):
     """
     # Get the image, standardize, rescale and pad it
     image = cv2.imread(str(image_path))
-    image = standardize(image)
+    if standardization:
+        image = standardize(image)
     (image, rescaled_label) = rescale(image, scale, video_length, label)
     return fill_with_black(image, dimensions, rescaled_label)
 
 
 if __name__ == "__main__":
     # Parameters
-    PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/lanes/tries/100NL_FAF/l8_f1054.jpg")
-    # PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/lanes/tries/vid0/l1_f0275.jpg")
+    PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
+    # PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid0/l1_f0275.jpg")
 
     # PATH_SAVE = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
 

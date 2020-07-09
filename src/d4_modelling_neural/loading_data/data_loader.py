@@ -25,7 +25,7 @@ class DataLoader(Sequence):
     """
     The class to load the data.
     """
-    def __init__(self, data, batch_size=2, scale=35, dimensions=[110, 1820], data_augmenting=False):
+    def __init__(self, data, batch_size=2, scale=35, dimensions=[110, 1820], data_augmenting=False, standardization=True):
         """
         Create the loader.
 
@@ -44,6 +44,9 @@ class DataLoader(Sequence):
 
             data_augmenting (boolean): if True, data_augmenting is performed.
                 Default value = False
+
+            standardization (boolean): standardize the lane_magnifier if standardization = True.
+                Default value = True
         """
         # To transform the image
         self.data_manager = ImageDataGenerator()
@@ -58,6 +61,7 @@ class DataLoader(Sequence):
         self.scale = scale
         self.dimensions = dimensions
         self.data_augmenting = data_augmenting
+        self.standardization = standardization
 
     def __len__(self):
         """
@@ -75,9 +79,9 @@ class DataLoader(Sequence):
         Returns:
             (array, 4 dimensions): list of images.
 
-            (array, 3 dimensions): list of the labels linked to the images.
+            (array, 3 dimensions): list of the LABELS linked to the images.
         """
-        # Get the paths, the labels and the lengths of the videos
+        # Get the paths, the LABELS and the lengths of the videos
         batch_path = self.samples[idx * self.batch_size: (idx + 1) * self.batch_size]
         batch_labels = self.labels[idx * self.batch_size: (idx + 1) * self.batch_size].astype(float)
         batch_video_length = self.video_length[idx * self.batch_size: (idx + 1) * self.batch_size]
@@ -95,7 +99,7 @@ class DataLoader(Sequence):
             video_length = batch_video_length[idx_img]
 
             # Get the image and transform it
-            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions)
+            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.standardization)
 
             # Perform data augmenting
             if self.data_augmenting:
@@ -128,7 +132,7 @@ if __name__ == "__main__":
     try:
         TRAIN_DATA = generate_data(PATHS_LABEL, take_all=False)
 
-        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, data_augmenting=False)
+        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, data_augmenting=False, standardization=False)
 
         for (BATCH, LABELS) in TRAIN_SET:
             # Get the image

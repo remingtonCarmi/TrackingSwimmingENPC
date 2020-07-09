@@ -14,7 +14,7 @@ def have_to_point_image(file_name, lane, frame):
     Args:
         file_name (string): the name of the file.
 
-        lane (integer): the index of the last lane pointed.
+        lane (integer): the index of the last lane_magnifier pointed.
 
         frame (integer): the index of the last frame pointed.
 
@@ -42,7 +42,7 @@ def get_lane_frame(image_name):
         image_name (string): the name of the image
 
     Returns:
-        (list of 2 integer): [index of the lane, index of the frame]
+        (list of 2 integer): [index of the lane_magnifier, index of the frame]
     """
     image_name = image_name[: -4]
     lane_frame = image_name.split("_")
@@ -55,16 +55,16 @@ def extract_path(path_file_images, lane, frame):
     Extract the path of the image that have not been labelled.
 
     Args:
-        path_file_images (WindowsPath): the path that leads to the image of lanes.
+        path_file_images (WindowsPath): the path that leads to the image of LANES.
 
-        lane (integer): the index of the last lane pointed.
+        lane (integer): the index of the last lane_magnifier pointed.
 
         frame (integer): the index of the last frame pointed.
 
     Returns:
         (array): the list of the path that leads to the image that have not been pointed.
 
-        (array): the list of the lanes and the frames of the image that have not been pointed.
+        (array): the list of the LANES and the frames of the image that have not been pointed.
     """
     if not path_file_images.exists():
         raise FindPathExtractError(path_file_images)
@@ -95,7 +95,7 @@ def extract_path(path_file_images, lane, frame):
 
 
 if __name__ == "__main__":
-    PATH_IMAGE = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries/vid0")
+    PATH_IMAGE = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries/vid0")
 
     try:
         (LIST_IMAGES_PATH, LIST_LANES_FRAMES) = extract_path(PATH_IMAGE, 1, 525)

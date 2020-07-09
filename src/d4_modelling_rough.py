@@ -111,13 +111,13 @@ if __name__ == "__main__":
     # lines for vid0
     LINES = [115, 227, 336, 443, 550, 659, 763, 871, 981]
 
-    # number of lines of pixels we ignore for each lane
+    # number of lines of pixels we ignore for each lane_magnifier
     MARGIN = 15
 
     try:
         RECTANGLES = animation_red_boxes(PATH_VIDEO, LINES, MARGIN, 12, 13, True)
 
-        # lanes we want to plot the swim frequency
+        # LANES we want to plot the swim frequency
         LINES_TO_PLOT = [0, 1, 2]
 
         PARAMETER_TO_PLOT = "x_front"

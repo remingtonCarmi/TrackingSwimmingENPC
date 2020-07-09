@@ -3,7 +3,7 @@ This script allows the user to create the data set.
 
 That is to say, the user can create:
     - a txt file that registers the information about the calibration
-    - a folder full of the lanes of the video
+    - a folder full of the LANES of the video
     - a csv file that registers the information about the position of the swimmers
 """
 from pathlib import Path
@@ -15,7 +15,7 @@ from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathEr
 # To calibrate the video
 from src.d2_intermediate_calibration import calibrate_video_text
 
-# To create the image lanes
+# To create the image LANES
 from src.d2_intermediate_lanes import create_data
 
 # To point at the heads of the swimmers
@@ -47,12 +47,12 @@ except AlreadyExistError as exist_error:
     print(exist_error.__repr__())
 
 
-# --- Create the lanes image --- #
+# --- Create the LANES image --- #
 PATH_TXT = Path("data/1_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
-DESTINATION_LANES = Path("data/1_intermediate_top_down_lanes/lanes")
+DESTINATION_LANES = Path("data/1_intermediate_top_down_lanes/LANES")
 
 try:
-    print(" --- Save the lanes as jpg files --- ")
+    print(" --- Save the LANES as jpg files --- ")
     MARGIN = 0
 
     create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES,

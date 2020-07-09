@@ -47,7 +47,7 @@ python main_rough_detection.py
 ```
 Before, feel free to modify the line 22 if you want the graph of more swimmers
 ```python
-    # lanes we want to plot the swim frequency
+    # LANES we want to plot the swim frequency
     LANES_TO_PLOT = [1]
 ```
 

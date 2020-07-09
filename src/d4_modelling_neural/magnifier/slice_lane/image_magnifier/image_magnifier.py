@@ -1,5 +1,5 @@
 """
-This module slice a lane with its label into smaller sub-images.
+This module slice a lane_magnifier with its label into smaller sub-images.
 """
 from pathlib import Path
 import numpy as np
@@ -8,14 +8,14 @@ import cv2
 
 class ImageMagnifier:
     """
-    The class that enables to slice a lane with its label.
+    The class that enables to slice a lane_magnifier with its label.
     """
     def __init__(self, lane, label, window_size, recovery):
         """
         Register the image.
 
         Args:
-            lane (array): the input lane.
+            lane (array): the input lane_magnifier.
 
             label (list: (integer, integer)): the position of the head : [y_head, x_head]
 
@@ -23,7 +23,7 @@ class ImageMagnifier:
 
             recovery (integer): the number of pixels to be taken twice per sub-image.
         """
-        # Get the lane
+        # Get the lane_magnifier
         self.lane = lane
         self.dimensions = lane.shape[: 2]
 
@@ -39,7 +39,7 @@ class ImageMagnifier:
 
     def __len__(self):
         """
-        Computes the number of sub-image for the lane.
+        Computes the number of sub-image for the lane_magnifier.
 
         Returns:
             (integer): the number of sub-image.
@@ -80,10 +80,31 @@ class ImageMagnifier:
         else:
             raise StopIteration
 
+    def get_limits(self, idx):
+        """
+        Compute the limits of a sub-image.
+
+        Args:
+            idx (integer): the specific sub-image.
+
+        Returns:
+             (integer): the beginning limit.
+
+             (integer): the ending limit.
+        """
+        if idx < self.nb_sub_images - 1:
+            pixel_step = self.window_size - self.recovery
+
+            return idx * pixel_step, idx * pixel_step + self.window_size
+        elif idx == self.nb_sub_images - 1:
+            return - self.window_size, None
+        else:
+            return None, None
+
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0297.jpg")
+    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
     # PATH_IMAGE = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
 
     LANE = cv2.imread(str(PATH_IMAGE))

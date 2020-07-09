@@ -1,5 +1,5 @@
 """
-This module split an image into lanes and save the lanes.
+This module split an image into LANES and save the LANES.
 """
 import cv2
 from src.d0_utils.split_and_save_data.crop.crop_lines import crop
@@ -7,7 +7,7 @@ from src.d0_utils.split_and_save_data.crop.crop_lines import crop
 
 def split_and_save(image, margin, destination, frame, nb_lines):
     """
-    Split the image into lanes and save the lanes
+    Split the image into LANES and save the LANES
 
     Args:
         image (array): the image to split.
@@ -21,7 +21,7 @@ def split_and_save(image, margin, destination, frame, nb_lines):
         nb_lines (integer): the number of lines in the pool.
     """
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # List of the cuts, idx_lane start at 1 and not at 0 since there are any swimmers in this lane.
+    # List of the cuts, idx_lane start at 1 and not at 0 since there are any swimmers in this lane_magnifier.
     list_y = [int(1/nb_lines * idx_lane * image.shape[0]) for idx_lane in range(1, nb_lines)]
 
     # Crop the image

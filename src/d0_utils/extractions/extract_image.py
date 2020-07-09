@@ -33,7 +33,7 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
             list of the extracted image.
     """
     if destination is None:
-        destination = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
+        destination = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries")
 
     # Verify if the video exists:
     if not path_video.exists():

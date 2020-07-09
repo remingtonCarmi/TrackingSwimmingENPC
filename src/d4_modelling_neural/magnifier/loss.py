@@ -1,5 +1,5 @@
 """
-This module computes the loss of the model.
+This module computes the loss of the MODEL.
 """
 import numpy as np
 
@@ -18,9 +18,9 @@ def get_loss(model, sub_lanes, sub_labels, trade_off):
     Get the loss and the gradient of every layer.
 
     Args:
-        model (TensorFlow Model): the model.
+        model (TensorFlow Model): the MODEL.
 
-        sub_lanes (array of 4 dimensions): the list of sub-lanes.
+        sub_lanes (array of 4 dimensions): the list of sub-LANES.
 
         sub_labels (array of 4 dimensions, list of : (integer, integer, integer)):
             (is_in_image, is_not_in_image, column), column is the index of the column of pixel is the head is located.
@@ -29,14 +29,14 @@ def get_loss(model, sub_lanes, sub_labels, trade_off):
         trade_off (float): the trade off between the classification loss and the regression loss.
 
     Returns:
-        (TensorFlow object): the gradient of each layer of the model.
+        (TensorFlow object): the gradient of each layer of the MODEL.
 
         loss_value (float): the value of the loss.
 
-        predictions (tensor of 2 dimensions): list of [pred_is_in_image, pred_is_not_in_image, pred_column]
+        PREDICTIONS (tensor of 2 dimensions): list of [pred_is_in_image, pred_is_not_in_image, pred_column]
     """
     with GradientTape() as tape:
-        # Evaluate with the model
+        # Evaluate with the MODEL
         predictions = model(sub_lanes)
 
         # Compute the loss value
@@ -114,9 +114,9 @@ def evaluate_loss(model, sub_lanes, sub_labels, trade_off):
     Get the loss and the gradient of every layer.
 
     Args:
-        model (TensorFlow Model): the model.
+        model (TensorFlow Model): the MODEL.
 
-        sub_lanes (array of 4 dimensions): the list of sub-lanes.
+        sub_lanes (array of 4 dimensions): the list of sub-LANES.
 
         sub_labels (array of 4 dimensions, list of : (integer, integer, integer)):
             (is_in_image, is_not_in_image, column), column is the index of the column of pixel is the head is located.
@@ -127,9 +127,9 @@ def evaluate_loss(model, sub_lanes, sub_labels, trade_off):
     Returns:
         (float): the value of the loss.
 
-        predictions (tensor of 2 dimensions): list of [pred_is_in_image, pred_is_not_in_image, pred_column]
+        PREDICTIONS (tensor of 2 dimensions): list of [pred_is_in_image, pred_is_not_in_image, pred_column]
     """
-    # Evaluate with the model
+    # Evaluate with the MODEL
     predictions = model(sub_lanes)
 
     # Compute the loss value

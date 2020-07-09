@@ -1,5 +1,5 @@
 """
-This module creates a folder filled with lanes taken from a video.
+This module creates a folder filled with LANES taken from a video.
 """
 import os
 import cv2
@@ -12,20 +12,20 @@ from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathEr
 # To calibrate an image from a txt file
 from src.d0_utils.calibration_from_txt import calibrate_from_txt
 
-# To split the image into lanes and save them
+# To split the image into LANES and save them
 from src.d0_utils.split_and_save_data.split_image import split_and_save
 
 
 def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_lines=10, destination=None):
     """
-    Fill the destination path with pictures of the lanes taken from the video.
+    Fill the destination path with pictures of the LANES taken from the video.
 
     Args:
         path_video (WindowsPath): path to the video
 
         path_txt (WindowsPath): path to the txt file to calibrate the video
 
-        margin (integer): number of lines of pixels to add to lanes
+        margin (integer): number of lines of pixels to add to LANES
             - we remove (if margin > 0)
             - we add (if margin < 0)
 
@@ -36,14 +36,14 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
             Default value = -1
             if time_end == -1, the video is viewed until the end.
 
-        nb_lines (integer): the number of lanes in the pool
+        nb_lines (integer): the number of LANES in the pool
             Default value = 10
 
-        destination (integer): the path where the lanes will be saves
+        destination (integer): the path where the LANES will be saves
             Default value = None
     """
     if destination is None:
-        destination = Path("../data/1_intermediate_top_down_lanes/lanes/tries")
+        destination = Path("../data/1_intermediate_top_down_lanes/LANES/tries")
 
     # Verify that the paths exists
     if not path_video.exists():

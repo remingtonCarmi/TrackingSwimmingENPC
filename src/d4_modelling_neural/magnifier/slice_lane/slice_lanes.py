@@ -1,5 +1,5 @@
 """
-This module slices a list of lanes with its labels.
+This module slices a list of LANES with its LABELS.
 """
 from pathlib import Path
 import cv2
@@ -9,20 +9,20 @@ from src.d4_modelling_neural.magnifier.slice_lane.image_magnifier.image_magnifie
 
 def slice_lanes(lanes, labels, window_size, recovery):
     """
-    Slices the list of lanes with its labels.
-    The lanes are sliced one after the order.
+    Slices the list of LANES with its LABELS.
+    The LANES are sliced one after the order.
 
     Args:
-        lanes (array of 4 dimensions): the list of lanes.
+        lanes (array of 4 dimensions): the list of LANES.
 
-        labels (array of 3 dimensions): the list of labels.
+        labels (array of 3 dimensions): the list of LABELS.
 
         window_size (integer): the width of the sub-images.
 
         recovery (integer): the number of pixels to be taken twice per sub-image.
 
     Returns:
-        sub_lanes (array of 4 dimensions): the list of sub-image.
+        SUB_LANES (array of 4 dimensions): the list of sub-image.
 
         (array: (integer, integer, integer)): (is_in_image, is_not_in_image, column)
             column is the index of the column of pixel where the head is located.
@@ -43,7 +43,7 @@ def slice_lanes(lanes, labels, window_size, recovery):
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE1 = Path("../../../../data/1_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0297.jpg")
+    PATH_IMAGE1 = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
     PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
 
     LANES = np.array([cv2.imread(str(PATH_IMAGE1)), cv2.imread(str(PATH_IMAGE2))])
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # Slice the image
     (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
 
-    # Plot the sub-lanes
+    # Plot the sub-LANES
     NB_SUB_LANES = len(SUB_LANES)
     for idx_image in range(NB_SUB_LANES):
         print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))

@@ -1,5 +1,5 @@
 """
-This script creates a video where the labels are printed on the lanes.
+This script creates a video where the LABELS are printed on the LANES.
 """
 from pathlib import Path
 import numpy as np
@@ -33,7 +33,7 @@ else:
 
 # --- Set the paths --- #
 PATH_LABEL = [Path("../data/2_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
-STARTING_DATA_PATH = Path("../data/1_intermediate_top_down_lanes/lanes{}".format(TRIES))
+STARTING_DATA_PATH = Path("../data/1_intermediate_top_down_lanes/LANES{}".format(TRIES))
 STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibration{}".format(TRIES))
 
 
@@ -43,12 +43,12 @@ try:
     SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS)
     print("The set is composed of {} images".format(len(DATA)))
 
-    # --- Get every lanes --- #
+    # --- Get every LANES --- #
     EVERY_LANES = [0] * len(DATA)
     for idx_sample in range(len(SET)):
         (lanes, labels) = SET[idx_sample]
         (lane, label) = (lanes[0].astype(np.uint8), labels[0].astype(int))
-        # Modify the lane if the head has been seen
+        # Modify the lane_magnifier if the head has been seen
         if label[0] >= 0:
             lane[:, label[1]] = [0, 0, 255]
         EVERY_LANES[idx_sample] = lane
