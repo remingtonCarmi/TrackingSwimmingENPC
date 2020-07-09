@@ -2,7 +2,7 @@ import numpy as np
 from pathlib import Path
 import cv2
 import matplotlib.pyplot as plt
-from src.d7_visualisation.merge_lanes.merge_lanes import merge
+from src.d7_visualization.merge_lanes.merge_lanes import merge
 
 
 def darken_box(image, yc, xc, width, length):

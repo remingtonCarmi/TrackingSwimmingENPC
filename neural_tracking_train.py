@@ -24,7 +24,7 @@ SCALE = 35
 DATA_AUGMENTING = False
 
 # Parameters for the training
-NB_EPOCHS = 8
+NB_EPOCHS = 4
 BATCH_SIZE = 2
 WINDOW_SIZE = 200
 RECOVERY = 100

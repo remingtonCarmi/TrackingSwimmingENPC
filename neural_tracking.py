@@ -6,7 +6,7 @@ from src.d4_modelling_neural.loading_data import DataLoader
 from src.d4_modelling_neural.loading_data import DataGenerator
 from src.d4_modelling_neural.networks import EasyModel
 from src.d4_modelling_neural.networks import HardModel
-from src.d7_visualisation.visualization_deep import animation_one_lane
+from src.d7_visualization.visualization_deep import animation_one_lane
 from src.d0_utils.store_load_matrix.make_video import make_video
 from src.d0_utils.store_load_matrix import AlreadyExistError, FindErrorStore
 

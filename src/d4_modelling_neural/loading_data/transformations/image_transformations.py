@@ -111,7 +111,7 @@ def transform_image(image_path, label, scale, video_length, dimensions):
     """
     # Get the image, standardize, rescale and pad it
     image = cv2.imread(str(image_path))
-    # image = standardize(image)
+    image = standardize(image)
     (image, rescaled_label) = rescale(image, scale, video_length, label)
     return fill_with_black(image, dimensions, rescaled_label)
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 
         # All in one function
         (FINAL_IMAGE, FINAL_LABEL) = transform_image(PATH_IMAGE, LABEL, SCALE, VIDEO_LENGTH, DIMENSIONS)
-        print(FINAL_LABEL)
+
         # Save the transformed image
         # cv2.imwrite(str(PATH_SAVE), FINAL_IMAGE)
 
