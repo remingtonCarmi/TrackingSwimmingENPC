@@ -3,6 +3,9 @@ This script trains a model with the magnifier concept.
 """
 from pathlib import Path
 
+# Exception
+from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError
+
 # To generate the data
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
 
@@ -55,6 +58,13 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     starting_data_paths = Path("data/1_intermediate_top_down_lanes/lanes{}".format(tries))
     starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
 
+    # Verify that the weights path does not exists
+    path_weight = Path("data/3_models_weights{}/magnifier".format(tries))
+    path_new_weight = path_weight / "window_{}_{}.h5".format(window_size, number_training)
+
+    if path_new_weight.exists():
+        raise AlreadyExistError(path_new_weight)
+
     # --- Generate and load the sets--- #
     train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
     valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths)
@@ -68,7 +78,6 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     model = ZoomModel()
 
     # Get the weights of the previous trainings
-    path_weight = Path("data/3_models_weights{}/magnifier".format(tries))
     if number_training > 1:
         # Get the input shape to build the model
         # Build the model to load the weights
@@ -142,8 +151,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         train_set.on_epoch_end()
 
     # --- Save the weights --- #
-    path_training = path_weight / "window_{}_{}.h5".format(window_size, number_training)
-    model.save_weights(str(path_training))
+    model.save_weights(str(path_new_weight))
 
     # To save the plots
     starting_path_save = Path("reports/figures_results/zoom_model{}".format(tries))

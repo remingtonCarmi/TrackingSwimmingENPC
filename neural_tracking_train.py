@@ -3,6 +3,7 @@ This script allows the user to train some model.
 """
 # Exceptions
 from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError, PaddingError
+from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError
 
 # To train the model
 from src.d4_modelling_neural_magnifier import train_magnifier
@@ -54,6 +55,8 @@ print("Is a GPU used for computations ?\n", tf.config.experimental.list_physical
 
 try:
     train_magnifier(DATA_PARAM, LOADING_PARAM, TRAINING_PARAM, TRIES)
+except AlreadyExistError as exist_error:
+    print(exist_error.__repr__())
 except FindPathDataError as find_path_data_error:
     print(find_path_data_error.__repr__())
 except PaddingError as padding_error:
