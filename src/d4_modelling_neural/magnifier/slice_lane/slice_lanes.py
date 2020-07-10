@@ -46,6 +46,8 @@ if __name__ == "__main__":
     PATH_IMAGE1 = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
     PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
 
+    PATH_SAVE = Path("../../../../data/4_model_output/tries/sliced_images")
+
     LANES = np.array([cv2.imread(str(PATH_IMAGE1)), cv2.imread(str(PATH_IMAGE2))])
     LABELS = np.array([[54, 1560], [49, 648]])
     WINDOW_SIZE = 200
@@ -57,6 +59,10 @@ if __name__ == "__main__":
     # Plot the sub-LANES
     NB_SUB_LANES = len(SUB_LANES)
     for idx_image in range(NB_SUB_LANES):
+        # Save the image
+        PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sliced_l1_f0275_{}.jpg".format(idx_image)
+        # cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
+
         print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))
         if SUB_LABELS[idx_image][0]:
             SUB_LANES[idx_image][:, int(SUB_LABELS[idx_image][2])] = [0, 0, 255]

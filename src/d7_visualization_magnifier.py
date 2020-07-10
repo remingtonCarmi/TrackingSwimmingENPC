@@ -2,7 +2,6 @@
 This script creates a video where the predicted LABELS are printed on the LANES.
 """
 from pathlib import Path
-import numpy as np
 
 # Exceptions
 from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError, PaddingError
@@ -27,14 +26,14 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = True
+REAL_RUN = False
 # For the data
 VIDEO_NAME = "vid1"
 DIMENSIONS = [110, 1820]
 SCALE = 35
 
 # For the MODEL
-NUMBER_TRAINING = 1
+NUMBER_TRAINING = 2
 WINDOW_SIZE = 200
 RECOVERY = 10
 # --- END : !! TO MODIFY !! --- #

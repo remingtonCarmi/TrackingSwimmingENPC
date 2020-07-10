@@ -118,11 +118,12 @@ class DataLoader(Sequence):
         """
         Shuffle the data set.
         """
-        full_data = list(zip(self.samples, self.labels))
+        full_data = list(zip(self.samples, self.labels, self.video_length))
         rd.shuffle(full_data)
-        (self.samples, self.labels) = zip(*full_data)
+        (self.samples, self.labels, self.video_length) = zip(*full_data)
         self.samples = np.array(self.samples)
         self.labels = np.array(self.labels)
+        self.video_length = np.array(self.video_length)
 
 
 if __name__ == "__main__":
@@ -134,7 +135,15 @@ if __name__ == "__main__":
 
         TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, data_augmenting=False, standardization=False)
 
-        for (BATCH, LABELS) in TRAIN_SET:
+        # Test on_epoch_end()
+        # TRAIN_SET.on_epoch_end()
+
+        for (IDX, (BATCH, LABELS)) in enumerate(TRAIN_SET):
+            # Print the name of the image
+            print(TRAIN_SET.samples[IDX])
+            print(TRAIN_SET.labels[IDX])
+            print(TRAIN_SET.video_length[IDX])
+
             # Get the image
             image = BATCH[0]
 
