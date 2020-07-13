@@ -17,13 +17,13 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = True
+REAL_RUN = False
 VIDEO_NAME = "vid1"
 # --- END : !! TO MODIFY !! --- #
 
 
 # --- Set the parameters --- #
-DIMENSIONS = [110, 1820]
+DIMENSIONS = [108, 1820]
 SCALE = 35
 if REAL_RUN:
     TRIES = ""
@@ -40,7 +40,7 @@ STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibrat
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False)
     print("The set is composed of {} images".format(len(DATA)))
 
     # --- Get every LANES --- #
