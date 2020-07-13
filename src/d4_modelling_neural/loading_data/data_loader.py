@@ -1,5 +1,5 @@
 """
-This module loads the image one by one when the object is called. It can perform data augmenting.
+This module loads the image one by one when the object is called. It can perform data augment.
 """
 from pathlib import Path
 import random as rd
@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
 
 # To generate the data
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
@@ -18,7 +18,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # To transform the image
 from src.d4_modelling_neural.loading_data.transformations.image_transformations import transform_image
-from src.d4_modelling_neural.loading_data.transformations.data_augmenting import augmenting
+from src.d4_modelling_neural.loading_data.transformations.tools.data_augmenting import augment
 
 
 class DataLoader(Sequence):
@@ -101,12 +101,12 @@ class DataLoader(Sequence):
             # Get the image and transform it
             (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.standardization)
 
-            # Perform data augmenting
+            # Perform data augment
             if self.data_augmenting:
                 random_augmenting = np.random.randint(0, 6)
             else:
                 random_augmenting = 3
-            (augmented_image, augmented_label) = augmenting(trans_image, trans_label, random_augmenting, self.data_manager)
+            (augmented_image, augmented_label) = augment(trans_image, trans_label, random_augmenting, self.data_manager)
 
             # Fill the lists
             batch_img.append(augmented_image)

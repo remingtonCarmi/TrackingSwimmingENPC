@@ -71,9 +71,9 @@ if SHOW_BY_IMAGE:
 
 # Percentage for the training set with FOR_VISU = False, to have the entire lane_magnifier 8 : 0.8959
 # Percentage for the training set with FOR_VISU = True, to have the entire lane_magnifier 8 : 0.875
-# The repartition of the classes of the training set, with data augmenting is : (FOR_VISU = False)
+# The repartition of the classes of the training set, with data augment is : (FOR_VISU = False)
     # [0.03116147 0.08038244 0.12252125 0.14164306 0.12322946 0.13456091, 0.1296034  0.12535411 0.08498584 0.02655807]
-# The repartition of the classes of the training set, without data augmenting is : (FOR_VISU = False)
+# The repartition of the classes of the training set, without data augment is : (FOR_VISU = False)
     # [0.         0.00318697 0.06126062 0.14305949 0.12747875 0.13031161, 0.12818697 0.18661473 0.1621813  0.05771955]
 # The repartition of the classes of the validation set is : (FOR_VISU = False)
     # [0.         0.         0.03544304 0.14936709 0.11898734 0.16962025, 0.12658228 0.21012658 0.12151899 0.06835443]

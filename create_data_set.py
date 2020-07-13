@@ -24,11 +24,11 @@ from src.d3_processing_head_pointing import head_pointing
 
 # BEGIN : !! TO MODIFY !! #
 # The name of the video
-NAME_VIDEO = "vid1"
+NAME_VIDEO = "100_NL_F_FA"
 
 # Time range for pointing
 POINTING_STARTING_TIME = 2
-POINTING_ENDING_TIME = 11
+POINTING_ENDING_TIME = 10
 # END : !! TO MODIFY !! #
 
 

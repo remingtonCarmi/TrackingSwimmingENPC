@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.exceptions.exception_classes import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError, FindPathError
 
 # To generate and load data
