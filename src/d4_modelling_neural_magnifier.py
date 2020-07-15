@@ -16,7 +16,7 @@ from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 
 # To slice the LANES
-from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
+from src.d4_modelling_neural.magnifier.slice_sample_lane.sample_lanes import sample_lanes
 
 # The loss
 from src.d4_modelling_neural.magnifier.loss import get_loss, evaluate_loss
@@ -35,16 +35,16 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     Args:
         data_param (list): (video_names_train, video_names_valid, number_training, dimensions)
 
-        loading_param (list): (scale, data_augmenting)
+        loading_param (list): (scale, augmentation)
 
-        training_param (list): (nb_epochs, batch_size, window_size, recovery, trade_off)
+        training_param (list): (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off)
 
         tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
     """
     # Unpack the arguments
     (video_names_train, video_names_valid, number_training, dimensions) = data_param
-    (scale, data_augmenting) = loading_param
-    (nb_epochs, batch_size, window_size, recovery, trade_off) = training_param
+    (scale, augmentation) = loading_param
+    (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off) = training_param
 
     # -- Paths to the data -- #
     paths_label_train = []
@@ -69,8 +69,8 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
     valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths)
 
-    train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, data_augmenting=data_augmenting)
-    valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, data_augmenting=data_augmenting)
+    train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=augmentation)
+    valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=False)
     print("The training set is composed of {} images".format(len(train_data)))
     print("The validation set is composed of {} images".format(len(valid_data)))
 
@@ -83,7 +83,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         # Build the MODEL to load the weights
         (lanes, labels) = train_set[0]
         # Get the sub images
-        (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
+        (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
 
         # Build the MODEL
         model.build(sub_lanes.shape)
@@ -108,7 +108,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             (lanes, labels) = batch
 
             # Get the sub images
-            (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
+            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
 
             # Compute the loss, the gradients and the PREDICTIONS
             (grads, loss_value, predictions) = get_loss(model, sub_lanes, sub_labels, trade_off)
@@ -131,7 +131,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             (lanes, labels) = batch
 
             # Get the sub images
-            (sub_lanes, sub_labels) = slice_lanes(lanes, labels, window_size, recovery)
+            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
 
             # Compute the loss value and the PREDICTIONS
             (loss_value, predictions) = evaluate_loss(model, sub_lanes, sub_labels, trade_off)

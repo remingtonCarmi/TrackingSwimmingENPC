@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError, FindPathError
 
 # To generate and load data
@@ -40,7 +40,7 @@ STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibrat
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False, standardization=False)
     print("The set is composed of {} images".format(len(DATA)))
 
     # --- Get every LANES --- #

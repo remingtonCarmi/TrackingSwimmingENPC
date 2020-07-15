@@ -4,7 +4,7 @@ This script creates a video where the predicted LABELS are printed on the LANES.
 from pathlib import Path
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError, FindPathError
 
 # To generate and load data
@@ -15,8 +15,8 @@ from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 
 # To slice the LANES
-from src.d4_modelling_neural.magnifier.slice_lane.image_magnifier.image_magnifier import ImageMagnifier
-from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
+from src.d4_modelling_neural.magnifier.slice_sample_lane.image_objects.image_magnifier import ImageMagnifier
+from src.d4_modelling_neural.magnifier.slice_sample_lane.slice_lanes import slice_lanes
 
 # To add the PREDICTIONS to the LANES
 from src.d7_visualization.add_prediction_magnifier import add_prediction
@@ -34,8 +34,8 @@ SCALE = 35
 
 # For the MODEL
 NUMBER_TRAINING = 2
-WINDOW_SIZE = 200
-RECOVERY = 10
+WINDOW_SIZE = 150
+RECOVERY = 75
 # --- END : !! TO MODIFY !! --- #
 
 # --- Set the parameter --- #
@@ -56,8 +56,8 @@ PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier".format(TRIES))
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS)
-    SET_VISU = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False)
+    SET_VISU = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False, standardization=False)
 
     print("The set is composed of {} images".format(len(DATA)))
 
@@ -100,6 +100,7 @@ try:
 
         # -- Add the PREDICTIONS to the lane_magnifier -- #
         # Plot the prediction on the image that has NOT been standardized
+        print(PREDICTIONS)
         LANE_PRED = add_prediction(MAGNIFIER_ORIGINAL_IMAGE, PREDICTIONS)
 
         # Add the main list
@@ -108,7 +109,7 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("../data/4_model_output/videos{}".format(TRIES))
-    NAME_PREDICTED_VIDEO = "predicted_{}_recovery_{}_{}.mp4".format(VIDEO_NAME, RECOVERY, NUMBER_TRAINING)
+    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, NUMBER_TRAINING)
     make_video(NAME_PREDICTED_VIDEO, LANES_PREDICTIONS, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:

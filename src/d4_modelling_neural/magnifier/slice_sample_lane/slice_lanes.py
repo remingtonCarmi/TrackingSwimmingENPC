@@ -4,7 +4,7 @@ This module slices a list of LANES with its LABELS.
 from pathlib import Path
 import cv2
 import numpy as np
-from src.d4_modelling_neural.magnifier.slice_lane.image_magnifier.image_magnifier import ImageMagnifier
+from src.d4_modelling_neural.magnifier.slice_sample_lane.image_objects.image_magnifier import ImageMagnifier
 
 
 def slice_lanes(lanes, labels, window_size, recovery):
@@ -43,15 +43,19 @@ def slice_lanes(lanes, labels, window_size, recovery):
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE1 = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
-    PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
+    PATH_IMAGE1 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
+    PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
+    PATH_IMAGE3 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
+    PATH_IMAGE4 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
 
-    PATH_SAVE = Path("../../../../data/4_model_output/tries/sliced_images")
+    # PATH_SAVE = Path("../../../../data/4_model_output/tries/sliced_images")
 
     LANES = np.array([cv2.imread(str(PATH_IMAGE1)), cv2.imread(str(PATH_IMAGE2))])
-    LABELS = np.array([[54, 1560], [49, 648]])
-    WINDOW_SIZE = 200
-    RECOVERY = 100
+    # LANES = np.array([cv2.imread(str(PATH_IMAGE3)), cv2.imread(str(PATH_IMAGE4))])
+    LABELS = np.array([[49, 648], [49, 768]])
+    # LABELS = np.array([[53, 950], [41, 1163]])
+    WINDOW_SIZE = 150
+    RECOVERY = 75
 
     # Slice the image
     (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
@@ -60,7 +64,7 @@ if __name__ == "__main__":
     NB_SUB_LANES = len(SUB_LANES)
     for idx_image in range(NB_SUB_LANES):
         # Save the image
-        PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sliced_l1_f0275_{}.jpg".format(idx_image)
+        # PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sliced_l1_f0107_{}.jpg".format(idx_image)
         # cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
 
         print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))

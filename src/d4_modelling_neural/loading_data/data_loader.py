@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
 
 # To generate the data
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
@@ -25,7 +25,7 @@ class DataLoader(Sequence):
     """
     The class to load the data.
     """
-    def __init__(self, data, batch_size=2, scale=35, dimensions=[110, 1820], data_augmenting=False, standardization=True):
+    def __init__(self, data, batch_size=2, scale=35, dimensions=[110, 1820], augmentation=False, standardization=True):
         """
         Create the loader.
 
@@ -42,7 +42,7 @@ class DataLoader(Sequence):
             dimensions (list of 2 integers): the final dimensions of the image. [vertical, horizontal]
                 Default value = [110, 1820]
 
-            data_augmenting (boolean): if True, data_augmenting is performed.
+            augmentation (boolean): if True, data_augmenting is performed.
                 Default value = False
 
             standardization (boolean): standardize the lane_magnifier if standardization = True.
@@ -60,7 +60,7 @@ class DataLoader(Sequence):
         self.batch_size = batch_size
         self.scale = scale
         self.dimensions = dimensions
-        self.data_augmenting = data_augmenting
+        self.augmentation = augmentation
         self.standardization = standardization
 
     def __len__(self):
@@ -99,18 +99,11 @@ class DataLoader(Sequence):
             video_length = batch_video_length[idx_img]
 
             # Get the image and transform it
-            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.standardization)
-
-            # Perform data augment
-            if self.data_augmenting:
-                random_augmenting = np.random.randint(0, 6)
-            else:
-                random_augmenting = 3
-            (augmented_image, augmented_label) = augment(trans_image, trans_label, random_augmenting, self.data_manager)
+            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.augmentation, self.standardization)
 
             # Fill the lists
-            batch_img.append(augmented_image)
-            batch_labs.append(augmented_label)
+            batch_img.append(trans_image)
+            batch_labs.append(trans_label)
 
         return np.array(batch_img, dtype=np.float32), np.array(batch_labs, dtype=np.float32)
 
@@ -133,10 +126,10 @@ if __name__ == "__main__":
     try:
         TRAIN_DATA = generate_data(PATHS_LABEL, take_all=False)
 
-        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, data_augmenting=False, standardization=False)
+        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, augmentation=True, standardization=False)
 
         # Test on_epoch_end()
-        # TRAIN_SET.on_epoch_end()
+        TRAIN_SET.on_epoch_end()
 
         for (IDX, (BATCH, LABELS)) in enumerate(TRAIN_SET):
             # Print the name of the image

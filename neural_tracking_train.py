@@ -2,7 +2,7 @@
 This script allows the user to train some MODEL.
 """
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError
 
 # To train the MODEL
@@ -13,30 +13,32 @@ import tensorflow as tf
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_TRAINING = True
+REAL_TRAINING = False
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
 NUMBER_TRAINING = 2
-DIMENSIONS = [110, 1820]
+DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
 SCALE = 35
-DATA_AUGMENTING = False
+AUGMENTATION = True
 
 # Parameters for the training
-NB_EPOCHS = 4
-BATCH_SIZE = 4
-WINDOW_SIZE = 200
-RECOVERY = 100
-TRADE_OFF = 1
+NB_EPOCHS = 10
+BATCH_SIZE = 12
+WINDOW_SIZE = 150
+NB_SAMPLES = 3
+DISTRIBUTION = 0.3
+MARGIN = 10
+TRADE_OFF = 0
 # --- END : !! TO MODIFY !! --- #
 
 
 # Pack the variables
 DATA_PARAM = [VIDEO_NAMES_TRAIN, VIDEO_NAMES_VALID, NUMBER_TRAINING, DIMENSIONS]
-LOADING_PARAM = [SCALE, DATA_AUGMENTING]
-TRAINING_PARAM = [NB_EPOCHS, BATCH_SIZE, WINDOW_SIZE, RECOVERY, TRADE_OFF]
+LOADING_PARAM = [SCALE, AUGMENTATION]
+TRAINING_PARAM = [NB_EPOCHS, BATCH_SIZE, WINDOW_SIZE, NB_SAMPLES, DISTRIBUTION, MARGIN, TRADE_OFF]
 
 
 """# To avoid memory problems

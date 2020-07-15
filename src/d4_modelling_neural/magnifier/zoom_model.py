@@ -17,7 +17,7 @@ from tensorflow.python.keras.layers import (
 # To test the MODEL
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
-from src.d4_modelling_neural.magnifier.slice_lane.slice_lanes import slice_lanes
+from src.d4_modelling_neural.magnifier.slice_sample_lane.slice_lanes import slice_lanes
 
 
 def compute_dimension(input_size, kernel_size, stride, padding, dilation):
@@ -53,7 +53,7 @@ class ZoomModel(Model):
         self.max_poolc64 = MaxPooling2D(pool_size=(4, 6), strides=(4, 6), padding="valid")
 
         self.flatten = Flatten()
-        self.dense = Dense(3, activation="relu")
+        self.dense = Dense(3)
 
     def call(self, inputs):
         # Size, without batch size

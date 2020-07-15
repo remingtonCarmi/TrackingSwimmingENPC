@@ -82,7 +82,7 @@ class ImageMagnifier:
 
     def get_limits(self, idx):
         """
-        Compute the limits of a sub-image.
+        Compute the limits of specific a sub-image.
 
         Args:
             idx (integer): the specific sub-image.

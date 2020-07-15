@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions import FindPathDataError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError
 
 
 def generate_data(paths_label, starting_data_paths=None, starting_calibration_paths=None, take_all=False):

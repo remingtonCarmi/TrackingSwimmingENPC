@@ -1,5 +1,6 @@
 from pathlib import Path
 import numpy as np
+from scipy.special import softmax
 
 
 def add_prediction(lane_magnifier, predictions):
@@ -24,9 +25,9 @@ def add_prediction(lane_magnifier, predictions):
     indicative_function = 1 - np.argmax(predictions[:, : 2], axis=1)
     indexes_head = np.where(indicative_function == 1)[0]
 
-    # print(np.array(predictions)[indexes_head, :2])
-    print(predictions)
-    print(indexes_head)
+    print("Predictions", predictions)
+    print("Head predictions indexes", indexes_head)
+    # print("Head predictions values", np.array(predictions)[indexes_head, :2])
 
     print("Number of head predicted : ", len(indexes_head))
 
@@ -35,7 +36,9 @@ def add_prediction(lane_magnifier, predictions):
         (begin_limit, end_limit) = lane_magnifier.get_limits(idx_sub_image)
 
         # Darker the pixels
-        lane_pred[:, begin_limit: end_limit, 0] -= 30
+        factor = int(np.round(50 * softmax(predictions[idx_sub_image, :2])[0]))
+        high_indexes = np.where(lane_pred[:, begin_limit: end_limit, 2] > factor)
+        lane_pred[:, begin_limit: end_limit, 2][high_indexes] -= factor
 
         # --- Visualize the column --- #
         lane_pred[:, begin_limit + int(np.floor(predictions[idx_sub_image, 2]))] = [0, 0, 255]
@@ -51,19 +54,19 @@ if __name__ == "__main__":
     from src.d4_modelling_neural.loading_data.transformations.image_transformations import transform_image
 
     # To modify the image
-    from src.d4_modelling_neural.magnifier.slice_lane.image_magnifier.image_magnifier import ImageMagnifier
+    from src.d4_modelling_neural.magnifier.slice_sample_lane.image_objects.image_magnifier import ImageMagnifier
 
     # -- Get the ImageMagnifier i.e. the lane_magnifier -- #
     PATH_IMAGE = Path("../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
-    (LANE, LABEL) = transform_image(PATH_IMAGE, np.array([43, 387]), 35, 25, [110, 1820], standardization=False)
+    (LANE, LABEL) = transform_image(PATH_IMAGE, np.array([43, 387]), 35, 25, [110, 1820], augmentation=False, standardization=False)
     IMAGE_MAGNIFIER = ImageMagnifier(LANE, LABEL, 200, 10)
 
     # -- Set the PREDICTIONS -- #
     PREDS = [[0, 1, -1]] * (len(IMAGE_MAGNIFIER) // 2 - 1)
     PREDS.append([1, 0, 100])
-    PREDS.append([100, 20, 170])
+    PREDS.append([100, 9, 170])
     PREDS.extend([[0, 1, -1]] * (len(IMAGE_MAGNIFIER) - 1 - len(IMAGE_MAGNIFIER) // 2))
-    print(PREDS)
+    print("Predictions", PREDS)
     print("len(PREDS)", len(PREDS))
 
     # -- Plot the lane_magnifier with the prediction -- #

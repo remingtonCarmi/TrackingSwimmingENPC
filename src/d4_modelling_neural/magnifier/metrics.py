@@ -99,7 +99,10 @@ class MetricsMagnifier:
         nb_heads = np.sum(np.where(labels == -1, 0, 1))
 
         # Compute the mean absolute error
-        mae = np.sum(np.abs(only_labels - only_preds)) / nb_heads
+        if nb_heads > 0:
+            mae = np.sum(np.abs(only_labels - only_preds)) / nb_heads
+        else:
+            mae = 0
 
         # Update the global accuracy
         if train:
