@@ -1,5 +1,5 @@
 """
-This module creates a folder filled with LANES taken from a video.
+This module creates a folder filled with lanes taken from a video.
 """
 import os
 import cv2
@@ -25,7 +25,7 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
 
         path_txt (WindowsPath): path to the txt file to calibrate the video
 
-        margin (integer): number of lines of pixels to add to LANES
+        margin (integer): number of lines of pixels to add to lanes
             - we remove (if margin > 0)
             - we add (if margin < 0)
 
@@ -36,14 +36,14 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
             Default value = -1
             if time_end == -1, the video is viewed until the end.
 
-        nb_lines (integer): the number of LANES in the pool
+        nb_lines (integer): the number of lanes in the pool
             Default value = 10
 
-        destination (integer): the path where the LANES will be saves
+        destination (integer): the path where the lanes will be saves
             Default value = None
     """
     if destination is None:
-        destination = Path("../data/1_intermediate_top_down_lanes/LANES/tries")
+        destination = Path("../data/1_intermediate_top_down_lanes/lanes/tries")
 
     # Verify that the paths exists
     if not path_video.exists():

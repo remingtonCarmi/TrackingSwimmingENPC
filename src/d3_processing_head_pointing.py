@@ -107,7 +107,7 @@ def head_pointing(path_images, destination_csv=None):
 
 
 if __name__ == "__main__":
-    PATH_IMAGES = Path("../data/1_intermediate_top_down_lanes/LANES/tries/vid1")
+    PATH_IMAGES = Path("../data/1_intermediate_top_down_lanes/lanes/tries/vid1")
 
     try:
         LIST_HEAD = head_pointing(PATH_IMAGES)
