@@ -1,0 +1,4 @@
+;Video Train;Video Valid;Dimensions;Scale;Data augment;Nb epochs;Batch size;Recovery;Trade off;Standardization
+Training 1;vid0;vid1;110, 1820;35;False;4;2;100;0;True
+Training 2;vid0;vid1;110, 1820;35;False;4;4;100;1;True
+Training 3;vid0;vid1;110, 1820;35;False;4;6;100;100;True

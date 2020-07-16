@@ -1,1 +1,3 @@
-*!.gitignore
+first_week/**
+
+!.gitignore
