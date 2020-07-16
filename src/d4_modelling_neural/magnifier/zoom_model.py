@@ -86,9 +86,9 @@ if __name__ == "__main__":
     RECOVERY = 100
 
     # Paths to data
-    PATHS_LABEL = [Path("../../../data/2_processed_positions/tries/vid0.csv")]
-    START_DATA_PATHS = Path("../../../data/1_intermediate_top_down_lanes/lanes/tries")
-    START_CALIB_PATHS = Path("../../../data/1_intermediate_top_down_lanes/calibration/tries")
+    PATHS_LABEL = [Path("../../../data/3_processed_positions/tries/vid0.csv")]
+    START_DATA_PATHS = Path("../../../data/2_intermediate_top_down_lanes/lanes/tries")
+    START_CALIB_PATHS = Path("../../../data/2_intermediate_top_down_lanes/calibration/tries")
 
     # Generate and load the data
     TRAIN_DATA = generate_data(PATHS_LABEL, starting_data_paths=START_DATA_PATHS, starting_calibration_paths=START_CALIB_PATHS)

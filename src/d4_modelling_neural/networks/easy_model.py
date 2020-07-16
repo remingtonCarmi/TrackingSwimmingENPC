@@ -77,8 +77,8 @@ class EasyModel(Model):
 
 
 if __name__ == "__main__":
-    PATH_DATA = Path("../../../data/1_intermediate_top_down_lanes/LANES/vid0/")
-    PATH_LABEL = Path("../../../data/2_processed_positions/vid0.csv")
+    PATH_DATA = Path("../../../data/2_intermediate_top_down_lanes/LANES/vid0/")
+    PATH_LABEL = Path("../../../data/3_processed_positions/vid0.csv")
     PERCENTAGE = 0.5
     NB_CLASSES = 10
 

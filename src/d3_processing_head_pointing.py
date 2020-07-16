@@ -74,7 +74,7 @@ def head_pointing(path_images, destination_csv=None):
         list_points (array): list of the points that have been pointed.
     """
     if destination_csv is None:
-        destination_csv = Path("../data/2_processed_positions/tries")
+        destination_csv = Path("../data/3_processed_positions/tries")
 
     # Check that the folder exists
     if not path_images.exists():
@@ -107,7 +107,7 @@ def head_pointing(path_images, destination_csv=None):
 
 
 if __name__ == "__main__":
-    PATH_IMAGES = Path("../data/1_intermediate_top_down_lanes/lanes/tries/vid1")
+    PATH_IMAGES = Path("../data/2_intermediate_top_down_lanes/lanes/tries/vid1")
 
     try:
         LIST_HEAD = head_pointing(PATH_IMAGES)

@@ -43,7 +43,7 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
             Default value = None
     """
     if destination is None:
-        destination = Path("../data/1_intermediate_top_down_lanes/lanes/tries")
+        destination = Path("../data/2_intermediate_top_down_lanes/lanes/tries")
 
     # Verify that the paths exists
     if not path_video.exists():
@@ -79,8 +79,8 @@ def create_data(path_video, path_txt, margin, time_begin=0, time_end=-1, nb_line
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../data/0_raw_videos/DSC_6980.mp4")
-    PATH_TXT = Path("../data/1_intermediate_top_down_lanes/calibration/tries/DSC_6980.txt")
+    PATH_VIDEO = Path("../data/1_raw_videos/DSC_6980.mp4")
+    PATH_TXT = Path("../data/2_intermediate_top_down_lanes/calibration/tries/DSC_6980.txt")
 
     MARGIN = 0
 

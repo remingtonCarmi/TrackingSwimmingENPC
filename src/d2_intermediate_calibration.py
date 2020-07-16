@@ -114,7 +114,7 @@ def calibrate_video(path_video, time_begin=0, time_end=-1, destination_video=Non
     if destination_video is None:
         destination_video = Path("../data/4_model_output/videos/tries")
     if destination_txt is None:
-        destination_txt = Path("../data/1_intermediate_top_down_lanes/calibration/tries")
+        destination_txt = Path("../data/2_intermediate_top_down_lanes/calibration/tries")
 
     # Verify that the video exists
     if not path_video.exists():
@@ -193,7 +193,7 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
     If the txt file is already created, an AlreadyExistError exception will be raised.
     """
     if destination_txt is None:
-        destination_txt = Path("../data/1_intermediate_top_down_lanes/calibration/tries")
+        destination_txt = Path("../data/2_intermediate_top_down_lanes/calibration/tries")
 
     # Verify that the video exists
     if not path_video.exists():
@@ -230,7 +230,7 @@ def calibrate_video_text(path_video, calibration_time, destination_txt=None):
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../data/0_raw_videos/DSC_6980.mp4")
+    PATH_VIDEO = Path("../data/1_raw_videos/DSC_6980.mp4")
     try:
         # calibrate_video(PATH_VIDEO, time_begin=0, time_end=5)
         calibrate_video_text(PATH_VIDEO, 1)

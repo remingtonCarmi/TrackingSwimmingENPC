@@ -95,7 +95,7 @@ def extract_path(path_file_images, lane, frame):
 
 
 if __name__ == "__main__":
-    PATH_IMAGE = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries/vid0")
+    PATH_IMAGE = Path("../../../data/2_intermediate_top_down_lanes/LANES/tries/vid0")
 
     try:
         (LIST_IMAGES_PATH, LIST_LANES_FRAMES) = extract_path(PATH_IMAGE, 1, 525)

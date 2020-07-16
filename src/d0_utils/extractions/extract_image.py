@@ -33,7 +33,7 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
             list of the extracted image.
     """
     if destination is None:
-        destination = Path("../../../data/1_intermediate_top_down_lanes/LANES/tries")
+        destination = Path("../../../data/2_intermediate_top_down_lanes/LANES/tries")
 
     # Verify if the video exists:
     if not path_video.exists():
@@ -83,7 +83,7 @@ def extract_image_video(path_video, time_begin=0, time_end=-1, register=False, d
 
 
 if __name__ == "__main__":
-    PATH_VIDEO = Path("../../../data/0_raw_videos/vid0.mp4")
+    PATH_VIDEO = Path("../../../data/1_raw_videos/vid0.mp4")
     try:
         LIST_IMAGES = extract_image_video(PATH_VIDEO, time_begin=0, time_end=1, register=True)
     except TimeError as time_error:

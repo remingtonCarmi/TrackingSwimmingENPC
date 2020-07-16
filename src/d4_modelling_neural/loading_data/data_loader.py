@@ -120,8 +120,8 @@ class DataLoader(Sequence):
 
 
 if __name__ == "__main__":
-    PATHS_LABEL = [Path("../../../data/2_processed_positions/tries/vid0.csv"),
-                   Path("../../../data/2_processed_positions/tries/vid1.csv")]
+    PATHS_LABEL = [Path("../../../data/3_processed_positions/tries/vid0.csv"),
+                   Path("../../../data/3_processed_positions/tries/vid1.csv")]
 
     try:
         TRAIN_DATA = generate_data(PATHS_LABEL, take_all=False)

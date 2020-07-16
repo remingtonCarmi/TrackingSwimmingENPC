@@ -13,7 +13,7 @@ import tensorflow as tf
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_TRAINING = True
+REAL_TRAINING = False
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]

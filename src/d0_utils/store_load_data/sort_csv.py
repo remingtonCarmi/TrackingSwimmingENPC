@@ -4,7 +4,7 @@ import pandas as pd
 
 if __name__ == "__main__":
     # Path to the csv
-    PATH_CSV = Path("../../../data/2_processed_positions/tries/vid0.csv")
+    PATH_CSV = Path("../../../data/3_processed_positions/tries/vid0.csv")
 
     # Read the csv
     DATA = pd.read_csv(PATH_CSV)

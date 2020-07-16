@@ -20,7 +20,7 @@ def store_calibration_txt(txt_name, data, destination=None):
             Should lead to a folder.
     """
     if destination is None:
-        destination = Path("../../../data/1_intermediate_top_down_lanes/calibration/tries/")
+        destination = Path("../../../data/2_intermediate_top_down_lanes/calibration/tries/")
 
     # Check that the folder exists
     if not destination.exists():

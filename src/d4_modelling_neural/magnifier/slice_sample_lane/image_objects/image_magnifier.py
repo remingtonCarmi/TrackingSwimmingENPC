@@ -104,7 +104,7 @@ class ImageMagnifier:
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
+    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
     # PATH_IMAGE = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
 
     LANE = cv2.imread(str(PATH_IMAGE))

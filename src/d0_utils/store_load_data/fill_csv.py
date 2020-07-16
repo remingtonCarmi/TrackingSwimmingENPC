@@ -38,7 +38,7 @@ def last_line(csv_path):
     return lane, frame
 
 
-def create_csv(csv_name, destination=None):
+def create_csv(csv_name, destination=None, dictionary=None):
     """
     Create a csv file.
 
@@ -48,7 +48,10 @@ def create_csv(csv_name, destination=None):
         destination (WindowsPath): the path where the csv will be created.
     """
     if destination is None:
-        destination = Path("../../../data/2_processed_positions/tries")
+        destination = Path("../../../data/3_processed_positions/tries")
+
+    if dictionary is None:
+        dictionary = {'x_head': [], 'y_head': []}
 
     # Check that the folder exists
     if not destination.exists():
@@ -59,7 +62,6 @@ def create_csv(csv_name, destination=None):
         raise AlreadyExistError(csv_path)
 
     # Create the keys
-    dictionary = {'x_head': [], 'y_head': []}
     keys = pd.DataFrame(dictionary)
 
     # saving the dataframe
@@ -100,7 +102,7 @@ def fill_csv(csv_path, lanes_frames, points):
 
 if __name__ == "__main__":
     CVS_NAME = "test0.csv"
-    CVS_PATH = Path("../../../data/2_processed_positions/tries") / CVS_NAME
+    CVS_PATH = Path("../../../data/3_processed_positions/tries") / CVS_NAME
     LIST_LANES_FRAMES = np.array([[1, 5], [4, 89]])
     LIST_POINTS = np.array([[4, 4.9], [9, 2.9]])
 

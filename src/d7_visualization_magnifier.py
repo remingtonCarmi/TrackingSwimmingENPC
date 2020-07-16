@@ -51,9 +51,9 @@ else:
 
 
 # --- Set the paths --- #
-PATH_LABEL = [Path("../data/2_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
-STARTING_DATA_PATH = Path("../data/1_intermediate_top_down_lanes/lanes{}".format(TRIES))
-STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibration{}".format(TRIES))
+PATH_LABEL = [Path("../data/3_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
+STARTING_DATA_PATH = Path("../data/2_intermediate_top_down_lanes/lanes{}".format(TRIES))
+STARTING_CALIBRATION_PATH = Path("../data/2_intermediate_top_down_lanes/calibration{}".format(TRIES))
 
 PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier{}".format(TRIES, MODEL_TYPE))
 

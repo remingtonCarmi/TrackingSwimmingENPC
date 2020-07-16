@@ -56,17 +56,17 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     # -- Paths to the data -- #
     paths_label_train = []
     for video_name_train in video_names_train:
-        paths_label_train.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_train)))
+        paths_label_train.append(Path("data/3_processed_positions{}/{}.csv".format(tries, video_name_train)))
 
     paths_label_valid = []
     for video_name_valid in video_names_valid:
-        paths_label_valid.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_valid)))
+        paths_label_valid.append(Path("data/3_processed_positions{}/{}.csv".format(tries, video_name_valid)))
 
-    starting_data_paths = Path("data/1_intermediate_top_down_lanes/lanes{}".format(tries))
-    starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
+    starting_data_paths = Path("data/2_intermediate_top_down_lanes/lanes{}".format(tries))
+    starting_calibration_paths = Path("data/2_intermediate_top_down_lanes/calibration{}".format(tries))
 
     # Verify that the weights path does not exists
-    path_weight = Path("data/3_models_weights{}/magnifier{}".format(tries, model_type))
+    path_weight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type))
     path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
 
     if path_new_weight.exists():

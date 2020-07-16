@@ -33,8 +33,8 @@ POINTING_ENDING_TIME = 10
 
 
 # --- Create the txt file --- #
-PATH_VIDEO = Path("data/0_raw_videos/{}.mp4".format(NAME_VIDEO))
-DESTINATION_TXT = Path("data/1_intermediate_top_down_lanes/calibration")
+PATH_VIDEO = Path("data/1_raw_videos/{}.mp4".format(NAME_VIDEO))
+DESTINATION_TXT = Path("data/2_intermediate_top_down_lanes/calibration")
 
 try:
     print(" --- Create the txt file for calibration --- ")
@@ -48,8 +48,8 @@ except AlreadyExistError as exist_error:
 
 
 # --- Create the LANES image --- #
-PATH_TXT = Path("data/1_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
-DESTINATION_LANES = Path("data/1_intermediate_top_down_lanes/LANES")
+PATH_TXT = Path("data/2_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
+DESTINATION_LANES = Path("data/2_intermediate_top_down_lanes/LANES")
 
 try:
     print(" --- Save the LANES as jpg files --- ")
@@ -68,7 +68,7 @@ except TimeError as time_error:
 
 # --- Create the csv file --- #
 PATH_LANES = DESTINATION_LANES / NAME_VIDEO
-DESTINATION_CSV = Path("data/2_processed_positions")
+DESTINATION_CSV = Path("data/3_processed_positions")
 
 try:
     print(" --- Create the csv file for pointing --- ")

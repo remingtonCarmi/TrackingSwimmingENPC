@@ -21,6 +21,6 @@ def update_video_file(path_videos, path_begin):
 
 
 if __name__ == "__main__":
-    PATH_VIDEOS = Path("../data/0_raw_videos")
-    PATH_BEGIN = Path("../data/0_raw_videos")
+    PATH_VIDEOS = Path("../data/1_raw_videos")
+    PATH_BEGIN = Path("../data/1_raw_videos")
     update_video_file(PATH_VIDEOS, PATH_BEGIN)
