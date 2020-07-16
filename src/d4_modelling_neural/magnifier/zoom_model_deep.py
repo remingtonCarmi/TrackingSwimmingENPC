@@ -1,5 +1,5 @@
 """
-This class is the model of the magnifier.
+This class is the deep model of the magnifier.
 """
 from pathlib import Path
 import numpy as np
@@ -13,7 +13,7 @@ from tensorflow.python.keras.layers import (
     MaxPooling2D
 )
 
-# To test the MODEL
+# To test the model
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 from src.d4_modelling_neural.magnifier.slice_sample_lane.slice_lanes import slice_lanes
@@ -40,36 +40,50 @@ def compute_dimension(input_size, kernel_size, stride, padding, dilation):
     return np.floor((input_size + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
 
 
-class ZoomModel(Model):
+class ZoomModelDeep(Model):
     def __init__(self):
-        super(ZoomModel, self).__init__()
-        self.c32 = Conv2D(32, kernel_size=(4, 6), strides=2, padding="valid", activation="relu")
+        super(ZoomModelDeep, self).__init__()
+        self.c32 = Conv2D(32, kernel_size=(2, 6), strides=(1, 2), padding="valid", activation="relu")
 
         self.max_poolc32 = MaxPooling2D(pool_size=2, strides=2, padding="valid")
 
-        self.c64 = Conv2D(64, kernel_size=(4, 3), strides=(3, 2), padding="valid", activation="relu")
+        self.c64 = Conv2D(64, kernel_size=3, strides=(1, 2), padding="valid", activation="relu")
 
-        self.max_poolc64 = MaxPooling2D(pool_size=(4, 6), strides=(4, 6), padding="valid")
+        self.max_poolc64 = MaxPooling2D(pool_size=2, strides=2, padding="valid")
+
+        self.c128 = Conv2D(128, kernel_size=3, strides=(3, 2), padding="valid", activation="relu")
+
+        self.max_poolc128 = MaxPooling2D(pool_size=(4, 2), strides=(4, 1), padding="valid")
 
         self.flatten = Flatten()
-        self.dense = Dense(3)
+
+        self.dense150 = Dense(150, activation="relu")
+
+        self.dense3 = Dense(3)
 
     def call(self, inputs):
         # Size, without batch size
-        # 110 x WindowSize x 3
+        # 108 x WindowSize x 3
         x = self.c32(inputs)
-        # 54 x 98 x 32
+        # 107, 73, 32
         x = self.max_poolc32(x)
 
-        # 27 x 49 x 32
+        # 53, 36, 32
         x = self.c64(x)
-        # 8 x 24 x 64
+        # 51, 17, 64
         x = self.max_poolc64(x)
 
-        # 2 x 4 x 64
+        # 25, 8, 64
+        x = self.c128(x)
+        # 8, 3, 128
+        x = self.max_poolc128(x)
+
+        # 2, 2, 128
         x = self.flatten(x)
         # 512
-        x = self.dense(x)
+        x = self.dense150(x)
+        # 150
+        x = self.dense3(x)
         # 3
 
         return x
@@ -83,7 +97,7 @@ if __name__ == "__main__":
     # - To try the MODEL - #
     # Parameters
     WINDOW_SIZE = 150
-    RECOVERY = 100
+    RECOVERY = 10
 
     # Paths to data
     PATHS_LABEL = [Path("../../../data/2_processed_positions/tries/vid0.csv")]
@@ -98,7 +112,7 @@ if __name__ == "__main__":
     (LANES, LABELS) = TRAIN_SET[0]
     (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
 
-    model = ZoomModel()
+    model = ZoomModelDeep()
     model.trainable = False
     output = model(SUB_LANES)
     model.summary()

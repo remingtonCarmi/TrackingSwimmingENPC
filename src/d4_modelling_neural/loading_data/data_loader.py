@@ -25,7 +25,7 @@ class DataLoader(Sequence):
     """
     The class to load the data.
     """
-    def __init__(self, data, batch_size=2, scale=35, dimensions=[110, 1820], augmentation=False, standardization=True):
+    def __init__(self, data, batch_size=2, scale=35, dimensions=[108, 1820], augmentation=False, standardization=True):
         """
         Create the loader.
 
