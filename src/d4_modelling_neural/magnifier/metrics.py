@@ -10,9 +10,16 @@ class MetricsMagnifier:
     """
     The class of the metric manager.
     """
-    def __init__(self):
+    def __init__(self, window_size, nb_epochs, batch_size):
         """
         Declaration of the variables.
+
+        Args:
+            window_size (integer): the size of the windows used during the training.
+
+            nb_epochs (integer): the number of epochs performed during the training.
+
+            batch_size (integer): the  size of the batch used during the training.
         """
         # For the loss
         self.losses_train = []
@@ -35,6 +42,11 @@ class MetricsMagnifier:
         # Batch counter
         self.nb_batches_train = 0
         self.nb_batches_valid = 0
+
+        # For the savings
+        self.window_size = window_size
+        self.nb_epochs = nb_epochs
+        self.batch_size = batch_size
 
     def update_loss(self, loss_value, nb_samples, train=True):
         """
@@ -157,7 +169,7 @@ class MetricsMagnifier:
             number_training (integer): the index of the current training.
         """
         # Save the losses
-        path_loss = starting_path / "loss_{}.jpg".format(number_training)
+        path_loss = starting_path / "loss_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
         plt.plot(self.losses_train, label="Loss on training set")
         plt.plot(self.losses_valid, label="Loss on validation set")
         plt.xlabel("Number of epoch")
@@ -166,7 +178,7 @@ class MetricsMagnifier:
         plt.close()
 
         # Save the accuracies
-        path_accuracy = starting_path / "accuracy_{}.jpg".format(number_training)
+        path_accuracy = starting_path / "accuracy_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
         plt.plot(self.accuracies_train, label="Accuracy on training set")
         plt.plot(self.accuracies_valid, label="Accuracy on validation set")
         plt.xlabel("Number of epoch")
@@ -175,7 +187,7 @@ class MetricsMagnifier:
         plt.close()
 
         # Save the mean absolute error
-        path_mae = starting_path / "mae_{}.jpg".format(number_training)
+        path_mae = starting_path / "mae_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
         plt.plot(self.maes_train, label="Mean absolute error on training set")
         plt.plot(self.maes_valid, label="Mean absolute error on validation set")
         plt.xlabel("Number of epoch")

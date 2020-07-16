@@ -60,7 +60,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
 
     # Verify that the weights path does not exists
     path_weight = Path("data/3_models_weights{}/magnifier".format(tries))
-    path_new_weight = path_weight / "window_{}_{}.h5".format(window_size, number_training)
+    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_size, nb_epochs, batch_size, number_training)
 
     if path_new_weight.exists():
         raise AlreadyExistError(path_new_weight)
@@ -88,7 +88,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         # Build the MODEL
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "window_{}_{}.h5".format(window_size, number_training - 1)
+        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_size, nb_epochs, batch_size, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
