@@ -55,7 +55,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     for video_name_valid in video_names_valid:
         paths_label_valid.append(Path("data/2_processed_positions{}/{}.csv".format(tries, video_name_valid)))
 
-    starting_data_paths = Path("data/1_intermediate_top_down_lanes/LANES{}".format(tries))
+    starting_data_paths = Path("data/1_intermediate_top_down_lanes/lanes{}".format(tries))
     starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
 
     # Verify that the weights path does not exists
