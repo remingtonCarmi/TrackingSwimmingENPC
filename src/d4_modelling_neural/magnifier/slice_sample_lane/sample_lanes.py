@@ -48,17 +48,17 @@ def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin):
 if __name__ == "__main__":
     # Data
     PATH_IMAGE1 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
-    PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
-    PATH_IMAGE3 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
-    PATH_IMAGE4 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
+    # PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
+    # PATH_IMAGE3 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
+    # PATH_IMAGE4 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
 
-    # PATH_SAVE = Path("../../../../data/4_model_output/tries/sliced_images")
+    PATH_SAVE = Path("../../../../data/4_model_output/tries/sampled_images")
 
-    LANES = np.array([cv2.imread(str(PATH_IMAGE1)), cv2.imread(str(PATH_IMAGE2))])
-    LANES = np.array([cv2.imread(str(PATH_IMAGE3)), cv2.imread(str(PATH_IMAGE4))])
+    LANES = np.array([cv2.imread(str(PATH_IMAGE1))])  # , cv2.imread(str(PATH_IMAGE2))])
+    # LANES = np.array([cv2.imread(str(PATH_IMAGE3)), cv2.imread(str(PATH_IMAGE4))])
 
-    LABELS = np.array([[49, 648], [49, 768]])
-    LABELS = np.array([[53, 950], [41, 1163]])
+    LABELS = np.array([[49, 648]])  # , [49, 768]])
+    # LABELS = np.array([[53, 950], [41, 1163]])
     WINDOW_SIZE = 150
     NB_SAMPLES = 10
     DISTRIBUTION = 0.3
@@ -71,10 +71,11 @@ if __name__ == "__main__":
     NB_SUB_LANES = len(SUB_LANES)
     for idx_image in range(NB_SUB_LANES):
         # Save the image
-        # PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sliced_l1_f0107_{}.jpg".format(idx_image)
-        # cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
+        PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sampled_l1_f0275_{}.jpg".format(idx_image)
+        cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
+        print(SUB_LABELS[idx_image])
 
-        print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))
+        # print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))
         if SUB_LABELS[idx_image][0]:
             SUB_LANES[idx_image][:, int(SUB_LABELS[idx_image][2])] = [0, 0, 255]
         cv2.imshow("Image n' {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]), SUB_LANES[idx_image].astype('uint8'))
