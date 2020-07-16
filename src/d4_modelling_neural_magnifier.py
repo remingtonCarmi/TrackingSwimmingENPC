@@ -28,7 +28,7 @@ from tensorflow.keras.optimizers import Adam
 from src.d4_modelling_neural.magnifier.metrics import MetricsMagnifier
 
 
-def train_magnifier(data_param, loading_param, training_param, tries):
+def train_magnifier(data_param, loading_param, training_param, tries, model_type):
     """
     Train the MODEL magnifier.
 
@@ -40,11 +40,18 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         training_param (list): (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off)
 
         tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
+
+        model_type (string): says the type of model to be used.
     """
     # Unpack the arguments
     (video_names_train, video_names_valid, number_training, dimensions) = data_param
     (scale, augmentation) = loading_param
     (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off) = training_param
+
+    # Take into account the trade off if it is different from 0.
+    trade_off_info = ""
+    if trade_off != 0:
+        trade_off_info = "trade_off_{}_".format(trade_off)
 
     # -- Paths to the data -- #
     paths_label_train = []
@@ -59,8 +66,8 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     starting_calibration_paths = Path("data/1_intermediate_top_down_lanes/calibration{}".format(tries))
 
     # Verify that the weights path does not exists
-    path_weight = Path("data/3_models_weights{}/magnifier".format(tries))
-    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_size, nb_epochs, batch_size, number_training)
+    path_weight = Path("data/3_models_weights{}/magnifier{}".format(tries, model_type))
+    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
 
     if path_new_weight.exists():
         raise AlreadyExistError(path_new_weight)
@@ -88,7 +95,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
         # Build the MODEL
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_size, nb_epochs, batch_size, number_training - 1)
+        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
@@ -122,8 +129,6 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             metrics.update_mae(sub_labels[:, 2], predictions[:, 2])
             metrics.update_nb_batches()
 
-        print("The loss on training is {}".format(metrics.loss_train))
-
         # - Evaluate the validation set - #
         print("Validation, epoch n° {}".format(epoch))
         model.trainable = False
@@ -142,8 +147,6 @@ def train_magnifier(data_param, loading_param, training_param, tries):
             metrics.update_mae(sub_labels[:, 2], predictions[:, 2], train=False)
             metrics.update_nb_batches(train=False)
 
-        print("The loss on validation is {}".format(metrics.loss_valid))
-
         # Update the metrics
         metrics.on_epoch_end()
 
@@ -154,5 +157,5 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     model.save_weights(str(path_new_weight))
 
     # To save the plots
-    starting_path_save = Path("reports/figures_results/zoom_model{}".format(tries))
-    metrics.save(starting_path_save, number_training)
+    starting_path_save = Path("reports/figures_results/zoom_model{}{}".format(tries, model_type))
+    metrics.save(starting_path_save, number_training, trade_off_info)

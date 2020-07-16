@@ -159,7 +159,15 @@ class MetricsMagnifier:
         self.nb_batches_train = 0
         self.nb_batches_valid = 0
 
-    def save(self, starting_path, number_training):
+        # Print the results
+        print("The loss on the training set is", np.float(self.losses_train[-1]))
+        print("The accuracy on the training set is", self.accuracies_train[-1])
+        print("The mae on the training set is", self.maes_train[-1])
+        print("The loss on the validation set is", np.float(self.losses_valid[-1]))
+        print("The accuracy on the validation set is", self.accuracies_valid[-1])
+        print("The mae on the validation set is", self.maes_valid[-1])
+
+    def save(self, starting_path, number_training, trade_off_info=""):
         """
         Save the metrics.
 
@@ -167,9 +175,12 @@ class MetricsMagnifier:
             starting_path (WindowsPath): the path where the metrics will be registered.
 
             number_training (integer): the index of the current training.
+
+            trade_off_info (string): indicates the trade off.
+                Default value = ""
         """
         # Save the losses
-        path_loss = starting_path / "loss_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
+        path_loss = starting_path / "loss_{}_epoch_{}_batch_{}_{}{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, trade_off_info, number_training)
         plt.plot(self.losses_train, label="Loss on training set")
         plt.plot(self.losses_valid, label="Loss on validation set")
         plt.xlabel("Number of epoch")
@@ -178,7 +189,7 @@ class MetricsMagnifier:
         plt.close()
 
         # Save the accuracies
-        path_accuracy = starting_path / "accuracy_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
+        path_accuracy = starting_path / "accuracy_{}_epoch_{}_batch_{}_{}{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, trade_off_info, number_training)
         plt.plot(self.accuracies_train, label="Accuracy on training set")
         plt.plot(self.accuracies_valid, label="Accuracy on validation set")
         plt.xlabel("Number of epoch")
@@ -187,7 +198,7 @@ class MetricsMagnifier:
         plt.close()
 
         # Save the mean absolute error
-        path_mae = starting_path / "mae_{}_epoch_{}_batch_{}_{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, number_training)
+        path_mae = starting_path / "mae_{}_epoch_{}_batch_{}_{}{}.jpg".format(self.window_size, self.nb_epochs, self.batch_size, trade_off_info, number_training)
         plt.plot(self.maes_train, label="Mean absolute error on training set")
         plt.plot(self.maes_valid, label="Mean absolute error on validation set")
         plt.xlabel("Number of epoch")
@@ -197,8 +208,8 @@ class MetricsMagnifier:
 
 
 if __name__ == "__main__":
-    METRICS = MetricsMagnifier()
-    STARTING_PATH_SAVE = Path("../../../reports/figures_results/tries")
+    METRICS = MetricsMagnifier(150, 15, 12)
+    STARTING_PATH_SAVE = Path("../../../reports/figures_results/zoom_model/tries/deep_model")
 
     LABELS = np.array([[0, 1, -1], [0, 1, -1], [1, 0, 10]], dtype=np.float)
 
