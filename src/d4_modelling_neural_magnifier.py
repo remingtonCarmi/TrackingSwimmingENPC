@@ -97,7 +97,7 @@ def train_magnifier(data_param, loading_param, training_param, tries):
     optimizer = Adam()
 
     # --- For statistics --- #
-    metrics = MetricsMagnifier()
+    metrics = MetricsMagnifier(window_size, nb_epochs, batch_size)
 
     # --- Training --- #
     for epoch in range(nb_epochs):
