@@ -66,21 +66,21 @@ def augment(image):
 if __name__ == "__main__":
     # Parameters
     PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid0/l1_f0275.jpg")
-    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0107.jpg")
-    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
-    PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
+    # PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0107.jpg")
+    # PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
+    # PATH_IMAGE = Path("../../../../../data/1_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
 
     # PATH_SAVE = Path("../../../../../data/4_model_output/tries/augmented_images")
 
     SCALE = 35
     VIDEO_LENGTH = 25
-    VIDEO_LENGTH = 50.97291666666667 - -1
-    VIDEO_LENGTH = 28.3
+    # VIDEO_LENGTH = 50.97291666666667 - -1
+    # VIDEO_LENGTH = 28.3
     DIMENSIONS = [108, 1820]
     LABEL = np.array([43, 387])
-    LABEL = np.array([83, 644])
-    LABEL = np.array([53, 1003])
-    LABEL = np.array([83, 2903])
+    # LABEL = np.array([83, 644])
+    # LABEL = np.array([53, 1003])
+    # LABEL = np.array([83, 2903])
 
     # Load the image
     IMAGE = cv2.imread(str(PATH_IMAGE))
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
         # Rescale the augmented image
         (RESCALED_AUGM_IMAGE, RESCALED_AUGM_LABEL) = rescale(AUGMENTED_IMAGE, SCALE, VIDEO_LENGTH, LABEL, DIMENSIONS[0])
-        # cv2.imwrite(str(PATH_SAVE / "augmented_l1_f0339_{}.jpg".format(idx_try)), RESCALED_AUGM_IMAGE)
+        # cv2.imwrite(str(PATH_SAVE / "augmented_l1_f0275_{}.jpg".format(idx_try)), RESCALED_AUGM_IMAGE)
 
         # Plot rescaled augmented image
         RESCALED_AUGM_IMAGE[RESCALED_AUGM_LABEL[0], RESCALED_AUGM_LABEL[1]] = [0, 0, 255]

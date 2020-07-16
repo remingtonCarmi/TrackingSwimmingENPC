@@ -62,24 +62,24 @@ if __name__ == "__main__":
     # Parameters
     PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid0/l1_f0275.jpg")
     PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0107.jpg")
-    PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
+    # PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
     # PATH_IMAGE = Path("../../../../data/1_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
 
-    # PATH_SAVE = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
+    # PATH_SAVE = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
 
     SCALE = 35
     VIDEO_LENGTH = 25
-    VIDEO_LENGTH = 50.97291666666667 - -1
+    # VIDEO_LENGTH = 50.97291666666667 - -1
     # VIDEO_LENGTH = 28.3
     DIMENSIONS = [108, 1820]
     LABEL = np.array([43, 387])
     LABEL = np.array([83, 644])
-    LABEL = np.array([53, 1003])
+    # LABEL = np.array([53, 1003])
     # LABEL = np.array([83, 2903])
 
     try:
         # All in one function
-        (FINAL_IMAGE, FINAL_LABEL) = transform_image(PATH_IMAGE, LABEL, SCALE, VIDEO_LENGTH, DIMENSIONS, standardization=False)
+        (FINAL_IMAGE, FINAL_LABEL) = transform_image(PATH_IMAGE, LABEL, SCALE, VIDEO_LENGTH, DIMENSIONS, augmentation=True, standardization=False)
         # Save the transformed image
         # cv2.imwrite(str(PATH_SAVE), FINAL_IMAGE)
 

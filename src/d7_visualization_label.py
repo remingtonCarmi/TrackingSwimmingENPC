@@ -17,8 +17,8 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = False
-VIDEO_NAME = "vid1"
+REAL_RUN = True
+VIDEO_NAME = "vid0"
 # --- END : !! TO MODIFY !! --- #
 
 
@@ -40,7 +40,7 @@ STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibrat
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False, standardization=False)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=True, standardization=False)
     print("The set is composed of {} images".format(len(DATA)))
 
     # --- Get every LANES --- #
@@ -56,7 +56,7 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("../data/4_model_output/videos{}".format(TRIES))
-    NAME_LABELLED_VIDEO = "labelled_{}.mp4".format(VIDEO_NAME)
+    NAME_LABELLED_VIDEO = "labelled_augmented_{}.mp4".format(VIDEO_NAME)
     make_video(NAME_LABELLED_VIDEO, EVERY_LANES, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:
