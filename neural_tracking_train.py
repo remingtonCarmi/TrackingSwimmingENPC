@@ -17,7 +17,7 @@ REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 7
+NUMBER_TRAINING = 1
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
@@ -25,8 +25,8 @@ SCALE = 35
 AUGMENTATION = True
 
 # Parameters for the training
-NB_EPOCHS = 15
-BATCH_SIZE = 12
+NB_EPOCHS = 130
+BATCH_SIZE = 10
 WINDOW_SIZE = 150
 NB_SAMPLES = 3
 DISTRIBUTION = 0.3
