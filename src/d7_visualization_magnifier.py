@@ -35,7 +35,7 @@ SCALE = 35
 # For the MODEL
 NUMBER_TRAINING = 3
 WINDOW_SIZE = 150
-RECOVERY = 10
+RECOVERY = 75
 # --- END : !! TO MODIFY !! --- #
 
 # --- Set the parameter --- #

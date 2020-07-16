@@ -17,7 +17,7 @@ REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 4
+NUMBER_TRAINING = 5
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
