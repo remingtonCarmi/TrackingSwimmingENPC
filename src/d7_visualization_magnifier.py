@@ -26,16 +26,16 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = False
+REAL_RUN = True
 # For the data
 VIDEO_NAME = "vid1"
-DIMENSIONS = [110, 1820]
+DIMENSIONS = [108, 1820]
 SCALE = 35
 
 # For the MODEL
-NUMBER_TRAINING = 2
+NUMBER_TRAINING = 3
 WINDOW_SIZE = 150
-RECOVERY = 75
+RECOVERY = 10
 # --- END : !! TO MODIFY !! --- #
 
 # --- Set the parameter --- #
@@ -56,7 +56,7 @@ PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier".format(TRIES))
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False, standardization=True)
     SET_VISU = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=False, standardization=False)
 
     print("The set is composed of {} images".format(len(DATA)))
@@ -74,7 +74,7 @@ try:
     # Build the MODEL
     MODEL.build(SUB_LANES.shape)
 
-    PATH_CURRENT_WEIGHT = PATH_WEIGHT / "window_{}_{}.h5".format(WINDOW_SIZE, NUMBER_TRAINING)
+    PATH_CURRENT_WEIGHT = PATH_WEIGHT / "window_{}_epoch_{}_batch_{}_{}.h5".format(WINDOW_SIZE, 15, 12, NUMBER_TRAINING)
 
     # Load the weights
     MODEL.load_weights(str(PATH_CURRENT_WEIGHT))
@@ -100,7 +100,6 @@ try:
 
         # -- Add the PREDICTIONS to the lane_magnifier -- #
         # Plot the prediction on the image that has NOT been standardized
-        print(PREDICTIONS)
         LANE_PRED = add_prediction(MAGNIFIER_ORIGINAL_IMAGE, PREDICTIONS)
 
         # Add the main list

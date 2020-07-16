@@ -36,9 +36,12 @@ def add_prediction(lane_magnifier, predictions):
         (begin_limit, end_limit) = lane_magnifier.get_limits(idx_sub_image)
 
         # Darker the pixels
-        factor = int(np.round(50 * softmax(predictions[idx_sub_image, :2])[0]))
-        high_indexes = np.where(lane_pred[:, begin_limit: end_limit, 2] > factor)
-        lane_pred[:, begin_limit: end_limit, 2][high_indexes] -= factor
+        trust = (2 * softmax(predictions[idx_sub_image, :2])[0] - 1) ** 2
+        factor = int(np.round(50 * trust))
+        print("Factor", factor)
+        # On the second channel
+        high_indexes_1 = np.where(lane_pred[:, begin_limit: end_limit, 1] > factor)
+        lane_pred[:, begin_limit: end_limit, 1][high_indexes_1] -= factor
 
         # --- Visualize the column --- #
         lane_pred[:, begin_limit + int(np.floor(predictions[idx_sub_image, 2]))] = [0, 0, 255]
