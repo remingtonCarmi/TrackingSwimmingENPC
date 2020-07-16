@@ -13,11 +13,11 @@ import tensorflow as tf
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_TRAINING = False
+REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 2
+NUMBER_TRAINING = 1
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
@@ -25,7 +25,7 @@ SCALE = 35
 AUGMENTATION = True
 
 # Parameters for the training
-NB_EPOCHS = 10
+NB_EPOCHS = 15
 BATCH_SIZE = 12
 WINDOW_SIZE = 150
 NB_SAMPLES = 3
