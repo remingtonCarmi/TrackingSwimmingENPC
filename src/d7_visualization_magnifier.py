@@ -33,24 +33,29 @@ DIMENSIONS = [108, 1820]
 SCALE = 35
 
 # For the MODEL
-NUMBER_TRAINING = 3
+DEEP_MODEL = False
+NUMBER_TRAINING = 4
 WINDOW_SIZE = 150
-RECOVERY = 75
+RECOVERY = 10
 # --- END : !! TO MODIFY !! --- #
 
-# --- Set the parameter --- #
+# --- Set the parameters --- #
 if REAL_RUN:
     TRIES = ""
 else:
     TRIES = "/tries"
+if DEEP_MODEL:
+    MODEL_TYPE = "/deep_model"
+else:
+    MODEL_TYPE = "/simple_model"
 
 
 # --- Set the paths --- #
 PATH_LABEL = [Path("../data/2_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
-STARTING_DATA_PATH = Path("../data/1_intermediate_top_down_lanes/LANES{}".format(TRIES))
+STARTING_DATA_PATH = Path("../data/1_intermediate_top_down_lanes/lanes{}".format(TRIES))
 STARTING_CALIBRATION_PATH = Path("../data/1_intermediate_top_down_lanes/calibration{}".format(TRIES))
 
-PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier".format(TRIES))
+PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier{}".format(TRIES, MODEL_TYPE))
 
 
 try:
@@ -108,7 +113,7 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("../data/4_model_output/videos{}".format(TRIES))
-    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, NUMBER_TRAINING)
+    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, "_" + MODEL_TYPE[1:], NUMBER_TRAINING)
     make_video(NAME_PREDICTED_VIDEO, LANES_PREDICTIONS, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:

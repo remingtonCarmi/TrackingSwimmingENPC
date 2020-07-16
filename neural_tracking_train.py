@@ -26,7 +26,7 @@ AUGMENTATION = True
 
 # Parameters for the training
 DEEP_MODEL = True
-NB_EPOCHS = 50
+NB_EPOCHS = 40
 BATCH_SIZE = 12
 WINDOW_SIZE = 150
 NB_SAMPLES = 3
