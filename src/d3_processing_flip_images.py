@@ -1,12 +1,9 @@
 """
 Add the flip label to the csv files.
 """
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 from pathlib import Path
-import cv2
+import numpy as np
+import pandas as pd
 
 # Exceptions
 from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathError, AlreadyExistError
@@ -16,9 +13,31 @@ from src.d0_utils.store_load_data.fill_csv import create_csv
 
 
 def get_ways(indexes, changes):
-    indexes.append(changes[0])
-    print(indexes)
-    return np.ones(len(indexes))
+    """
+    Get the flip label.
+
+    Args:
+        indexes (MultiIndex): the indexes of the video.
+
+        changes (array): the index where a change has to be made.
+
+    Returns:
+        swimming_ways (array): a list that indicate on which way the swimmer is swimming.
+            + 1 if the swimmer goes toward the left.
+            - 1 if the swimmer goes toward the right.
+    """
+    indexes_change = pd.MultiIndex.from_tuples(tuple(changes))
+    indexes_search = indexes.searchsorted(indexes_change)
+    swimming_ways = np.ones(len(indexes))
+
+    nb_changes = len(changes)
+    for idx_index in range(0, nb_changes, 2):
+        if idx_index + 1 < nb_changes:
+            swimming_ways[indexes_search[idx_index]: indexes_search[idx_index + 1]] = -1
+        else:
+            swimming_ways[indexes_search[idx_index]:] = -1
+
+    return swimming_ways
 
 
 def add_swimming_way(video_name, destination_csv, changes):
@@ -34,7 +53,7 @@ def add_swimming_way(video_name, destination_csv, changes):
     """
     # Get the paths
     csv_path = destination_csv / "{}.csv".format(video_name)
-    csv_name_save = "full_{}{}.csv".format(video_name, np.random.randint(1, 10000))
+    csv_name_save = "full_{}.csv".format(video_name)
     csv_path_save = destination_csv / csv_name_save
 
     if not csv_path.exists():
@@ -58,7 +77,7 @@ if __name__ == "__main__":
     VIDEO_NAME = "vid1"
     DESTINATION_CSV = Path("../data/3_processed_positions/tries")
 
-    CHANGES = [[1, 1000], [1, 1097]]
+    CHANGES = np.array([[1, 1000], [1, 1097], [1, 1098]])
 
     try:
         add_swimming_way(VIDEO_NAME, DESTINATION_CSV, CHANGES)
