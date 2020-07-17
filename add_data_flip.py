@@ -13,9 +13,9 @@ from src.d3_processing_flip_images import add_swimming_way
 
 # BEGIN : !! TO MODIFY !! #
 # The name of the video
-VIDEO_NAME = "vid1"
+VIDEO_NAME = "100_NL_F_FA"
 
-CHANGES = np.array([[1, 900], [2, 0], [2, 900]])
+CHANGES = np.array([[1, 0], [1, 960], [2, 0], [2, 960], [3, 0], [3, 960], [4, 0], [4, 960], [5, 0], [5, 960], [6, 0], [6, 960], [7, 0], [7, 960], [8, 0], [8, 960]])
 # END : !! TO MODIFY !! #
 
 
