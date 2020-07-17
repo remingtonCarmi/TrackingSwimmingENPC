@@ -28,13 +28,13 @@ from src.d0_utils.store_load_data.make_video import make_video
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
 # For the data
-VIDEO_NAME = "vid1"
+VIDEO_NAME = "vid0"
 DIMENSIONS = [108, 1820]
 SCALE = 35
 
 # For the MODEL
 DEEP_MODEL = False
-NUMBER_TRAINING = 4
+NUMBER_TRAINING = 1
 WINDOW_SIZE = 150
 RECOVERY = 10
 # --- END : !! TO MODIFY !! --- #
@@ -55,7 +55,7 @@ PATH_LABEL = [Path("../data/3_processed_positions{}/{}.csv".format(TRIES, VIDEO_
 STARTING_DATA_PATH = Path("../data/2_intermediate_top_down_lanes/lanes{}".format(TRIES))
 STARTING_CALIBRATION_PATH = Path("../data/2_intermediate_top_down_lanes/calibration{}".format(TRIES))
 
-PATH_WEIGHT = Path("../data/3_models_weights{}/magnifier{}".format(TRIES, MODEL_TYPE))
+PATH_WEIGHT = Path("../data/4_models_weights{}/magnifier{}".format(TRIES, MODEL_TYPE))
 
 
 try:
@@ -79,7 +79,7 @@ try:
     # Build the MODEL
     MODEL.build(SUB_LANES.shape)
 
-    PATH_CURRENT_WEIGHT = PATH_WEIGHT / "window_{}_epoch_{}_batch_{}_{}.h5".format(WINDOW_SIZE, 15, 12, NUMBER_TRAINING)
+    PATH_CURRENT_WEIGHT = PATH_WEIGHT / "window_{}_epoch_{}_batch_{}_trade_off_2.3_{}.h5".format(WINDOW_SIZE, 10, 12, NUMBER_TRAINING)
 
     # Load the weights
     MODEL.load_weights(str(PATH_CURRENT_WEIGHT))
@@ -112,8 +112,8 @@ try:
 
     # --- Make the video --- #
     print("Making the video...")
-    DESTINATION_VIDEO = Path("../data/4_model_output/videos{}".format(TRIES))
-    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, "_" + MODEL_TYPE[1:], NUMBER_TRAINING)
+    DESTINATION_VIDEO = Path("../data/5_model_output/videos{}".format(TRIES))
+    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}_trade_off_2.3{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, "_" + MODEL_TYPE[1:], NUMBER_TRAINING)
     make_video(NAME_PREDICTED_VIDEO, LANES_PREDICTIONS, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:

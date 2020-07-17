@@ -76,7 +76,7 @@ def head_selection(image, lane, frame):
 
     # Get the sizes
     screen_size = QDesktopWidget().screenGeometry()
-    image_size = QSize(screen_size.width() - 25, screen_size.height() - 900)
+    image_size = QSize(screen_size.width() - 25, screen_size.height() - 950)
 
     # Set the image selection and the editable text
     pix_map = array_to_qpixmap(image)
@@ -102,7 +102,7 @@ def head_selection(image, lane, frame):
 
 if __name__ == "__main__":
     # Get the array
-    ROOT_IMAGE = Path('../../../data/4_model_output/tries/raw_images/vid0_frame126.jpg')
+    ROOT_IMAGE = Path('../../../data/5_model_output/tries/raw_images/vid0_frame126.jpg')
     IMAGE = cv2.imread(str(ROOT_IMAGE))
 
     # Select the points
