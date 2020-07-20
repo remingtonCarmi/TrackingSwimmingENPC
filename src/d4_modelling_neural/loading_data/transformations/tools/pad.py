@@ -45,12 +45,12 @@ def pad(image, dimensions, label):
 
 if __name__ == "__main__":
     # Parameters
-    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/vid0/l1_f0275.jpg")
-    # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0107.jpg")
-    # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
-    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
+    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/vid0/l1_f0275.jpg")
+    # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0107.jpg")
+    # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/100NL_FAF/l8_f1054.jpg")
+    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/50_Br_M_SF_1/l1_f0339.jpg")
 
-    # PATH_SAVE = Path("../../../../../data/4_model_output/tries/transformed_images/padded_l1_f0107.jpg")
+    # PATH_SAVE = Path("../../../../../data/5_model_output/tries/transformed_images/padded_l1_f0107.jpg")
 
     SCALE = 35
     VIDEO_LENGTH = 25
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     try:
         # Load the image
-        IMAGE = cv2.imread(str(PATH_IMAGE))
+        IMAGE = cv2.imread(str(PATH_IMAGE)).astype(np.float)
 
         # Rescale the image
         (RESCALED_IMAGE, RESCALED_LABEL) = rescale(IMAGE, SCALE, VIDEO_LENGTH, LABEL, DIMENSIONS[0])
@@ -74,13 +74,13 @@ if __name__ == "__main__":
 
         # Plot original image
         IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]
-        cv2.imshow("Image", IMAGE)
+        cv2.imshow("Image", IMAGE.astype(np.uint8))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
         # Plot rescaled image
         RESCALED_IMAGE[RESCALED_LABEL[0], RESCALED_LABEL[1]] = [0, 0, 255]
-        cv2.imshow("Rescaled Image", RESCALED_IMAGE)
+        cv2.imshow("Rescaled Image", RESCALED_IMAGE.astype(np.uint8))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         PADDED_IMAGE[PADDED_LABEL[0], PADDED_LABEL[1]] = [0, 0, 255]
         # cv2.imwrite(str(PATH_SAVE), PADDED_IMAGE)
 
-        cv2.imshow("Filled Image", PADDED_IMAGE)
+        cv2.imshow("Filled Image", PADDED_IMAGE.astype(np.uint8))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 

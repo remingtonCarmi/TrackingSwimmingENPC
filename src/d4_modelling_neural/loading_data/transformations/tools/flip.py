@@ -14,13 +14,12 @@ def flip_image(image, label):
         image (3d array): the image.
 
         label (1d array of float): [y_head, x_head].
-
-    Returns:
-        image (3d array): the flipped image.
-
-        label (1d array of float): [y_head, flipped x_head].
     """
-    return cv2.flip(image, 1), np.array([label[0], image.shape[1] - label[1]])
+    # Flip the image
+    cv2.flip(image, 1, image)
+
+    # Flip the label
+    label[1] = image.shape[1] - label[1]
 
 
 if __name__ == "__main__":
@@ -38,22 +37,22 @@ if __name__ == "__main__":
     # LABEL = np.array([83, 2903])
 
     # Load the image
-    IMAGE = cv2.imread(str(PATH_IMAGE))
+    IMAGE = cv2.imread(str(PATH_IMAGE)).astype(np.float)
+
+    # Plot the original image
+    IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]
+    cv2.imshow(" Image", IMAGE.astype(np.uint8))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     # Flip the image
-    (FLIPPED_IMAGE, FLIPPED_LABEL) = flip_image(IMAGE, LABEL)
+    flip_image(IMAGE, LABEL)
 
     # Register the flipped image
     # cv2.imwrite(str(PATH_SAVE / "flipped_l1_f0275.jpg"), FLIPPED_IMAGE)
 
-    # Plot the image
-    IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]
-    cv2.imshow(" Image", IMAGE)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
     # Plot the flipped image
-    FLIPPED_IMAGE[FLIPPED_LABEL[0], FLIPPED_LABEL[1]] = [0, 0, 255]
-    cv2.imshow("Flipped Image", FLIPPED_IMAGE)
+    IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]
+    cv2.imshow("Flipped Image", IMAGE.astype(np.uint8))
     cv2.waitKey(0)
     cv2.destroyAllWindows()

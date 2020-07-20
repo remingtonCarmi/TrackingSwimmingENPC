@@ -18,7 +18,7 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
-VIDEO_NAME = "vid0"
+VIDEO_NAME = "100_NL_F_FA"
 # --- END : !! TO MODIFY !! --- #
 
 
@@ -33,19 +33,20 @@ else:
 
 # --- Set the paths --- #
 PATH_LABEL = [Path("../data/3_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
-STARTING_DATA_PATH = Path("../data/2_intermediate_top_down_lanes/LANES{}".format(TRIES))
+STARTING_DATA_PATH = Path("../data/2_intermediate_top_down_lanes/lanes{}".format(TRIES))
 STARTING_CALIBRATION_PATH = Path("../data/2_intermediate_top_down_lanes/calibration{}".format(TRIES))
 
 
 try:
     # --- Generate and load the sets --- #
     DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, augmentation=True, standardization=False)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False, augmentation=True, flip=True)
     print("The set is composed of {} images".format(len(DATA)))
 
     # --- Get every LANES --- #
     EVERY_LANES = [0] * len(DATA)
     for idx_sample in range(len(SET)):
+        print(idx_sample)
         (lanes, labels) = SET[idx_sample]
         (lane, label) = (lanes[0].astype(np.uint8), labels[0].astype(int))
         # Modify the lane_magnifier if the head has been seen
@@ -55,8 +56,8 @@ try:
 
     # --- Make the video --- #
     print("Making the video...")
-    DESTINATION_VIDEO = Path("../data/4_model_output/videos{}".format(TRIES))
-    NAME_LABELLED_VIDEO = "labelled_augmented_{}.mp4".format(VIDEO_NAME)
+    DESTINATION_VIDEO = Path("../data/5_model_output/videos/labelled_videos{}".format(TRIES))
+    NAME_LABELLED_VIDEO = "labelled_augmented_flip{}.mp4".format(VIDEO_NAME)
     make_video(NAME_LABELLED_VIDEO, EVERY_LANES, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:

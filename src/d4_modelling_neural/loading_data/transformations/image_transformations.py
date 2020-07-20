@@ -52,20 +52,20 @@ def transform_image(image_path, label, scale, video_length, dimensions, standard
         (list of 2 integers): the position of the head in pixels. [vertical, horizontal]
     """
     # Load the image and define the position label
-    image = cv2.imread(str(image_path))
+    image = cv2.imread(str(image_path)).astype(np.float)
     pos_label = label[:-1]
 
     # Flip the image if flip = True and if it has to be flipped.
     if flip and label[-1] == -1:
-        (image, pos_label) = flip_image(image, pos_label)
+        flip_image(image, pos_label)
 
     # Augment the image
     if augmentation:
-        image = augment(image)
+        augment(image)
 
     # Standardize the image
     if standardization:
-        image = standardize(image)
+        standardize(image)
 
     # Rescale the image
     (image, rescaled_label) = rescale(image, scale, video_length, pos_label, dimensions[0])
@@ -102,7 +102,7 @@ if __name__ == "__main__":
         # Plot the final image
         FINAL_IMAGE[FINAL_LABEL[0], FINAL_LABEL[1]] = [0, 0, 255]
         print(FINAL_LABEL)
-        cv2.imshow("Final Image", FINAL_IMAGE)
+        cv2.imshow("Final Image", FINAL_IMAGE.astype("uint8"))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
