@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError, SwimmingWayError
 
 # To generate the data
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
@@ -18,20 +18,21 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # To transform the image
 from src.d4_modelling_neural.loading_data.transformations.image_transformations import transform_image
-from src.d4_modelling_neural.loading_data.transformations.tools.data_augmenting import augment
 
 
 class DataLoader(Sequence):
     """
     The class to load the data.
     """
-    def __init__(self, data, batch_size=2, scale=35, dimensions=[108, 1820], augmentation=False, standardization=True):
+    def __init__(self, data, batch_size=2, scale=35, dimensions=[108, 1820], standardization=True, augmentation=False, flip=True):
         """
         Create the loader.
 
         Args:
-            data (list of 4 : [WindowsPath, integer, integer, float):
-                List of [image_path, 'x_head', 'y_head', 'video_length]
+            data (list of 4 : [WindowsPath, integer, integer, integer, float):
+                List of [image_path, x_head, y_head, swimming_way, video_length]
+                if swimming_way = 1, the swimmer swims toward the right.
+                if swimming_way = -1, the swimmer swims toward the left.
 
             batch_size (integer): the size of the batches
                 Default value = 2
@@ -42,15 +43,15 @@ class DataLoader(Sequence):
             dimensions (list of 2 integers): the final dimensions of the image. [vertical, horizontal]
                 Default value = [110, 1820]
 
+            standardization (boolean): standardize the lane_magnifier if standardization = True.
+                Default value = True
+
             augmentation (boolean): if True, data_augmenting is performed.
                 Default value = False
 
-            standardization (boolean): standardize the lane_magnifier if standardization = True.
+            flip (boolean): if True, each image where the swimmer is swimming toward the left side is flipped.
                 Default value = True
         """
-        # To transform the image
-        self.data_manager = ImageDataGenerator()
-
         # The data
         self.samples = data[:, 0]
         self.labels = data[:, 1: -1]
@@ -60,8 +61,9 @@ class DataLoader(Sequence):
         self.batch_size = batch_size
         self.scale = scale
         self.dimensions = dimensions
-        self.augmentation = augmentation
         self.standardization = standardization
+        self.augmentation = augmentation
+        self.flip = flip
 
     def __len__(self):
         """
@@ -79,7 +81,7 @@ class DataLoader(Sequence):
         Returns:
             (array, 4 dimensions): list of images.
 
-            (array, 3 dimensions): list of the LABELS linked to the images.
+            (array, 3 dimensions): list of the labels linked to the images.
         """
         # Get the paths, the LABELS and the lengths of the videos
         batch_path = self.samples[idx * self.batch_size: (idx + 1) * self.batch_size]
@@ -99,7 +101,7 @@ class DataLoader(Sequence):
             video_length = batch_video_length[idx_img]
 
             # Get the image and transform it
-            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.augmentation, self.standardization)
+            (trans_image, trans_label) = transform_image(image_path, label, self.scale, video_length, self.dimensions, self.standardization, self.augmentation, self.flip)
 
             # Fill the lists
             batch_img.append(trans_image)
@@ -126,7 +128,7 @@ if __name__ == "__main__":
     try:
         TRAIN_DATA = generate_data(PATHS_LABEL, take_all=False)
 
-        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, augmentation=True, standardization=False)
+        TRAIN_SET = DataLoader(TRAIN_DATA, scale=35, batch_size=1, standardization=False, augmentation=True, flip=True)
 
         # Test on_epoch_end()
         TRAIN_SET.on_epoch_end()
@@ -155,3 +157,5 @@ if __name__ == "__main__":
         print(find_path_data_error.__repr__())
     except PaddingError as padding_error:
         print(padding_error.__repr__())
+    except SwimmingWayError as swimming_way_error:
+        print(swimming_way_error.__repr__())

@@ -4,6 +4,7 @@ This module is where you can find all the exception classes.
 Classes:
     FindPathDataError
     PaddingError
+    SwimmingWayError
 """
 
 
@@ -33,3 +34,15 @@ class PaddingError(Exception):
         middle = "cannot be pad. "
         end = "The padding dimensions are : {}, {}. ".format(self.pad_dimensions[0], self.pad_dimensions[1])
         return beginning + middle + end + "Please check the quality of the video."
+
+
+class SwimmingWayError(Exception):
+    """The exception class error to tell that the swimming way has not been registered."""
+    def __init__(self, path_data_images):
+        """
+        Construct the name of the video.
+        """
+        self.name_video = path_data_images.parts[-1]
+
+    def __repr__(self):
+        return "The swimming way label of the video {} has not been registered.".format(self.name_video)

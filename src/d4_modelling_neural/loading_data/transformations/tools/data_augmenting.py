@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
 
-    # PATH_SAVE = Path("../../../../../data/4_model_output/tries/augmented_images")
+    # PATH_SAVE = Path("../../../../../data/5_model_output/tries/augmented_images")
 
     SCALE = 35
     VIDEO_LENGTH = 25

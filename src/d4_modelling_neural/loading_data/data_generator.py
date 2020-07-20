@@ -7,12 +7,12 @@ import pandas as pd
 import numpy as np
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, SwimmingWayError
 
 
 def generate_data(paths_label, starting_data_paths=None, starting_calibration_paths=None, take_all=False):
     """
-    Produce a list of list of 4 elements : path_to_image, y_head, x_head, video_length.
+    Produce a list of list of 5 elements : path_to_image, y_head, x_head, swimming_way, video_length.
     We look in the label and if the image is in the computer, we add it to the list.
 
     Args:
@@ -29,11 +29,11 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
             Default value = False
 
     Returns:
-        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, float):
-            list of elements like (path_to_image, y_head, x_head, length_image) for the training.
+        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, integer, float):
+            list of elements like (path_to_image, y_head, x_head, swimming_way, length_image) for the training.
     """
     if starting_data_paths is None:
-        starting_data_paths = Path("../../../data/2_intermediate_top_down_lanes/LANES/tries")
+        starting_data_paths = Path("../../../data/2_intermediate_top_down_lanes/lanes/tries")
 
     if starting_calibration_paths is None:
         starting_calibration_paths = Path("../../../data/2_intermediate_top_down_lanes/calibration/tries")
@@ -81,7 +81,7 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
 
 def get_full_data(path_data, labels, length_image, take_all):
     """
-    Produce a list of list of 4 elements : path_to_image, y_head, x_head, length_image.
+    Produce a list of list of 5 elements : path_to_image, y_head, x_head, swimming_way, length_image.
     We look in the label and if the image is in the computer, we add it to the list.
 
     Args:
@@ -95,18 +95,22 @@ def get_full_data(path_data, labels, length_image, take_all):
             with a positive label is taken.
 
     Returns:
-        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, float):
-            list of elements like (path_to_image, y_head, x_head, length_image) for the training.
+        full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, integer, float):
+            list of elements like (path_to_image, y_head, x_head, swimming_way, length_image) for the training.
     """
     full_data = []
-    for ((lane, frame), label) in labels.iterrows():
+
+    if 'swimming_way' not in labels.columns:
+        raise SwimmingWayError(path_data)
+
+    for ((lane, frame), (x_head, y_head, swimming_way)) in labels.iterrows():
         # Add to the list only if the image has been labeled with a right position
-        if label[0] >= 0 or take_all:
+        if x_head >= 0 or take_all:
             name_image = "l{}_f{}.jpg".format(lane, str(frame).zfill(4))
             path_image = path_data / name_image
             # Add to the list only if the image is in the computer
             if path_image.exists():
-                full_data.append([path_image, label[1], label[0], length_image])
+                full_data.append([path_image, y_head, x_head, swimming_way, length_image])
 
     return np.array(full_data)
 
@@ -136,3 +140,6 @@ if __name__ == "__main__":
         print(GENERATOR)
     except FindPathDataError as find_path_data_error:
         print(find_path_data_error.__repr__())
+    except SwimmingWayError as swimming_way_error:
+        print(swimming_way_error.__repr__())
+

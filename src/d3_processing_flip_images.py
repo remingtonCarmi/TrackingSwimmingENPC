@@ -74,10 +74,10 @@ def add_swimming_way(video_name, destination_csv, changes):
 
 
 if __name__ == "__main__":
-    VIDEO_NAME = "vid1"
+    VIDEO_NAME = "vid0"
     DESTINATION_CSV = Path("../data/3_processed_positions/tries")
 
-    CHANGES = np.array([[1, 1000], [1, 1097], [1, 1098]])
+    CHANGES = np.array([[1, 300], [1, 319]])
 
     try:
         add_swimming_way(VIDEO_NAME, DESTINATION_CSV, CHANGES)
