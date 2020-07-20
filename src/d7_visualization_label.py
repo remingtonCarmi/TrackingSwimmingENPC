@@ -18,7 +18,7 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
-VIDEO_NAME = "100_NL_F_FA"
+VIDEO_NAME = "vid0"
 # --- END : !! TO MODIFY !! --- #
 
 
@@ -57,7 +57,7 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("../data/5_model_output/videos/labelled_videos{}".format(TRIES))
-    NAME_LABELLED_VIDEO = "labelled_augmented_flip{}.mp4".format(VIDEO_NAME)
+    NAME_LABELLED_VIDEO = "labelled_augmented_flip_{}.mp4".format(VIDEO_NAME)
     make_video(NAME_LABELLED_VIDEO, EVERY_LANES, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:
