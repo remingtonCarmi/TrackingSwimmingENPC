@@ -10,7 +10,9 @@ from tensorflow.python.keras.layers import (
     Dense,
     Conv2D,
     Flatten,
-    MaxPooling2D
+    MaxPooling2D,
+    BatchNormalization,
+    ReLU
 )
 
 # To test the MODEL
@@ -43,11 +45,15 @@ def compute_dimension(input_size, kernel_size, stride, padding, dilation):
 class ZoomModel(Model):
     def __init__(self):
         super(ZoomModel, self).__init__()
-        self.c32 = Conv2D(32, kernel_size=(4, 6), strides=2, padding="valid", activation="relu")
+        self.c32 = Conv2D(32, kernel_size=(4, 6), strides=2, padding="valid")
+        self.batch_norm32 = BatchNormalization()
+        self.relu32 = ReLU()
 
         self.max_poolc32 = MaxPooling2D(pool_size=2, strides=2, padding="valid")
 
-        self.c64 = Conv2D(64, kernel_size=(4, 3), strides=(3, 2), padding="valid", activation="relu")
+        self.c64 = Conv2D(64, kernel_size=(4, 3), strides=(3, 2), padding="valid")
+        self.batch_norm64 = BatchNormalization()
+        self.relu64 = ReLU()
 
         self.max_poolc64 = MaxPooling2D(pool_size=(4, 6), strides=(4, 6), padding="valid")
 
@@ -58,11 +64,15 @@ class ZoomModel(Model):
         # Size, without batch size
         # 110 x WindowSize x 3
         x = self.c32(inputs)
+        x = self.batch_norm32(x, self.trainable)
+        x = self.relu32(x)
         # 54 x 98 x 32
         x = self.max_poolc32(x)
 
         # 27 x 49 x 32
         x = self.c64(x)
+        x = self.batch_norm64(x, self.trainable)
+        x = self.relu64(x)
         # 8 x 24 x 64
         x = self.max_poolc64(x)
 
