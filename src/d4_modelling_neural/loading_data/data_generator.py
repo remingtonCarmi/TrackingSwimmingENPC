@@ -10,7 +10,7 @@ import numpy as np
 from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, SwimmingWayError
 
 
-def generate_data(paths_label, starting_data_paths=None, starting_calibration_paths=None, take_all=False):
+def generate_data(paths_label, starting_data_paths=None, starting_calibration_paths=None, take_all=False, lane_number=-1):
     """
     Produce a list of list of 5 elements : path_to_image, y_head, x_head, swimming_way, video_length.
     We look in the label and if the image is in the computer, we add it to the list.
@@ -27,6 +27,10 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
         take_all (boolean): if True, all the image are taken. Otherwise, only the image
             with a positive label is taken.
             Default value = False
+
+        lane_number (integer): indicates the lanes to be taken.
+            if -1, all the lanes are taken.
+            Default value = -1
 
     Returns:
         full_data (array of 2 dimensions, one line : (WindowsPath, integer, integer, integer, float):
@@ -71,6 +75,9 @@ def generate_data(paths_label, starting_data_paths=None, starting_calibration_pa
         length_image = get_length_image(paths_calibration[idx_video])
 
         # Get the data
+        if lane_number > 0:
+            labels = labels.iloc[labels.index.get_level_values(0) == lane_number]
+
         data = get_full_data(paths_data[idx_video], labels, length_image, take_all)
 
         # Add the data
@@ -136,8 +143,9 @@ if __name__ == "__main__":
     PATHS_LABEL = [Path("../../../data/3_processed_positions/tries/vid0.csv"),
                    Path("../../../data/3_processed_positions/tries/vid1.csv")]
     try:
-        GENERATOR = generate_data(PATHS_LABEL, take_all=False)
+        GENERATOR = generate_data(PATHS_LABEL, take_all=False, lane_number=1)
         print(GENERATOR)
+        print(len(GENERATOR))
     except FindPathDataError as find_path_data_error:
         print(find_path_data_error.__repr__())
     except SwimmingWayError as swimming_way_error:

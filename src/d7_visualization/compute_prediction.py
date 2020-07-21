@@ -3,7 +3,6 @@ This module computes the prediction of the location of the head of the swimmer g
 """
 from pathlib import Path
 import numpy as np
-from scipy.special import softmax
 
 
 def merge_predictions(lane_magnifier, predictions):
@@ -14,22 +13,23 @@ def merge_predictions(lane_magnifier, predictions):
         lane_magnifier (ImageMagnifier): the lane.
 
         predictions (array of 2 dimensions, list of [float, float, float]):
-            the list of the PREDICTIONS of all the sub-images : [is_in_sub_image, is_not_in_sub_image, column].
+            the list of the predictions of all the sub-images : [is_in_sub_image, is_not_in_sub_image, column].
 
     Returns:
-        (Interval): the interval that corresponds to the prediction.
+        (array): the list of the index where the head can be.
     """
     indicative_function = 1 - np.argmax(predictions[:, : 2], axis=1)
     indexes_head = np.where(indicative_function == 1)[0]
+    print(indexes_head)
 
-    prediction_manager = PredictionManager()
+    witness_prediction = np.zeros(lane_magnifier.lane.shape[1])
 
     # For all the indexes where the head has been predicted, the color is change.
     for idx_sub_image in indexes_head:
         (begin_limit, end_limit) = lane_magnifier.get_limits(idx_sub_image)
-        prediction_manager.add_prediction(begin_limit, end_limit)
+        witness_prediction[begin_limit: end_limit] += 1
 
-    return prediction_manager.get_bigest_interval()
+    return np.where(witness_prediction == max(witness_prediction))[0]
 
 
 if __name__ == "__main__":
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     # -- Get the ImageMagnifier i.e. the lane_magnifier -- #
     PATH_IMAGE = Path("../../data/2_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
-    (LANE, LABEL) = transform_image(PATH_IMAGE, np.array([43, 387]), 35, 25, [108, 1820], False, False, True)
+    (LANE, LABEL) = transform_image(PATH_IMAGE, np.array([43, 387, 1]), 35, 25, [108, 1820], False, False, True)
     IMAGE_MAGNIFIER = ImageMagnifier(LANE, LABEL, 200, 10)
 
     # -- Set the PREDICTIONS -- #

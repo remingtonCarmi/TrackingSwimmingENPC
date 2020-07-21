@@ -14,6 +14,7 @@ from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 
 # The models
 from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
+from src.d4_modelling_neural.magnifier.zoom_model_deep import ZoomModelDeep
 
 # To slice the LANES
 from src.d4_modelling_neural.magnifier.slice_sample_lane.sample_lanes import sample_lanes
@@ -35,7 +36,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     Args:
         data_param (list): (video_names_train, video_names_valid, number_training, dimensions)
 
-        loading_param (list): (scale, augmentation)
+        loading_param (list): (scale, augmentation, flip)
 
         training_param (list): (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off)
 
@@ -45,7 +46,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     """
     # Unpack the arguments
     (video_names_train, video_names_valid, number_training, dimensions) = data_param
-    (scale, augmentation) = loading_param
+    (scale, augmentation, flip) = loading_param
     (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off) = training_param
 
     # Take into account the trade off if it is different from 0.
@@ -76,13 +77,16 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
     valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths)
 
-    train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=augmentation)
-    valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=False)
+    train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=augmentation, flip=flip)
+    valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=False, flip=flip)
     print("The training set is composed of {} images".format(len(train_data)))
     print("The validation set is composed of {} images".format(len(valid_data)))
 
     # --- Define the MODEL --- #
-    model = ZoomModel()
+    if model_type == "/deep_model":
+        model = ZoomModelDeep()
+    else:
+        model = ZoomModel()
 
     # Get the weights of the previous trainings
     if number_training > 1:
@@ -108,6 +112,9 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # --- Training --- #
     for epoch in range(nb_epochs):
+        # Shuffle data
+        train_set.on_epoch_end()
+
         # - Train on the train set - #
         print("Training, epoch n ° {}".format(epoch))
         model.trainable = True
@@ -149,9 +156,6 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
         # Update the metrics
         metrics.on_epoch_end()
-
-        # Shuffle data
-        train_set.on_epoch_end()
 
     # --- Save the weights --- #
     model.save_weights(str(path_new_weight))
