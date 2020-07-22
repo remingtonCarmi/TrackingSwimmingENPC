@@ -24,7 +24,7 @@ from src.d3_processing_head_pointing import head_pointing
 
 # BEGIN : !! TO MODIFY !! #
 # The name of the video
-NAME_VIDEO = "2004N_FHA"
+NAME_VIDEO = "100_NL_D_FA-Canet"
 
 # Time range for pointing
 POINTING_STARTING_TIME = 26

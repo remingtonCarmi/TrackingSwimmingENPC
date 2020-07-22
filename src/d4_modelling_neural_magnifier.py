@@ -38,7 +38,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
         loading_param (list): (scale, augmentation, flip)
 
-        training_param (list): (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off)
+        training_param (list): (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off, close_to_head)
 
         tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
 
@@ -47,7 +47,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     # Unpack the arguments
     (video_names_train, video_names_valid, number_training, dimensions) = data_param
     (scale, augmentation, flip) = loading_param
-    (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off) = training_param
+    (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off, close_to_head) = training_param
 
     # Take into account the trade off if it is different from 0.
     trade_off_info = ""
@@ -94,7 +94,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         # Build the MODEL to load the weights
         (lanes, labels) = train_set[0]
         # Get the sub images
-        (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
+        (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head)
 
         # Build the MODEL
         model.build(sub_lanes.shape)

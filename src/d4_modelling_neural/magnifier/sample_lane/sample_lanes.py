@@ -7,7 +7,7 @@ import numpy as np
 from src.d4_modelling_neural.magnifier.sample_lane.image_sampler.image_sampler import ImageSampler
 
 
-def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin):
+def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head):
     """
     Samples the list of LANES with its LABELS.
     The LANES are samples one after the order.
@@ -25,6 +25,8 @@ def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin):
 
         margin (integer): the margin to be sure that the head is not in the border of the image.
 
+        close_to_head (boolean): if True, the column with be chosen near the head.
+
     Returns:
         SUB_LANES (array of 4 dimensions): the list of sub-image.
 
@@ -36,7 +38,7 @@ def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin):
     sub_lanes = []
     sub_labels = []
     for idx_lanes in range(nb_lanes):
-        magnifier = ImageSampler(lanes[idx_lanes], labels[idx_lanes], window_size, nb_samples, distribution, margin)
+        magnifier = ImageSampler(lanes[idx_lanes], labels[idx_lanes], window_size, nb_samples, distribution, margin, close_to_head)
 
         for (sub_lane, sub_label) in magnifier:
             sub_lanes.append(sub_lane.astype(dtype='float32'))
@@ -47,32 +49,33 @@ def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin):
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE1 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
-    # PATH_IMAGE2 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
-    # PATH_IMAGE3 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
-    # PATH_IMAGE4 = Path("../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
+    PATH_IMAGE1 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
+    # PATH_IMAGE2 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
+    # PATH_IMAGE3 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
+    # PATH_IMAGE4 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
 
-    PATH_SAVE = Path("../../../../data/4_model_output/tries/sampled_images")
+    # PATH_SAVE = Path("../../../../data/4_model_output/tries/sampled_images")
 
     LANES = np.array([cv2.imread(str(PATH_IMAGE1))])  # , cv2.imread(str(PATH_IMAGE2))])
     # LANES = np.array([cv2.imread(str(PATH_IMAGE3)), cv2.imread(str(PATH_IMAGE4))])
 
     LABELS = np.array([[49, 648]])  # , [49, 768]])
     # LABELS = np.array([[53, 950], [41, 1163]])
-    WINDOW_SIZE = 150
+    WINDOW_SIZE = 30
     NB_SAMPLES = 10
     DISTRIBUTION = 0.3
-    MARGIN = 10
+    MARGIN = 5
+    CLOSED_TO_HEAD = True
 
     # Slice the image
-    (SUB_LANES, SUB_LABELS) = sample_lanes(LANES, LABELS, WINDOW_SIZE, NB_SAMPLES, DISTRIBUTION, MARGIN)
+    (SUB_LANES, SUB_LABELS) = sample_lanes(LANES, LABELS, WINDOW_SIZE, NB_SAMPLES, DISTRIBUTION, MARGIN, CLOSED_TO_HEAD)
 
     # Plot the sub-LANES
     NB_SUB_LANES = len(SUB_LANES)
     for idx_image in range(NB_SUB_LANES):
         # Save the image
-        PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sampled_l1_f0275_{}.jpg".format(idx_image)
-        cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
+        # PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sampled_l1_f0275_{}.jpg".format(idx_image)
+        # cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
         print(SUB_LABELS[idx_image])
 
         # print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))

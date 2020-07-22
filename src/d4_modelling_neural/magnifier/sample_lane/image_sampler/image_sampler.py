@@ -11,7 +11,7 @@ class ImageSampler:
     """
     The class that enables to sample a lane with its label.
     """
-    def __init__(self, lane, label, window_size, nb_samples, distribution, margin):
+    def __init__(self, lane, label, window_size, nb_samples, distribution, margin, close_to_head):
         """
         Register the image.
 
@@ -27,6 +27,8 @@ class ImageSampler:
             distribution (float in [0, 1]): the percentage of head returned.
 
             margin (integer): the margin to be sure that the head is not in the border of the image.
+
+            close_to_head (boolean): if True, the column with be chosen near the head.
         """
         # Get the lane_magnifier
         self.lane = lane
@@ -40,7 +42,14 @@ class ImageSampler:
         self.nb_samples = nb_samples
         self.distribution = distribution
         self.margin = margin
-        self.max_column = self.lane.shape[1] - self.window_size
+
+        # Parameter to choose the column
+        self.right_column = self.lane.shape[1] - self.window_size
+        self.left_column = 0
+
+        if close_to_head:
+            self.left_column = max(0, self.label[1] - 2 * window_size)
+            self.right_column = min(self.right_column, self.label[1] + window_size)
 
     def __len__(self):
         """
@@ -92,11 +101,11 @@ class ImageSampler:
         Returns:
             column (integer): the column.
         """
-        column = rd.randint(0, self.max_column)
+        column = rd.randint(self.left_column, self.right_column)
 
         # We continue until the window contains the head with a margin
         while (not self.contain_head(column)) or self.is_black(column):
-            column = rd.randint(0, self.max_column)
+            column = rd.randint(self.left_column, self.right_column)
 
         return column
 
@@ -107,11 +116,11 @@ class ImageSampler:
         Returns:
             column (integer): the column.
         """
-        column = rd.randint(0, self.max_column)
+        column = rd.randint(self.left_column, self.right_column)
 
         # We continue until the window is at the left or at the right of the head with a margin
         while (not self.is_left(column) and not self.is_right(column)) or self.is_black(column):
-            column = rd.randint(0, self.max_column)
+            column = rd.randint(self.left_column, self.right_column)
 
         return column
 
@@ -142,10 +151,10 @@ class ImageSampler:
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE1 = Path("../../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
-    PATH_IMAGE2 = Path("../../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
-    PATH_IMAGE3 = Path("../../../../../data/4_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
-    PATH_IMAGE4 = Path("../../../../../data/4_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
+    PATH_IMAGE1 = Path("../../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
+    PATH_IMAGE2 = Path("../../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
+    PATH_IMAGE3 = Path("../../../../../data/5_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
+    PATH_IMAGE4 = Path("../../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
 
     LANE = cv2.imread(str(PATH_IMAGE4))
 
@@ -154,12 +163,13 @@ if __name__ == "__main__":
     LABEL = np.array([53, 950])
     LABEL = np.array([41, 1163])
 
-    WINDOW_SIZE = 150
+    WINDOW_SIZE = 30
     NB_SAMPLE = 10
-    DISTRIBUTION = 0.3
-    MARGIN = 10
+    DISTRIBUTION = 1
+    MARGIN = 5
+    CLOSE_TO_HEAD = True
 
-    IMAGE_SAMPLER = ImageSampler(LANE, LABEL, WINDOW_SIZE, NB_SAMPLE, DISTRIBUTION, MARGIN)
+    IMAGE_SAMPLER = ImageSampler(LANE, LABEL, WINDOW_SIZE, NB_SAMPLE, DISTRIBUTION, MARGIN, CLOSE_TO_HEAD)
 
     print("Nb sub image", len(IMAGE_SAMPLER))
 
