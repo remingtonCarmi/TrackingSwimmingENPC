@@ -4,7 +4,7 @@ This module samples a list of LANES with its LABELS.
 from pathlib import Path
 import cv2
 import numpy as np
-from src.d4_modelling_neural.magnifier.sample_lane.image_sampler.image_sampler import ImageSampler
+from src.d4_modelling_neural.sample_lane.image_sampler.image_sampler import ImageSampler
 
 
 def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head):

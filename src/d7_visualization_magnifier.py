@@ -14,8 +14,8 @@ from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 
 # The model
-from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
-from src.d4_modelling_neural.magnifier.zoom_model_deep import ZoomModelDeep
+from src.d4_modelling_neural.zoom_model import ZoomModel
+from src.d4_modelling_neural.zoom_model_deep import ZoomModelDeep
 
 # To slice the lanes
 from src.d5_model_evaluation.slice_lane.slice_lanes import slice_lane

@@ -1,8 +1,22 @@
+"""
+This module compares the pointed lane between two users.
+"""
 import numpy as np
 import cv2
 
 
 def compute_common_indexes(pointing1, pointing2):
+    """
+    Computes the common pointed indexes.
+
+    Args:
+        pointing1 (DataFrame): the pointed lanes from a user.
+
+        pointing2 (DataFrame): the pointed lanes from another user.
+
+    Returns:
+        pointed_index (Index): the common pointed indexes.
+    """
     # Select the lines where both lanes have been pointed
     pointed_index1 = pointing1.index[pointing1["x_head"] >= 0]
     pointed_index2 = pointing2.index[pointing2["x_head"] >= 0]

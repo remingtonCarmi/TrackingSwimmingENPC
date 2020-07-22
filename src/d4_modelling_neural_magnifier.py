@@ -13,20 +13,20 @@ from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
 
 # The models
-from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
-from src.d4_modelling_neural.magnifier.zoom_model_deep import ZoomModelDeep
+from src.d4_modelling_neural.zoom_model import ZoomModel
+from src.d4_modelling_neural.zoom_model_deep import ZoomModelDeep
 
 # To slice the LANES
-from src.d4_modelling_neural.magnifier.sample_lane.sample_lanes import sample_lanes
+from src.d4_modelling_neural.sample_lane.sample_lanes import sample_lanes
 
 # The loss
-from src.d4_modelling_neural.magnifier.loss import get_loss, evaluate_loss
+from src.d4_modelling_neural.loss import get_loss, evaluate_loss
 
 # The optimizer
 from tensorflow.keras.optimizers import Adam
 
 # The metric's manager
-from src.d4_modelling_neural.magnifier.metrics import MetricsMagnifier
+from src.d4_modelling_neural.metrics import MetricsMagnifier
 
 
 def train_magnifier(data_param, loading_param, training_param, tries, model_type):
@@ -43,6 +43,9 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
 
         model_type (string): says the type of model to be used.
+
+    Returns:
+        (list of 4 float): accuracy on train, mae on train, accuracy on validation, mae on validation.
     """
     # Unpack the arguments
     (video_names_train, video_names_valid, number_training, dimensions) = data_param
@@ -52,7 +55,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     # Take into account the trade off if it is different from 0.
     trade_off_info = ""
     if trade_off != 0:
-        trade_off_info = "trade_off_{}_".format(trade_off)
+        trade_off_info = "trade_off_{}".format(trade_off)
 
     # -- Paths to the data -- #
     paths_label_train = []
@@ -68,7 +71,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # Verify that the weights path does not exists
     path_weight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type))
-    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
+    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}_{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
 
     if path_new_weight.exists():
         raise AlreadyExistError(path_new_weight)
@@ -99,7 +102,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         # Build the MODEL
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
+        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}_{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
@@ -163,3 +166,5 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     # To save the plots
     starting_path_save = Path("reports/figures_results/zoom_model{}{}".format(tries, model_type))
     metrics.save(starting_path_save, number_training, trade_off_info)
+
+    return metrics.get_final_result()
