@@ -17,7 +17,7 @@ from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 from src.d4_modelling_neural.magnifier.zoom_model_deep import ZoomModelDeep
 
 # To slice the LANES
-from src.d4_modelling_neural.magnifier.slice_sample_lane.sample_lanes import sample_lanes
+from src.d4_modelling_neural.magnifier.sample_lane.sample_lanes import sample_lanes
 
 # The loss
 from src.d4_modelling_neural.magnifier.loss import get_loss, evaluate_loss
@@ -31,7 +31,7 @@ from src.d4_modelling_neural.magnifier.metrics import MetricsMagnifier
 
 def train_magnifier(data_param, loading_param, training_param, tries, model_type):
     """
-    Train the MODEL magnifier.
+    Train the model magnifier.
 
     Args:
         data_param (list): (video_names_train, video_names_valid, number_training, dimensions)

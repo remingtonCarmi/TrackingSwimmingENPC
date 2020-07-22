@@ -80,36 +80,15 @@ class ImageMagnifier:
         else:
             raise StopIteration
 
-    def get_limits(self, idx):
-        """
-        Compute the limits of specific a sub-image.
-
-        Args:
-            idx (integer): the specific sub-image.
-
-        Returns:
-             (integer): the beginning limit.
-
-             (integer): the ending limit.
-        """
-        if idx < self.nb_sub_images - 1:
-            pixel_step = self.window_size - self.recovery
-
-            return idx * pixel_step, idx * pixel_step + self.window_size
-        elif idx == self.nb_sub_images - 1:
-            return - self.window_size, None
-        else:
-            return None, None
-
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0297.jpg")
-    # PATH_IMAGE = Path("../../../../data/4_model_output/tries/scaled_images/scaled_l1_f0275.jpg")
+    PATH_IMAGE = Path("../../../../data/2_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0297.jpg")
+    PATH_IMAGE = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
 
     LANE = cv2.imread(str(PATH_IMAGE))
     LABEL = np.array([54, 1570])
-    # LABEL = np.array([49, 648])
+    LABEL = np.array([49, 648])
     WINDOW_SIZE = 200
     RECOVERY = 100
 

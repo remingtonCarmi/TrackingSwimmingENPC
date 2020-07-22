@@ -57,7 +57,7 @@ if __name__ == "__main__":
     from src.d4_modelling_neural.loading_data.transformations.image_transformations import transform_image
 
     # To modify the image
-    from src.d4_modelling_neural.magnifier.slice_sample_lane.image_objects.image_magnifier import ImageMagnifier
+    from src.d5_model_evaluation.slice_lane.image_magnifier.image_magnifier import ImageMagnifier
 
     # -- Get the ImageMagnifier i.e. the lane_magnifier -- #
     PATH_IMAGE = Path("../../data/2_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")

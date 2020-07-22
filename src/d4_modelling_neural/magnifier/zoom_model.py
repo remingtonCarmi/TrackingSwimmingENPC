@@ -18,7 +18,7 @@ from tensorflow.python.keras.layers import (
 # To test the MODEL
 from src.d4_modelling_neural.loading_data.data_generator import generate_data
 from src.d4_modelling_neural.loading_data.data_loader import DataLoader
-from src.d4_modelling_neural.magnifier.slice_sample_lane.slice_lanes import slice_lanes
+from src.d5_model_evaluation.slice_lane.slice_lanes import slice_lane
 
 
 def compute_dimension(input_size, kernel_size, stride, padding, dilation):
@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     # Slice the first batch
     (LANES, LABELS) = TRAIN_SET[0]
-    (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
+    (SUB_LANES, SUB_LABELS) = slice_lane(LANES, LABELS, WINDOW_SIZE, RECOVERY)
 
     model = ZoomModel()
     model.trainable = False

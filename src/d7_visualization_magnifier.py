@@ -1,12 +1,7 @@
 """
-This script creates a video where the predicted LABELS are printed on the LANES.
+This script creates a video where the predicted LABELS are printed on the lanes.
 """
 from pathlib import Path
-import numpy as np
-
-# Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
-from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError, FindPathError
 
 # To manage the graphic
 from src.d7_visualization.graphic_manager import GraphicManager
@@ -23,125 +18,105 @@ from src.d4_modelling_neural.magnifier.zoom_model import ZoomModel
 from src.d4_modelling_neural.magnifier.zoom_model_deep import ZoomModelDeep
 
 # To slice the lanes
-from src.d4_modelling_neural.magnifier.slice_sample_lane.image_objects.image_magnifier import ImageMagnifier
-from src.d4_modelling_neural.magnifier.slice_sample_lane.slice_lanes import slice_lanes
-
-# To merge the predictions
-from src.d7_visualization.compute_prediction import merge_predictions
+from src.d5_model_evaluation.slice_lane.slice_lanes import slice_lane
 
 # To make a video from images
 from src.d0_utils.store_load_data.make_video import make_video
 
 
-# --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = False
-# For the data
-VIDEO_NAME = "vid0"
-LANE_NUMBER = 1
-DIMENSIONS = [108, 1820]
-SCALE = 35
+def observe_models(data_param, models_param, model_evaluator, tries):
+    """
+    Observe the models behavior.
 
-# For the MODEL
-DEEP_MODEL = True
-NUMBER_TRAINING = 1
-WINDOW_SIZE = 150
-RECOVERY = 100
-# --- END : !! TO MODIFY !! --- #
+    Args:
+        data_param (list): (video_name, lane_number, dimensions, scale)
 
-# --- Set the parameters --- #
-if REAL_RUN:
-    TRIES = ""
-else:
-    TRIES = "/tries"
-if DEEP_MODEL:
-    MODEL_TYPE = "/deep_model"
-else:
-    MODEL_TYPE = "/simple_model"
+        models_param (list): (model_type1, model_type2, number_trainings, nb_epochs, batch_sizes, window_sizes, recoveries)
 
+        model_evaluator (function): function to evaluate the model.
 
-# --- Set the paths --- #
-PATH_VIDEO = Path("../data/1_raw_videos/{}.mp4".format(VIDEO_NAME))
-PATH_LABEL = [Path("../data/3_processed_positions{}/{}.csv".format(TRIES, VIDEO_NAME))]
-STARTING_DATA_PATH = Path("../data/2_intermediate_top_down_lanes/lanes{}".format(TRIES))
-STARTING_CALIBRATION_PATH = Path("../data/2_intermediate_top_down_lanes/calibration{}".format(TRIES))
-PATH_SAVE_GRAPHIC = Path("../reports/graphic_results{}/{}.jpg".format(TRIES, VIDEO_NAME))
+        tries (string): says if the training is done on colab : tries = "" or on the computer : tries = "/tries".
+    """
+    # Unpack the variables
+    (video_name, lane_number, dimensions, scale) = data_param
+    (model_type1, model_type2, number_trainings, nb_epochs, batch_sizes, window_sizes, recoveries) = models_param
 
-PATH_WEIGHT = Path("../data/4_models_weights{}/magnifier{}".format(TRIES, MODEL_TYPE))
-PATH_CURRENT_WEIGHT = PATH_WEIGHT / "window_{}_epoch_{}_batch_{}_{}.h5".format(WINDOW_SIZE, 15, 3, NUMBER_TRAINING)
+    # --- Set the paths --- #
+    path_video = Path("data/1_raw_videos/{}.mp4".format(video_name))
+    path_label = [Path("data/3_processed_positions{}/{}.csv".format(tries, video_name))]
+    starting_data_path = Path("data/2_intermediate_top_down_lanes/lanes{}".format(tries))
+    starting_calibration_path = Path("data/2_intermediate_top_down_lanes/calibration{}".format(tries))
+    path_save_graphic = Path("reports/graphic_results{}/{}_{}_{}_{}_{}.jpg".format(tries, video_name, model_type1[1:], window_sizes[0], model_type2[1:], window_sizes[1]))
 
+    path_weight_rough = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type1))
+    path_current_weight_rough = path_weight_rough / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[0], nb_epochs[0], batch_sizes[0], number_trainings[0])
 
-try:
+    path_weight_tight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type2))
+    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
+
     # --- Generate and load the sets --- #
-    DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False, lane_number=LANE_NUMBER)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=True, augmentation=False, flip=True)
-    SET_VISU = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False, augmentation=False, flip=False)
+    data = generate_data(path_label, starting_data_path, starting_calibration_path, take_all=False, lane_number=lane_number)
+    set = DataLoader(data, scale=scale, batch_size=1, dimensions=dimensions, standardization=True, augmentation=False, flip=True)
+    set_visu = DataLoader(data, scale=scale, batch_size=1, dimensions=dimensions, standardization=False, augmentation=False, flip=False)
 
-    print("The set is composed of {} images".format(len(DATA)))
+    print("The set is composed of {} images".format(len(data)))
 
     # --- Define the graphic manager --- #
-    GRAPHIC_MANAGER = GraphicManager(PATH_VIDEO, STARTING_CALIBRATION_PATH / "{}.txt".format(VIDEO_NAME), SCALE, len(SET), DIMENSIONS[1])
+    graphic_manager = GraphicManager(path_video, starting_calibration_path / "{}.txt".format(video_name), scale, len(set), dimensions[1])
 
     # --- Define the video manager --- #
-    VIDEO_MANAGER = VideoManager(len(SET))
+    video_manager = VideoManager(len(set))
 
-    # --- Define the MODEL --- #
-    if DEEP_MODEL:
-        MODEL = ZoomModelDeep()
+    # --- Define the MODELS --- #
+    if model_type1 == "/rough_deep_model":
+        model_rough = ZoomModelDeep()
     else:
-        MODEL = ZoomModel()
+        model_rough = ZoomModel()
+    if model_type2 == "/tight_deep_model":
+        model_tight = ZoomModelDeep()
+    else:
+        model_tight = ZoomModel()
 
     # --- Get the weights of the trainings --- #
-    # Build the model to load the weights
-    (LANES, LABELS) = SET[0]
-    (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
-    MODEL.build(SUB_LANES.shape)
+    # Build the rough model to load the weights
+    (lanes, labels) = set[0]
+    (sub_lanes, sub_labels) = slice_lane(lanes, labels, window_sizes[0], recoveries[0])
+    model_rough.build(sub_lanes.shape)
     # Load the weights
-    MODEL.load_weights(str(PATH_CURRENT_WEIGHT))
+    model_rough.load_weights(str(path_current_weight_rough))
+
+    # Build the tight model to load the weights
+    (sub_lanes, sub_labels) = slice_lane(lanes, labels, window_sizes[1], recoveries[1])
+    model_tight.build(sub_lanes.shape)
+    # Load the weights
+    model_tight.load_weights(str(path_current_weight_tight))
 
     # --- Evaluate the set --- #
-    MODEL.trainable = False
+    model_rough.trainable = False
+    model_tight.trainable = False
 
-    for (idx_batch, batch) in enumerate(SET):
-        (LANES, LABELS) = batch
-        SWIMMING_WAY = DATA[idx_batch, 3]
+    for (idx_batch, batch) in enumerate(set):
+        (lanes, labels) = batch
+        swimming_way = data[idx_batch, 3]
 
         # -- Get the predictions -- #
-        # Get the sub-images with the image that has been standardized
-        (SUB_LANES, SUB_LABELS) = slice_lanes(LANES, LABELS, WINDOW_SIZE, RECOVERY)
-        # Compute predictions
-        PREDICTIONS = MODEL(SUB_LANES)[:: int(SWIMMING_WAY)]
+        index_preds = model_evaluator(model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries)
+        # Take the swimming way into account
+        index_preds = index_preds[:: int(swimming_way)]
+        print(index_preds)
 
-        # -- Merge the predictions -- #
-        # Get the original lane_magnifier
-        MAGNIFIER_ORIGINAL_IMAGE = ImageMagnifier(SET_VISU[idx_batch][0][0], SET_VISU[idx_batch][1][0], WINDOW_SIZE, RECOVERY)
-        # The magnifier original image is only used to get the limits of the windows
-        INDEX_PREDS = merge_predictions(MAGNIFIER_ORIGINAL_IMAGE, PREDICTIONS)
-        print(INDEX_PREDS)
         # -- For the graphic -- #
-        FRAME_NAME = DATA[idx_batch, 0].parts[-1][: -4]
-        if SWIMMING_WAY == 1:
-            LABEL = LABELS[0, 1]
-        else:
-            LABEL = DIMENSIONS[1] - LABELS[0, 1]
-        GRAPHIC_MANAGER.update(idx_batch, FRAME_NAME, INDEX_PREDS, LABEL)
+        frame_name = data[idx_batch, 0].parts[-1][: -4]
+        graphic_manager.update(idx_batch, frame_name, index_preds, set_visu[idx_batch][1][0])
 
         # -- For the video -- #
-        VIDEO_MANAGER.update(idx_batch, MAGNIFIER_ORIGINAL_IMAGE.lane, INDEX_PREDS)
+        video_manager.update(idx_batch, set_visu[idx_batch][0][0], index_preds)
 
     # --- Make the graphic --- #
-    GRAPHIC_MANAGER.make_graphic(PATH_SAVE_GRAPHIC)
+    graphic_manager.make_graphic(path_save_graphic)
 
     # --- Make the video --- #
     print("Making the video...")
-    DESTINATION_VIDEO = Path("../data/5_model_output/videos{}".format(TRIES))
-    NAME_PREDICTED_VIDEO = "predicted_{}_window_{}_recovery_{}{}_{}.mp4".format(VIDEO_NAME, WINDOW_SIZE, RECOVERY, "_" + MODEL_TYPE[1:], NUMBER_TRAINING)
-    make_video(NAME_PREDICTED_VIDEO, VIDEO_MANAGER.lanes_with_preds, destination=DESTINATION_VIDEO)
-
-except FindPathDataError as find_path_data_error:
-    print(find_path_data_error.__repr__())
-except PaddingError as padding_error:
-    print(padding_error.__repr__())
-except AlreadyExistError as already_exist_error:
-    print(already_exist_error.__repr__())
-except FindPathError as find_path_error:
-    print(find_path_error.__repr__())
+    destination_video = Path("../data/5_model_output/videos{}".format(tries))
+    name_predicted_video = "predicted_{}_{}_window_{}_{}_window_{}.mp4".format(video_name, model_type1[1:], window_sizes[0], model_type2[1:], window_sizes[1])
+    make_video(name_predicted_video, video_manager.lanes_with_preds, destination=destination_video)
