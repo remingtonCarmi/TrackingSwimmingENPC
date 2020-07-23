@@ -38,11 +38,12 @@ class GraphicManager:
 
         # Data for figure
         self.pos_predictions = np.zeros((nb_images, 2))
+        self.pos_regression = np.zeros(nb_images)
         self.pos_real = np.zeros(nb_images)
         self.time = np.zeros(nb_images)
         self.lane_numbers = np.zeros(nb_images)
 
-    def update(self, idx_image, frame_name, index_preds, label):
+    def update(self, idx_image, frame_name, index_preds, index_regression_pred, label):
         """
         Update the lists with a new prediction.
 
@@ -64,6 +65,7 @@ class GraphicManager:
 
         # Register the predicted and the real position of the head
         self.pos_predictions[idx_image] = np.array([self.left_limit + index_preds[0] / self.scale - self.added_pad, self.left_limit + index_preds[-1] / self.scale - self.added_pad])
+        self.pos_regression[idx_image] = np.array([self.left_limit + index_regression_pred / self. scale - self.added_pad])
         self.pos_real[idx_image] = self.left_limit + label / self.scale - self.added_pad
 
     def make_graphic(self, path_save):
@@ -80,7 +82,7 @@ class GraphicManager:
         ax.plot(self.pos_real, self.time, label="real position", c="black")
 
         # Set the mean for the predictions
-        ax.plot((self.pos_predictions[:, 0] + self.pos_predictions[:, 1]) / 2, self.time, label="estimated position", c="blue")
+        ax.plot(self.pos_regression, self.time, label="estimated position", c="blue")
 
         # Set the uncertainty
         ax.fill_betweenx(self.time, self.pos_predictions[:, 0], self.pos_predictions[:, 1], alpha=0.3, facecolor="blue", label="likely zone")

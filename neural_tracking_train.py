@@ -22,19 +22,19 @@ DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
 SCALE = 35
-AUGMENTATION = True
+AUGMENTATION = False
 FLIP = True
 
 # Parameters for the training
 DEEP_MODEL = True
 NB_EPOCHS = 15
 BATCH_SIZE = 3
-WINDOW_SIZE = 150
+WINDOW_SIZE = 30
 NB_SAMPLES = 20
 DISTRIBUTION = 0.3
-MARGIN = 10
+MARGIN = 5
 TRADE_OFF = 0
-CLOSE_TO_HEAD = False
+CLOSE_TO_HEAD = True
 # --- END : !! TO MODIFY !! --- #
 
 

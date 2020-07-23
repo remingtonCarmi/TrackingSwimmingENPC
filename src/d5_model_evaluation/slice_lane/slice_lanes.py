@@ -57,8 +57,8 @@ if __name__ == "__main__":
     LABEL = np.array([49, 768])
     # LABEL = np.array([53, 950])
     # LABEL = np.array([41, 1163])
-    WINDOW_SIZE = 150
-    RECOVERY = 75
+    WINDOW_SIZE = 30
+    RECOVERY = 0
 
     # Slice the image
     (SUB_LANES, SUB_LABELS, LANE_ITERATOR) = slice_lane(LANE, LABEL, WINDOW_SIZE, RECOVERY)

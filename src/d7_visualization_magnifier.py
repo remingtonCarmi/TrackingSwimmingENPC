@@ -100,17 +100,18 @@ def observe_models(data_param, models_param, model_evaluator, tries):
         swimming_way = data[idx_batch, 3]
 
         # -- Get the predictions -- #
-        index_preds = model_evaluator(model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries)
+        (index_preds, index_regression_pred) = model_evaluator(model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries)
         # Take the swimming way into account
         index_preds = index_preds[:: int(swimming_way)]
-        print(index_preds)
+        print("Classification prediction", index_preds)
+        print("Regression prediction")
 
         # -- For the graphic -- #
         frame_name = data[idx_batch, 0].parts[-1][: -4]
-        graphic_manager.update(idx_batch, frame_name, index_preds, set_visu[idx_batch][1][0])
+        graphic_manager.update(idx_batch, frame_name, index_preds, index_regression_pred, set_visu[idx_batch][1][0])
 
         # -- For the video -- #
-        video_manager.update(idx_batch, set_visu[idx_batch][0][0], index_preds)
+        video_manager.update(idx_batch, set_visu[idx_batch][0][0], index_preds, index_regression_pred)
 
     # --- Make the graphic --- #
     graphic_manager.make_graphic(path_save_graphic)

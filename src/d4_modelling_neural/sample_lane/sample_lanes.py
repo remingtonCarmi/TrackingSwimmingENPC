@@ -49,12 +49,12 @@ def sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, c
 
 if __name__ == "__main__":
     # Data
-    PATH_IMAGE1 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
-    # PATH_IMAGE2 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
-    # PATH_IMAGE3 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
-    # PATH_IMAGE4 = Path("../../../../data/5_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
+    PATH_IMAGE1 = Path("../../../data/5_model_output/tries/transformed_images/transformed_l1_f0275.jpg")
+    # PATH_IMAGE2 = Path("../../../data/5_model_output/tries/transformed_images/transformed_l1_f0107.jpg")
+    # PATH_IMAGE3 = Path("../../../data/5_model_output/tries/transformed_images/transformed_l8_f1054.jpg")
+    # PATH_IMAGE4 = Path("../../../data/5_model_output/tries/transformed_images/transformed_l1_f0339.jpg")
 
-    # PATH_SAVE = Path("../../../../data/4_model_output/tries/sampled_images")
+    # PATH_SAVE = Path("../../../data/4_model_output/tries/sampled_images")
 
     LANES = np.array([cv2.imread(str(PATH_IMAGE1))])  # , cv2.imread(str(PATH_IMAGE2))])
     # LANES = np.array([cv2.imread(str(PATH_IMAGE3)), cv2.imread(str(PATH_IMAGE4))])

@@ -55,7 +55,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     # Take into account the trade off if it is different from 0.
     trade_off_info = ""
     if trade_off != 0:
-        trade_off_info = "trade_off_{}".format(trade_off)
+        trade_off_info = "trade_off_{}_".format(trade_off)
 
     # -- Paths to the data -- #
     paths_label_train = []
@@ -71,7 +71,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # Verify that the weights path does not exists
     path_weight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type))
-    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}_{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
+    path_new_weight = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training)
 
     if path_new_weight.exists():
         raise AlreadyExistError(path_new_weight)
@@ -87,9 +87,9 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # --- Define the MODEL --- #
     if model_type == "/deep_model":
-        model = ZoomModelDeep()
+        model = ZoomModelDeep(close_to_head)
     else:
-        model = ZoomModel()
+        model = ZoomModel(close_to_head)
 
     # Get the weights of the previous trainings
     if number_training > 1:
@@ -102,7 +102,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         # Build the MODEL
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}_{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
+        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
@@ -125,8 +125,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
             (lanes, labels) = batch
 
             # Get the sub images
-            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
-
+            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head)
             # Compute the loss, the gradients and the PREDICTIONS
             (grads, loss_value, predictions) = get_loss(model, sub_lanes, sub_labels, trade_off)
 
@@ -146,7 +145,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
             (lanes, labels) = batch
 
             # Get the sub images
-            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin)
+            (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head)
 
             # Compute the loss value and the PREDICTIONS
             (loss_value, predictions) = evaluate_loss(model, sub_lanes, sub_labels, trade_off)

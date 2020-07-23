@@ -36,9 +36,8 @@ def get_loss(model, sub_lanes, sub_labels, trade_off):
         PREDICTIONS (tensor of 2 dimensions): list of [pred_is_in_image, pred_is_not_in_image, pred_column]
     """
     with GradientTape() as tape:
-        # Evaluate with the MODEL
+        # Evaluate with the model
         predictions = model(sub_lanes)
-
         # Compute the loss value
         loss_value = compute_loss(sub_labels, predictions, trade_off)
 

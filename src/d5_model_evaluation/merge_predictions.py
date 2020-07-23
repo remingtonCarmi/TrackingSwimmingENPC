@@ -16,20 +16,24 @@ def merge_predictions(predictions, lane_iterator):
 
     Returns:
         (array): the list of the index where the head can be.
+
+        (integer): the predicted position of the head.
     """
     # Get the index where the head can be
     indicative_function = 1 - np.argmax(predictions[:, : 2], axis=1)
     indexes_head = np.where(indicative_function == 1)[0]
 
     # Will count the number of time that a head can be in a specific column
-    witness_prediction = np.zeros(lane_iterator.image_horiz_size)
+    witness_classification = np.zeros(lane_iterator.image_horiz_size)
+    witness_regression = np.zeros(lane_iterator.image_horiz_size)
 
     for idx_sub_image in indexes_head:
         (begin_limit, end_limit) = lane_iterator.get_limits(idx_sub_image)
-        witness_prediction[begin_limit: end_limit] += 1
+        witness_classification[begin_limit: end_limit] += 1
+        witness_regression[begin_limit + int(predictions[idx_sub_image, -1])] += 1
 
     # Return the columns with the highest probability to have a head
-    return np.where(witness_prediction == max(witness_prediction))[0]
+    return np.where(witness_classification == max(witness_classification))[0], np.max(np.where(witness_regression > 0)[0])
 
 
 if __name__ == "__main__":
@@ -53,5 +57,6 @@ if __name__ == "__main__":
     print("len(PREDS)", len(PREDS))
 
     # -- Plot the lane_magnifier with the prediction -- #
-    pred_interval = merge_predictions(np.array(PREDS), LANE_ITERATOR)
+    (pred_interval, pred_head) = merge_predictions(np.array(PREDS), LANE_ITERATOR)
     print(pred_interval)
+    print(pred_head)

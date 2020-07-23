@@ -27,12 +27,14 @@ def evaluate_model(model_rough, model_tight, lane, label, window_sizes, recoveri
 
     Returns:
         index_tight_predictions (array of integer): the list of the columns that might contain a head.
+
+        index_regression_pred (integer): the predicted position of the head.
     """
     # -- Get the first rough predictions -- #
     # Get the large sub-images
     (sub_lanes_rough, sub_labels_rough, lane_iterator_rough) = slice_lane(lane, label, window_sizes[0], recoveries[0])
     # Compute rough predictions
-    rough_predictions = model_rough(sub_lanes_rough)
+    rough_predictions = model_rough(sub_lanes_rough)[0]
 
     # -- Merge the rough predictions -- #
     index_rough_predictions = merge_predictions(rough_predictions, lane_iterator_rough)
@@ -49,7 +51,8 @@ def evaluate_model(model_rough, model_tight, lane, label, window_sizes, recoveri
     tight_predictions = model_tight(sub_lanes_tight)
 
     # -- Merge the rough predictions -- #
-    index_tight_predictions = merge_predictions(tight_predictions, lane_iterator_tight)
-    print(index_tight_predictions)
+    index_tight_predictions, index_regression_pred = merge_predictions(tight_predictions, lane_iterator_tight)
+    print("Index classification prediction", index_tight_predictions)
+    print("Index regression prediction", index_regression_pred)
 
-    return index_tight_predictions
+    return index_tight_predictions, index_regression_pred
