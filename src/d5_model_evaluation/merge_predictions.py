@@ -32,8 +32,19 @@ def merge_predictions(predictions, lane_iterator):
         witness_classification[begin_limit: end_limit] += 1
         witness_regression[begin_limit + int(predictions[idx_sub_image, -1])] += 1
 
+    # Take the columns with the highest probabilities
+    classification_columns = np.where(witness_classification == max(witness_classification))[0]
+
+    # Take the column with the highest probability
+    regression_columns = np.where(witness_regression > 0)[0]
+
+    # If there is any column return the middle of the initial image
+    if len(regression_columns) == 0:
+        final_regression = lane_iterator.image_horiz_size // 2
+    else:
+        final_regression = np.max(regression_columns)
     # Return the columns with the highest probability to have a head
-    return np.where(witness_classification == max(witness_classification))[0], np.max(np.where(witness_regression > 0)[0])
+    return classification_columns, final_regression
 
 
 if __name__ == "__main__":

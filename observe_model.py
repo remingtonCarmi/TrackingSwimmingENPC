@@ -23,8 +23,8 @@ SCALE = 35
 # For the models
 DEEP_MODELS = [False, False]
 NUMBER_TRAININGS = [1, 1]
-NB_EPOCHS = [12, 15]
-BATCH_SIZES = [12, 14]
+NB_EPOCHS = [15, 10]
+BATCH_SIZES = [3, 3]
 WINDOW_SIZES = [150, 30]
 RECOVERIES = [75, 29]
 # --- END : !! TO MODIFY !! --- #
@@ -36,13 +36,13 @@ if REAL_RUN:
 else:
     TRIES = "/tries"
 if DEEP_MODELS[0]:
-    MODEL_TYPE1 = "/rough_deep_model"
+    MODEL_TYPE1 = "/deep_model"
 else:
-    MODEL_TYPE1 = "/rough_simple_model"
+    MODEL_TYPE1 = "/simple_model"
 if DEEP_MODELS[1]:
-    MODEL_TYPE2 = "/tight_deep_model"
+    MODEL_TYPE2 = "/deep_model"
 else:
-    MODEL_TYPE2 = "/tight_simple_model"
+    MODEL_TYPE2 = "/simple_model"
 
 
 # Pack the variables

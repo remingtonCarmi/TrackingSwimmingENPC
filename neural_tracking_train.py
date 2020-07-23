@@ -17,7 +17,7 @@ REAL_TRAINING = False
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0"]
 VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 1
+NUMBER_TRAINING = 2
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
@@ -26,11 +26,11 @@ AUGMENTATION = False
 FLIP = True
 
 # Parameters for the training
-DEEP_MODEL = True
-NB_EPOCHS = 15
+DEEP_MODEL = False
+NB_EPOCHS = 10
 BATCH_SIZE = 3
 WINDOW_SIZE = 30
-NB_SAMPLES = 20
+NB_SAMPLES = 40
 DISTRIBUTION = 0.3
 MARGIN = 5
 TRADE_OFF = 0

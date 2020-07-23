@@ -52,7 +52,7 @@ class GraphicManager:
 
             frame_name (string): the name of the image.
 
-            index_preds (array): the index of the columns where the head should be.
+            index_regression_pred (array): the index of the columns where the head should be.
 
             label (integer): the column where the head is.
         """

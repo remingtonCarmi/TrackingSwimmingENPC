@@ -68,25 +68,25 @@ def observe_models(data_param, models_param, model_evaluator, tries):
     video_manager = VideoManager(len(set))
 
     # --- Define the MODELS --- #
-    if model_type1 == "/rough_deep_model":
-        model_rough = ZoomModelDeep()
+    if model_type1 == "/deep_model":
+        model_rough = ZoomModelDeep(False)
     else:
-        model_rough = ZoomModel()
-    if model_type2 == "/tight_deep_model":
-        model_tight = ZoomModelDeep()
+        model_rough = ZoomModel(False)
+    if model_type2 == "/deep_model":
+        model_tight = ZoomModelDeep(True)
     else:
-        model_tight = ZoomModel()
+        model_tight = ZoomModel(True)
 
     # --- Get the weights of the trainings --- #
     # Build the rough model to load the weights
     (lanes, labels) = set[0]
-    (sub_lanes, sub_labels) = slice_lane(lanes, labels, window_sizes[0], recoveries[0])
+    (sub_lanes, sub_labels) = slice_lane(lanes[0], labels[0], window_sizes[0], recoveries[0])[:2]
     model_rough.build(sub_lanes.shape)
     # Load the weights
     model_rough.load_weights(str(path_current_weight_rough))
 
     # Build the tight model to load the weights
-    (sub_lanes, sub_labels) = slice_lane(lanes, labels, window_sizes[1], recoveries[1])
+    (sub_lanes, sub_labels) = slice_lane(lanes[0], labels[0], window_sizes[1], recoveries[1])[:2]
     model_tight.build(sub_lanes.shape)
     # Load the weights
     model_tight.load_weights(str(path_current_weight_tight))
@@ -101,14 +101,16 @@ def observe_models(data_param, models_param, model_evaluator, tries):
 
         # -- Get the predictions -- #
         (index_preds, index_regression_pred) = model_evaluator(model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries)
+        print("Prediction tight", index_preds)
+        print("Regression prediction", index_regression_pred)
         # Take the swimming way into account
         index_preds = index_preds[:: int(swimming_way)]
-        print("Classification prediction", index_preds)
-        print("Regression prediction")
+        if swimming_way == -1:
+            index_regression_pred = dimensions[1] - index_regression_pred
 
         # -- For the graphic -- #
         frame_name = data[idx_batch, 0].parts[-1][: -4]
-        graphic_manager.update(idx_batch, frame_name, index_preds, index_regression_pred, set_visu[idx_batch][1][0])
+        graphic_manager.update(idx_batch, frame_name, index_preds, index_regression_pred, set_visu[idx_batch][1][0, 1])
 
         # -- For the video -- #
         video_manager.update(idx_batch, set_visu[idx_batch][0][0], index_preds, index_regression_pred)
@@ -118,6 +120,6 @@ def observe_models(data_param, models_param, model_evaluator, tries):
 
     # --- Make the video --- #
     print("Making the video...")
-    destination_video = Path("../data/5_model_output/videos{}".format(tries))
+    destination_video = Path("data/5_model_output/videos{}".format(tries))
     name_predicted_video = "predicted_{}_{}_window_{}_{}_window_{}.mp4".format(video_name, model_type1[1:], window_sizes[0], model_type2[1:], window_sizes[1])
     make_video(name_predicted_video, video_manager.lanes_with_preds, destination=destination_video)

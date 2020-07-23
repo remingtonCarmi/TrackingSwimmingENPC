@@ -69,6 +69,7 @@ class ImageMagnifier:
                 label = [1, 0, self.label[1] - idx * pixel_step]
             else:
                 label = [0, 1, -1]
+
             return self.lane[:, idx * pixel_step: idx * pixel_step + self.window_size], label
         elif idx == self.nb_sub_images - 1:
             # Compute the label
@@ -76,6 +77,7 @@ class ImageMagnifier:
                 label = [1, 0, self.label[1] - self.dimensions[1] - self.window_size]
             else:
                 label = [0, 1, -1]
+
             return self.lane[:, - self.window_size:], label
         else:
             raise StopIteration

@@ -128,6 +128,11 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
             (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head)
             # Compute the loss, the gradients and the PREDICTIONS
             (grads, loss_value, predictions) = get_loss(model, sub_lanes, sub_labels, trade_off)
+            import numpy as np
+            indicative_function = 1 - np.argmax(predictions[:nb_samples, : 2], axis=1)
+            indexes_head = np.where(indicative_function == 1)[0]
+            print(indexes_head)
+            print(sub_labels)
 
             # Optimize
             optimizer.apply_gradients(zip(grads, model.trainable_variables))
@@ -146,7 +151,6 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
             # Get the sub images
             (sub_lanes, sub_labels) = sample_lanes(lanes, labels, window_size, nb_samples, distribution, margin, close_to_head)
-
             # Compute the loss value and the PREDICTIONS
             (loss_value, predictions) = evaluate_loss(model, sub_lanes, sub_labels, trade_off)
 
