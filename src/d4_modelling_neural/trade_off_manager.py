@@ -3,6 +3,7 @@ This module contains the class TradeOffManager.
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 
 
 class TradeOffManager:
@@ -66,11 +67,26 @@ class TradeOffManager:
         Args:
             path_root (WindowsPath): the path that leads to the folder that will contain the figure.
         """
-        plt.plot(self.trade_offs, self.error_rates_train, label="Error rates", color="blue")
-        plt.plot(self.trade_offs, self.maes_train, label="Mean absolute errors", color="blue")
-        plt.plot(self.trade_offs, self.error_rates_valid, label="Error rates", color="orange")
-        plt.plot(self.trade_offs, self.maes_valid, label="Mean absolute errors", color="orange")
-        plt.xlabel("Values of the trade off")
-        plt.legend()
+        (fig, ax_error) = plt.subplots()
+        ax_mae = ax_error.twinx()
+
+        # Set the error rate figure
+        ax_error.plot(self.trade_offs, self.error_rates_train, label="Train", color="red", linestyle="dashed")
+        ax_error.plot(self.trade_offs, self.error_rates_valid, label="Validation", color="red")
+        ax_error.set_xlabel("Values of the trade off")
+        ax_error.set_ylabel("Error rates", color="red")
+        ax_error.tick_params(axis='y', labelcolor="red")
+
+        # Set the mean absolute error figure
+        ax_mae.plot(self.trade_offs, self.maes_train, color="black", linestyle="dashed")
+        ax_mae.plot(self.trade_offs, self.maes_valid, color="black")
+        ax_mae.set_ylabel("Mean absolute error", color="black")
+        ax_mae.tick_params(axis='y', labelcolor="black")
+
+        train_legend = mlines.Line2D([], [], color='black', linestyle="dashed", label='Train')
+        validation_legend = mlines.Line2D([], [], color='black', label='Validation')
+
+        plt.legend(handles=[train_legend, validation_legend])
+        plt.xscale("log")
         plt.savefig(path_root / self.save_name)
         plt.close()
