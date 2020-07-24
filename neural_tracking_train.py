@@ -27,7 +27,7 @@ FLIP = True
 
 # Parameters for the training
 DEEP_MODEL = False
-NB_EPOCHS = 22
+NB_EPOCHS = 10
 BATCH_SIZE = 12
 WINDOW_SIZE = 150
 NB_SAMPLES = 3
