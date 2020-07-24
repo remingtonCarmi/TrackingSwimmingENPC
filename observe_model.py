@@ -13,18 +13,18 @@ from src.d7_visualization_magnifier import observe_models
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = False
+REAL_RUN = True
 # For the data
-VIDEO_NAME = "vid0"
-LANE_NUMBER = 1
+VIDEO_NAME = "100_NL_F_FA"
+LANE_NUMBER = 8
 DIMENSIONS = [108, 1820]
 SCALE = 35
 
 # For the models
 DEEP_MODELS = [False, False]
 NUMBER_TRAININGS = [1, 1]
-NB_EPOCHS = [15, 10]
-BATCH_SIZES = [3, 3]
+NB_EPOCHS = [10, 10]
+BATCH_SIZES = [12, 12]
 WINDOW_SIZES = [150, 30]
 RECOVERIES = [75, 29]
 # --- END : !! TO MODIFY !! --- #
