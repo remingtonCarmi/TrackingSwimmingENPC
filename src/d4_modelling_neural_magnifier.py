@@ -2,6 +2,7 @@
 This script trains a MODEL with the magnifier concept.
 """
 from pathlib import Path
+import numpy as np
 
 # Exception
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError
@@ -78,7 +79,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # --- Generate and load the sets--- #
     train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
-    valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths)
+    valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths, lane_number=8)
 
     train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=augmentation, flip=flip)
     valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=False, flip=flip)
@@ -122,6 +123,9 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         print("Training, epoch n ° {}".format(epoch))
         model.trainable = True
         for (idx_batch, batch) in enumerate(train_set):
+            # Print the progress
+            if idx_batch % 100 == 0:
+                print(np.round(100 * idx_batch // len(train_set)), "% of the training done")
             (lanes, labels) = batch
 
             # Get the sub images
