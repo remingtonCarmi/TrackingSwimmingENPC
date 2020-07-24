@@ -49,18 +49,21 @@ if __name__ == "__main__":
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0107.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/100NL_FAF/l8_f1054.jpg")
     PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/50_Br_M_SF_1/l1_f0339.jpg")
+    PATH_IMAGE = Path("../../../../../data/5_model_output/tries/augmented_images/augmented_l5_f0123_2.jpg")
 
-    # PATH_SAVE = Path("../../../../../data/5_model_output/tries/transformed_images/padded_l1_f0107.jpg")
+    # PATH_SAVE = Path("../../../../../data/5_model_output/tries/padded_images/padded_l1_f0107.jpg")
 
     SCALE = 35
     VIDEO_LENGTH = 25
     # VIDEO_LENGTH = 50.97291666666667 - -1
     VIDEO_LENGTH = 28.3
+    VIDEO_LENGTH = 50.98645833333333 - 6.204166666666667
     DIMENSIONS = [108, 1820]
     LABEL = np.array([43, 387])
     # LABEL = np.array([83, 644])
     # LABEL = np.array([53, 1003])
     LABEL = np.array([83, 2903])
+    LABEL = np.array([136, 2774])
 
     try:
         # Load the image

@@ -28,13 +28,15 @@ if __name__ == "__main__":
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/vid1/l1_f0107.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/100NL_FAF/l8_f1054.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/tries/50_Br_M_SF_1/l1_f0339.jpg")
+    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/100_NL_F_FA/l5_f0123.jpg")
 
     # PATH_SAVE = Path("../../../../../data/5_model_output/tries/flipped_images")
 
-    LABEL = np.array([43, 387])
+    # LABEL = np.array([43, 387])
     # LABEL = np.array([83, 644])
     # LABEL = np.array([53, 1003])
     # LABEL = np.array([83, 2903])
+    LABEL = np.array([136, 2774])
 
     # Load the image
     IMAGE = cv2.imread(str(PATH_IMAGE)).astype(np.float)
@@ -49,7 +51,7 @@ if __name__ == "__main__":
     flip_image(IMAGE, LABEL)
 
     # Register the flipped image
-    # cv2.imwrite(str(PATH_SAVE / "flipped_l1_f0275.jpg"), FLIPPED_IMAGE)
+    # cv2.imwrite(str(PATH_SAVE / "flipped_l5_f0123.jpg"), IMAGE)
 
     # Plot the flipped image
     IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]

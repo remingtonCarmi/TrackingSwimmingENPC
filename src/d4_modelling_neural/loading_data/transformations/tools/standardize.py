@@ -24,13 +24,15 @@ if __name__ == "__main__":
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/vid1/l1_f0107.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/100NL_FAF/l8_f1054.jpg")
     # PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/lanes/tries/50_Br_M_SF_1/l1_f0339.jpg")
+    PATH_IMAGE = Path("../../../../../data/2_intermediate_top_down_lanes/LANES/100_NL_F_FA/l5_f0123.jpg")
 
-    # PATH_SAVE = Path("../../../../../data/5_model_output/tries/transformed_images/rescaled_l1_f0107.jpg")
+    PATH_SAVE = Path("../../../../../data/5_model_output/tries/standardized_images/standardized_l5_f0123.jpg")
 
     LABEL = np.array([43, 387])
     # LABEL = np.array([83, 644])
     # LABEL = np.array([53, 1003])
     # LABEL = np.array([83, 2903])
+    LABEL = np.array([136, 2774])
 
     # Load the image
     IMAGE = cv2.imread(str(PATH_IMAGE)).astype(np.float)
@@ -45,11 +47,11 @@ if __name__ == "__main__":
     standardize(IMAGE)
 
     # Plot standardized image
-    print(IMAGE)
     print("Mean", np.mean(IMAGE))
     print("Std", np.std(IMAGE))
+    print(type(IMAGE[0, 0, 0]))
+    cv2.imwrite(str(PATH_SAVE), IMAGE)
     IMAGE[LABEL[0], LABEL[1]] = [0, 0, 255]
-    # cv2.imwrite(str(PATH_SAVE), STAN_IMAGE)
     cv2.imshow("Standardized image", IMAGE)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
