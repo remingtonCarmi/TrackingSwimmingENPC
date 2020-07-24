@@ -36,8 +36,8 @@ if __name__ == "__main__":
     # Define the paths
     VIDEO_NAME = "vid1"
     PATH_VIDEO = Path("../data/1_raw_videos/{}.mp4".format(VIDEO_NAME))
-    PATH_POINTING_REMI = Path("../data/3_processed_positions/tries/{}_pointing_remi.csv".format(VIDEO_NAME))
-    PATH_POINTING_THEO = Path("../data/3_processed_positions/tries/{}_pointing_theo.csv".format(VIDEO_NAME))
+    PATH_POINTING_CLEM = Path("../data/3_processed_positions/{}_pointing_clem.csv".format(VIDEO_NAME))
+    PATH_POINTING_THEO = Path("../data/3_processed_positions/{}_pointing_theo.csv".format(VIDEO_NAME))
 
     PATH_CALIBRATION = Path("../data/2_intermediate_top_down_lanes/calibration/{}.txt".format(VIDEO_NAME))
 
@@ -47,8 +47,8 @@ if __name__ == "__main__":
     video_lenght_pixel = video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
 
     # Load the csv files
-    remi_pointing = pd.read_csv(PATH_POINTING_REMI)
-    theo_pointing = pd.read_csv(PATH_POINTING_THEO)
+    remi_pointing = pd.read_csv(PATH_POINTING_CLEM)[30:]
+    theo_pointing = pd.read_csv(PATH_POINTING_THEO)[30:]
 
     # Compute the common indexes
     common_pixels = compute_common_indexes(remi_pointing, theo_pointing)
