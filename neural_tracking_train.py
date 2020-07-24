@@ -13,28 +13,28 @@ import tensorflow as tf
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_TRAINING = False
+REAL_TRAINING = True
 # Parameters for data
-VIDEO_NAMES_TRAIN = ["vid0"]
-VIDEO_NAMES_VALID = ["vid1"]
-NUMBER_TRAINING = 2
+VIDEO_NAMES_TRAIN = ["vid0", "vid1", "100_NL_D_FA-Canet", "100NL_FAF",  "2004N_FHA"]
+VIDEO_NAMES_VALID = ["100_NL_F_FA"]
+NUMBER_TRAINING = 1
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
 SCALE = 35
-AUGMENTATION = False
+AUGMENTATION = True
 FLIP = True
 
 # Parameters for the training
 DEEP_MODEL = False
-NB_EPOCHS = 10
-BATCH_SIZE = 3
-WINDOW_SIZE = 30
-NB_SAMPLES = 40
+NB_EPOCHS = 25
+BATCH_SIZE = 12
+WINDOW_SIZE = 150
+NB_SAMPLES = 3
 DISTRIBUTION = 0.3
-MARGIN = 5
+MARGIN = 10
 TRADE_OFF = 0
-CLOSE_TO_HEAD = True
+CLOSE_TO_HEAD = False
 # --- END : !! TO MODIFY !! --- #
 
 
