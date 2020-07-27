@@ -67,7 +67,7 @@ if __name__ == "__main__":
     NB_SAMPLES = 4
     DISTRIBUTION = 0.3
     MARGIN = 5
-    CLOSED_TO_HEAD = False
+    CLOSED_TO_HEAD = True
 
     # Slice the image
     (SUB_LANES, SUB_LABELS) = sample_lanes(LANES, LABELS, WINDOW_SIZE, NB_SAMPLES, DISTRIBUTION, MARGIN, CLOSED_TO_HEAD)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     for idx_image in range(NB_SUB_LANES):
         # Save the image
         PATH_SAVE_SUB_IMAGE = PATH_SAVE / "sampled_l5_f0123_{}.jpg".format(idx_image)
-        cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
+        # cv2.imwrite(str(PATH_SAVE_SUB_IMAGE), SUB_LANES[idx_image])
         print(SUB_LABELS[idx_image])
 
         # print("Image n° {}. Present = {}".format(idx_image, SUB_LABELS[idx_image][0]))
