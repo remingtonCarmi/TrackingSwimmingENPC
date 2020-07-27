@@ -66,7 +66,7 @@ if __name__ == "__main__":
     LABEL = np.array([83, 644])
     LABEL = np.array([53, 1003])
     LABEL = np.array([83, 2903])
-    LABEL = np.array([136, 2774])
+    LABEL = np.array([136, 3840 - 2774])
 
     # Load the image
     IMAGE = cv2.imread(str(PATH_IMAGE)).astype(np.float)

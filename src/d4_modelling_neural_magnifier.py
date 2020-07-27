@@ -35,7 +35,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     Train the model magnifier.
 
     Args:
-        data_param (list): (video_names_train, video_names_valid, number_training, dimensions)
+        data_param (list): (video_names_train, video_names_valid, number_training, dimensions, vadid_lane_number)
 
         loading_param (list): (scale, augmentation, flip)
 
@@ -49,7 +49,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         (list of 4 float): accuracy on train, mae on train, accuracy on validation, mae on validation.
     """
     # Unpack the arguments
-    (video_names_train, video_names_valid, number_training, dimensions) = data_param
+    (video_names_train, video_names_valid, number_training, dimensions, valid_lane_number) = data_param
     (scale, augmentation, flip) = loading_param
     (nb_epochs, batch_size, window_size, nb_samples, distribution, margin, trade_off, close_to_head) = training_param
 
@@ -79,7 +79,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
 
     # --- Generate and load the sets--- #
     train_data = generate_data(paths_label_train, starting_data_paths, starting_calibration_paths)
-    valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths, lane_number=8)
+    valid_data = generate_data(paths_label_valid, starting_data_paths, starting_calibration_paths, lane_number=valid_lane_number)
 
     train_set = DataLoader(train_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=augmentation, flip=flip)
     valid_set = DataLoader(valid_data, batch_size=batch_size, scale=scale, dimensions=dimensions, augmentation=False, flip=flip)

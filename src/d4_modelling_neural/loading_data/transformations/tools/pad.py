@@ -63,7 +63,7 @@ if __name__ == "__main__":
     # LABEL = np.array([83, 644])
     # LABEL = np.array([53, 1003])
     LABEL = np.array([83, 2903])
-    LABEL = np.array([136, 2774])
+    LABEL = np.array([136, 3840 - 2774])
 
     try:
         # Load the image
@@ -89,6 +89,7 @@ if __name__ == "__main__":
 
         # Plot padded image
         PADDED_IMAGE[PADDED_LABEL[0], PADDED_LABEL[1]] = [0, 0, 255]
+        print(PADDED_LABEL)
         # cv2.imwrite(str(PATH_SAVE), PADDED_IMAGE)
 
         cv2.imshow("Filled Image", PADDED_IMAGE.astype(np.uint8))
