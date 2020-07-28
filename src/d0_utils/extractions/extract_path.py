@@ -73,6 +73,7 @@ def extract_path(path_file_images, lane, frame):
     list_images_path = []
     list_lanes_frames = []
     list_file = listdir(path_file_images)
+    list_file = sorted(list_file)
 
     # Verify that there is at least one image in the folder
     nb_files = len(list_file)
@@ -95,7 +96,7 @@ def extract_path(path_file_images, lane, frame):
 
 
 if __name__ == "__main__":
-    PATH_IMAGE = Path("../../../data/2_intermediate_top_down_lanes/LANES/tries/vid0")
+    PATH_IMAGE = Path("../../../data/2_intermediate_top_down_lanes/LANES/tries/vid1")
 
     try:
         (LIST_IMAGES_PATH, LIST_LANES_FRAMES) = extract_path(PATH_IMAGE, 1, 525)
