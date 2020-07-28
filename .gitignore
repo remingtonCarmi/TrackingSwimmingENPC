@@ -1,11 +1,39 @@
-*.mp4
+**/*.mp4
+
+**/*.mov
 
 *.pyc
 
-*.jpg
+**/*.jpg
+
+**/*.gif
+
+reports/**/*.xlsx
+
+**/*.h5
 
 *test
 
 *.idea
 
 **/tries/**
+
+
+# For README.md
+!data/5_model_output/gif/first_method_detection.gif
+!data/5_model_output/gif/predicted_original_vid0_simple_model_window_150_simple_model_window_30_short.gif
+!data/5_model_output/gif/predicted_original_vid0_deep_model_window_150_deep_model_window_30_short.gif
+!data/5_model_output/gif/time_line_data.gif
+!data/5_model_output/gif/labelled_augmented_flip_vid0_short.gif
+!data/5_model_output/gif/labelled_flip_100_NL_D_FA-Canet_short.gif
+!reports/figures_results/zoom_model/simple_model/final_training/accuracy_150_epoch_22_batch_12_1.jpg
+!reports/figures_results/zoom_model/simple_model/final_training/loss_150_epoch_22_batch_12_1.jpg
+!reports/trade_off_results/simple_model/window_30_epoch_7_batch_12.jpg
+!reports/figures_results/zoom_model/simple_model/trade_off_tune/accuracy_30_epoch_7_batch_12_trade_off_0.01_1.jpg
+!reports/figures_results/zoom_model/simple_model/trade_off_tune/mae_30_epoch_7_batch_12_trade_off_0.01_1.jpg
+!reports/graphic_results/100_NL_D_FA-Canet_simple_model_150_simple_model_30.jpg
+!data/5_model_output/gif/predicted_original_100_NL_D_FA-Canet_deep_model_window_150_deep_model_window_30_short.gif
+
+# The trainings
+!data/4_models_weights/magnifier/simple_model/final_training/window_150_epoch_22_batch_12_1.h5
+!data/4_models_weights/magnifier/simple_model/trade_off_tune/window_30_epoch_7_batch_12_trade_off_0.01_1.h5

@@ -96,7 +96,7 @@ Here, the prediction on the validation set can be seen :
 <td><img width="600px" src="data/5_model_output/gif/predicted_original_100_NL_D_FA-Canet_deep_model_window_150_deep_model_window_30_short.gif"></td> <br>
 </DIV>
 
-## Prerequisites & Installation:
+### Prerequisites & Installation
 
 need Python version 3.7
 
@@ -119,7 +119,7 @@ These videos are provided by the [French Swimming Federation](https://www.ffnata
 
 **Note** : on Mac OS, some functionnalities might not work. Please tell us when you point some of them out. We'll fix them asap.
 
-## Usage
+### Usage
 
 **To test the first method based on the skin color**, run
 ```bash
