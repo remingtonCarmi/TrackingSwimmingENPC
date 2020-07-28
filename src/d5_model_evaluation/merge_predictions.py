@@ -30,7 +30,7 @@ def merge_predictions(predictions, lane_iterator):
     for idx_sub_image in indexes_head:
         (begin_limit, end_limit) = lane_iterator.get_limits(idx_sub_image)
         witness_classification[begin_limit: end_limit] += 1
-        witness_regression[np.clip(begin_limit + int(predictions[idx_sub_image, -1]), 0, lane_iterator.image_horiz_size)] += 1
+        witness_regression[np.clip(begin_limit + int(predictions[idx_sub_image, -1]), 0, lane_iterator.image_horiz_size - 1)] += 1
 
     # Take the columns with the highest probabilities
     classification_columns = np.where(witness_classification == max(witness_classification))[0]
