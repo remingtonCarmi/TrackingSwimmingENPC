@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-# To get the left limit
+# To get the left limit and the video length
 from src.d7_visualization.tools.get_meters_video import get_meters_video
 
 

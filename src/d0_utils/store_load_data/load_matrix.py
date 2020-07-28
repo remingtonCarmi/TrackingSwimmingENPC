@@ -1,5 +1,5 @@
 """
-This module has the purpose of storing a matrix.
+This module has the purpose of loading a matrix.
 """
 from pathlib import Path
 import numpy as np

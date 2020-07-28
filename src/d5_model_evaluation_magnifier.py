@@ -39,19 +39,15 @@ def evaluate_model(model_rough, model_tight, lane, label, window_sizes, recoveri
     # -- Merge the rough predictions -- #
     (index_rough_predictions, index_rough_regression_pred) = merge_predictions(rough_predictions, lane_iterator_rough)
     (left_rough_pred, right_rough_pred) = (index_rough_predictions[0], index_rough_predictions[-1] + 1)
-    print("Left rough pred", left_rough_pred, "Right rough pred", right_rough_pred)
-    print("Prediction rough", index_rough_predictions)
 
     # -- Get the second tight predictions -- #
     # Adapt the label
     label_tight = label.copy()
     label_tight[1] -= left_rough_pred
     # Get the tight sub-images
-    print("Tight")
     (sub_lanes_tight, sub_labels_tight, lane_iterator_tight) = slice_lane(lane[:, left_rough_pred: right_rough_pred], label_tight, window_sizes[1], recoveries[1])
     # Compute tight predictions
     tight_predictions = model_tight(sub_lanes_tight)
-    print("Prediction tight value", tight_predictions)
 
     # -- Merge the rough predictions -- #
     (index_tight_predictions, index_regression_pred) = merge_predictions(tight_predictions, lane_iterator_tight)

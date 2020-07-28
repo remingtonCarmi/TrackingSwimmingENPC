@@ -140,11 +140,11 @@ def get_length_image(path_calibration):
 
 
 if __name__ == "__main__":
-    PATHS_LABEL = [Path("../../../data/3_processed_positions/tries/vid0.csv"),
-                   Path("../../../data/3_processed_positions/tries/vid1.csv")]
+    PATHS_LABEL = [Path("../../../data/3_processed_positions/tries/vid1_try.csv")]
+                   # Path("../../../data/3_processed_positions/tries/vid1.csv")]
     try:
-        GENERATOR = generate_data(PATHS_LABEL, take_all=False, lane_number=1)
-        print(GENERATOR)
+        GENERATOR = generate_data(PATHS_LABEL, take_all=False, lane_number=-1)
+
         print(len(GENERATOR))
     except FindPathDataError as find_path_data_error:
         print(find_path_data_error.__repr__())
