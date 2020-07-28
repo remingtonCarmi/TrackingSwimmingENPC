@@ -52,7 +52,7 @@ def observe_models(data_param, models_param, model_evaluator, tries):
     path_current_weight_rough = path_weight_rough / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[0], nb_epochs[0], batch_sizes[0], number_trainings[0])
 
     path_weight_tight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type2))
-    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
+    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_trade_off_0.01_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
 
     # --- Generate and load the sets --- #
     data = generate_data(path_label, starting_data_path, starting_calibration_path, take_all=False, lane_number=lane_number)

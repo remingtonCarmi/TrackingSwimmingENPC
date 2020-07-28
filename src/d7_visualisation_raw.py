@@ -53,13 +53,14 @@ def observe_on_original_video(data_param, models_param, model_evaluator, tries):
     path_current_weight_rough = path_weight_rough / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[0], nb_epochs[0], batch_sizes[0], number_trainings[0])
 
     path_weight_tight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type2))
-    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
+    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_trade_off_0.01_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
 
     # --- Define the prediction memories --- #
     prediction_memories = PredictionMemories(begin_time, end_time, path_video, read_homography, get_original_image, starting_calibration_path, dimensions, extract_image_video, scale)
 
     # --- Generate and load the sets --- #
     data = generate_data(path_label, starting_data_path, starting_calibration_path, take_all=True, lane_number=lane_number)
+    print(len(data))
     # Withdraw the frame that are out of the laps of time of interest
     data = prediction_memories.in_time(data)
     set = DataLoader(data, batch_size=1, scale=scale, dimensions=dimensions, standardization=True, augmentation=False, flip=True)

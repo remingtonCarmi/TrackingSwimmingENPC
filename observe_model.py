@@ -23,7 +23,7 @@ SCALE = 35
 # For the models
 DEEP_MODELS = [False, False]
 NUMBER_TRAININGS = [1, 1]
-NB_EPOCHS = [22, 22]
+NB_EPOCHS = [22, 7]
 BATCH_SIZES = [12, 12]
 WINDOW_SIZES = [150, 30]
 RECOVERIES = [75, 29]
