@@ -26,6 +26,9 @@ class PredictionMemories:
         self.end_time = end_time
         self.begin_frame = int(begin_time * self.fps)
         self.end_frame = int(end_time * self.fps)
+        print("begin_frame first", self.begin_frame)
+        print("end_frame first", self.end_frame)
+        print("fps", self.fps)
         self.path_video = path_video
         self.video_name = path_video.parts[-1][:-4]
         self.extract_image = extract_image

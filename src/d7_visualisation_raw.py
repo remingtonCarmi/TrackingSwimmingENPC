@@ -42,8 +42,7 @@ def observe_on_original_video(data_param, models_param, model_evaluator, tries):
     # Unpack the variables
     (video_name, lane_number, dimensions, scale, begin_time, end_time) = data_param
     (model_type1, model_type2, number_trainings, nb_epochs, batch_sizes, window_sizes, recoveries) = models_param
-    print("begin_time first", begin_time)
-    print("end_time first", end_time)
+
     # --- Set the paths --- #
     path_video = Path("data/1_raw_videos/{}.mp4".format(video_name))
     path_label = [Path("data/3_processed_positions{}/{}.csv".format(tries, video_name))]
