@@ -126,6 +126,6 @@ class PredictionMemories:
             transformed_image[vertical_pixel_begin: vertical_pixel_end, index_pred_left: index_pred_right] += 40
 
             # [-255, -255, 255] to be sure that after the clip, it will be [0, 0, 255]
-            transformed_image[vertical_pixel_begin: vertical_pixel_end, np.clip(index_regression, 0, self.original_dimensions[1])] = [-255, -255, 255]
+            transformed_image[vertical_pixel_begin: vertical_pixel_end, np.clip(index_regression, 0, self.original_dimensions[1] - 1)] = [-255, -255, 255]
 
         return self.get_original_image(transformed_image, self.homography, self.original_dimensions)
