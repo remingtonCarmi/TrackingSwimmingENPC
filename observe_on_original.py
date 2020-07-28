@@ -20,7 +20,7 @@ LANE_NUMBER = -1
 DIMENSIONS = [108, 1820]
 SCALE = 35
 BEGIN_TIME = 10
-END_TIME = 36
+END_TIME = 12  # 36
 
 # For the models
 DEEP_MODELS = [False, False]

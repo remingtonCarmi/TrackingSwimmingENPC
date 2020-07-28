@@ -4,7 +4,7 @@
 
 This project aims to track the position of swimmers in a video clip. With the position of the swimmers, the instant velocity can be computed. We chose to track the head to deduce the position of the swimmer.
 This project has been requested by the [French Swimming Federation](https://www.ffnatation.fr/) and financed by [ARN Neptune](https://anr.fr/).
-The project has been made by [Théo Vincent](https://github.com/theovincent), [Maxime Brisinger](https://github.com/MaximeBrisinger), [Victoria Brami](https://github.com/Victoria-brami) and supervised by [Rémi Carmigniani](https://github.com/remingtonCarmi) and [Vincent Lepetit](http://imagine.enpc.fr/~lepetitv/)
+The project has been made by [Théo Vincent](https://github.com/theovincent), [Maxime Brisinger](https://github.com/MaximeBrisinger), [Victoria Brami](https://github.com/Victoria-brami) and supervised by [Rémi Carmigniani](https://github.com/remingtonCarmi) and [Vincent Lepetit](http://imagine.enpc.fr/~lepetitv/).
 
 The code contains two different methods of swimmer tracking : the first one focuses on the skin color of the swimmers and the second one uses neural networks. 
 The inputs are videos filmed with a fixed camera.
@@ -42,12 +42,12 @@ For example, it tooks 1 hour and 30 minutes to train the simple model on colab f
 
 Before sampling the lanes, the sets look like the following gif.
 
-For the training set :
+The training set is composed of 9482 images from 5 different videos of 4 different races. Three races are inside, four of them are in HD and one of them is in 4K :
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="data/5_model_output/gif/labelled_augmented_flip_vid0_short.gif"></td> <br>
 </DIV>
 
-For the validation set :
+The validation set is composed of 678 images from 1 4K outside video :
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="data/5_model_output/gif/labelled_flip_100_NL_D_FA-Canet_short.gif"></td> <br>
 </DIV>
