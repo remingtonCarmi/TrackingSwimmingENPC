@@ -104,9 +104,9 @@ def observe_models(data_param, models_param, model_evaluator, tries):
         print("Prediction tight", index_preds)
         print("Regression prediction", index_regression_pred)
         # Take the swimming way into account
-        index_preds = index_preds[:: int(swimming_way)]
         if swimming_way == -1:
             index_regression_pred = dimensions[1] - index_regression_pred
+            index_preds = dimensions[1] - index_preds
 
         # -- For the graphic -- #
         frame_name = data[idx_batch, 0].parts[-1][: -4]
