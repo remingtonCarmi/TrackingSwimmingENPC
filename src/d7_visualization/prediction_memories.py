@@ -26,9 +26,6 @@ class PredictionMemories:
         self.end_time = end_time
         self.begin_frame = int(begin_time * self.fps)
         self.end_frame = int(end_time * self.fps)
-        print("begin_frame first", self.begin_frame)
-        print("end_frame first", self.end_frame)
-        print("fps", self.fps)
         self.path_video = path_video
         self.video_name = path_video.parts[-1][:-4]
         self.extract_image = extract_image
@@ -60,14 +57,10 @@ class PredictionMemories:
         """
         # Get the frame numbers
         frame_numbers = np.array([int(element[0].parts[-1][:-4].split("f")[1]) for element in data])
-        print("frame numbers", frame_numbers)
-        print("begin frame", self.begin_frame)
-        print("end frame", self.end_frame)
+
         # Get the indexes separately
         index_selection_low = np.where(frame_numbers >= self.begin_frame)[0]
         index_selection_high = np.where(frame_numbers < self.end_frame)[0]
-        print("index_selection_low", index_selection_low)
-        print("index_selection_high", index_selection_high)
 
         # Get the intersections of the indexes
         return data[list(set(index_selection_low).intersection(index_selection_high))]
