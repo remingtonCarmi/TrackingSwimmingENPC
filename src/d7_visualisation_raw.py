@@ -60,7 +60,6 @@ def observe_on_original_video(data_param, models_param, model_evaluator, tries):
 
     # --- Generate and load the sets --- #
     data = generate_data(path_label, starting_data_path, starting_calibration_path, take_all=True, lane_number=lane_number)
-    print(len(data))
     # Withdraw the frame that are out of the laps of time of interest
     data = prediction_memories.in_time(data)
     set = DataLoader(data, batch_size=1, scale=scale, dimensions=dimensions, standardization=True, augmentation=False, flip=True)
