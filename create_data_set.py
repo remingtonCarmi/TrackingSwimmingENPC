@@ -49,7 +49,7 @@ except AlreadyExistError as exist_error:
 
 # --- Create the LANES image --- #
 PATH_TXT = Path("data/2_intermediate_top_down_lanes/calibration/{}.txt".format(NAME_VIDEO))
-DESTINATION_LANES = Path("data/2_intermediate_top_down_lanes/LANES")
+DESTINATION_LANES = Path("data/2_intermediate_top_down_lanes/lanes")
 
 try:
     print(" --- Save the LANES as jpg files --- ")
