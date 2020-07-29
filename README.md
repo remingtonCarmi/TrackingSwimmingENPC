@@ -56,7 +56,7 @@ There is not a unique answer to the problem since no one knows the exact positio
 Thus it is good to compare the pointed images between several humans. We have asked to 3 persons to point the head swimmers on 180 same images of the training set with varying difficulty.
 
 <DIV ALIGN="CENTER">
-<td><img width="600px" src="reports/pointing_comparison.jpg"></td> <br>
+<td><img width="600px" src="reports/pointing_comparison.png"></td> <br>
 </DIV>
 
 
