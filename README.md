@@ -22,12 +22,12 @@ To enter more deeply in the code, please check the project_overview.pdf file.
 
 - The second method uses a Deep Learning model. With a simple CNN architecture, we find the discrete position of each swimmer, at each time of the video. 
 
-With a simple network :
+With a simple network on the training set :
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="data/5_model_output/gif/predicted_original_vid0_simple_model_window_150_simple_model_window_30_short.gif"></td> <br>
 </DIV>
 
-With a deep network : 
+With a deep network, on the training set : 
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="data/5_model_output/gif/predicted_original_vid0_deep_model_window_150_deep_model_window_30_short.gif"></td> <br>
 </DIV>

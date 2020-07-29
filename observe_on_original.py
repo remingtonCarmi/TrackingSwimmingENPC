@@ -19,7 +19,7 @@ VIDEO_NAME = "vid0"
 LANE_NUMBER = -1
 DIMENSIONS = [108, 1820]
 SCALE = 35
-BEGIN_TIME = 12
+BEGIN_TIME = 12  # 10
 END_TIME = 16  # 36
 
 # For the models
