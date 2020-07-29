@@ -35,7 +35,7 @@ With a deep network, on the training set :
 
 ### The data
 Starting for a simple video clip, many operations are applied to the frames before passing through the neural network.
-For example, it tooks 1 hour and 30 minutes to train the simple model on colab for small image with 150 pixels width.
+For example, it tooks 11 minutes to train the deeper model on colab for small images with 150 pixels width, for one epoch.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="data/5_model_output/gif/time_line_data.gif"></td> <br>
 </DIV>
@@ -74,19 +74,24 @@ Here you may see the loss during the training of the simple model for 150 pixels
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/final_training/loss_150_epoch_22_batch_12_1.jpg"></td> <br>
 </DIV>
 
+For the deeper model, the accuracy on the validation set reaches 98.2 % with a loss value of 0.05. This deeper model is more efficient.
+
 In this problem, we try to acheive two tasks : a classification (is the head in the sampled image ?) and a regression (in which column is the head in the sampled image ?).
 This is why the loss is composed of two terms for the two task. A trade off has been added between those two terms. As the following graph shows, the best value of this trade off is 0.01.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/trade_off_results/simple_model/window_30_epoch_7_batch_12.jpg"></td> <br>
 </DIV>
 
-The second neural network has been trained with this value of trade off for 30 pixels width images.
+The second neural network has been trained with this value of trade off for 30 pixels width images. The following graphs show that results for the simple model.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/trade_off_tune/accuracy_30_epoch_7_batch_12_trade_off_0.01_1.jpg"></td> <br>
 </DIV>
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/trade_off_tune/mae_30_epoch_7_batch_12_trade_off_0.01_1.jpg"></td> <br>
 </DIV>
+
+For the deeper model, the accuracy on the validation set reaches ?? % with a loss value of ??. This deeper model is more efficient.
+
 
 With the predictions returned by the algorithm, a time according to the position of a particular swimmer can be computed.
 This following graphic shows the position of the swimmer in the 7th lane for the validation set :
