@@ -15,9 +15,9 @@ import tensorflow as tf
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_TRAINING = True
 # Parameters for data
-VIDEO_NAMES_TRAIN = ["vid0", "vid1", "100NL_FAF",  "2004N_FHA", "100_NL_F_FA"]
-VIDEO_NAMES_VALID = ["100_NL_D_FA-Canet"]
-NUMBER_TRAINING = 4
+VIDEO_NAMES_TRAIN = ["vid0", "vid1", "100NL_FAF",  "2004N_FHA", "100_NL_F_FA"]  # Video for the training
+VIDEO_NAMES_VALID = ["100_NL_D_FA-Canet"]  # Video for the validation
+NUMBER_TRAINING = 1  # The number of the training that has been done
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
@@ -28,14 +28,14 @@ VALID_LANE_NUMBER = 7
 
 # Parameters for the training
 DEEP_MODEL = True
-NB_EPOCHS = 1
+NB_EPOCHS = 22
 BATCH_SIZE = 12
-WINDOW_SIZE = 150
+WINDOW_SIZE = 30
 NB_SAMPLES = 3
 DISTRIBUTION = 0.3
-MARGIN = 10
+MARGIN = 5
 TRADE_OFF = 0
-CLOSE_TO_HEAD = False
+CLOSE_TO_HEAD = True
 # --- END : !! TO MODIFY !! --- #
 
 

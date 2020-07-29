@@ -15,8 +15,8 @@ from src.d7_visualization_magnifier import observe_models
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
 # For the data
-VIDEO_NAME = "100_NL_D_FA-Canet"
-LANE_NUMBER = 7
+VIDEO_NAME = "S5580002"
+LANE_NUMBER = 5
 DIMENSIONS = [108, 1820]
 SCALE = 35
 
