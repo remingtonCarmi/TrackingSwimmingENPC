@@ -17,7 +17,7 @@ REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0", "vid1", "100NL_FAF",  "2004N_FHA", "100_NL_F_FA"]
 VIDEO_NAMES_VALID = ["100_NL_D_FA-Canet"]
-NUMBER_TRAINING = 2
+NUMBER_TRAINING = 3
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
