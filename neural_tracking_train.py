@@ -17,7 +17,7 @@ REAL_TRAINING = True
 # Parameters for data
 VIDEO_NAMES_TRAIN = ["vid0", "vid1", "100NL_FAF",  "2004N_FHA", "100_NL_F_FA"]
 VIDEO_NAMES_VALID = ["100_NL_D_FA-Canet"]
-NUMBER_TRAINING = 1
+NUMBER_TRAINING = 2
 DIMENSIONS = [108, 1820]
 
 # Parameters for loading the data
@@ -28,7 +28,7 @@ VALID_LANE_NUMBER = 7
 
 # Parameters for the training
 DEEP_MODEL = True
-NB_EPOCHS = 22
+NB_EPOCHS = 1
 BATCH_SIZE = 12
 WINDOW_SIZE = 150
 NB_SAMPLES = 3

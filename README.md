@@ -54,6 +54,7 @@ The validation set is composed of 678 images from 1 4K outside video :
 
 There is not a unique answer to the problem since no one knows the exact position of the head of the swimmers.
 Thus it is good to compare the pointed images between several humans. We have asked to 3 persons to point the head swimmers on 180 same images of the training set with varying difficulty.
+To compare the three pointers together (the last line of the table), we took the maximum of the pointed positions minus the minimum of the pointed positions.
 
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/pointing_comparison.png"></td> <br>
