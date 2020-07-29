@@ -37,3 +37,4 @@ reports/**/*.xlsx
 # The trainings
 !data/4_models_weights/magnifier/simple_model/final_training/window_150_epoch_22_batch_12_1.h5
 !data/4_models_weights/magnifier/simple_model/trade_off_tune/window_30_epoch_7_batch_12_trade_off_0.01_1.h5
+!data/4_models_weights/magnifier/deep_model/final_training/window_150_epoch_1_batch_12_4.h5
