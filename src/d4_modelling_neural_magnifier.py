@@ -104,7 +104,7 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
         # Build the MODEL
         model.build(sub_lanes.shape)
 
-        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, 22, batch_size, trade_off_info, number_training - 1)
+        path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, nb_epochs, batch_size, trade_off_info, number_training - 1)
 
         # Load the weights
         model.load_weights(str(path_former_training))
