@@ -18,8 +18,9 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = True
-VIDEO_NAME = "vid0"
+REAL_RUN = False
+VIDEO_NAME = "100_NL_D_FA-Canet"
+LANE_NUMBER = 7
 # --- END : !! TO MODIFY !! --- #
 
 
@@ -44,8 +45,8 @@ try:
     FPS = VIDEO.get(cv2.CAP_PROP_FPS)
 
     # --- Generate and load the sets --- #
-    DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False)
-    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False, augmentation=True, flip=True)
+    DATA = generate_data(PATH_LABEL, STARTING_DATA_PATH, STARTING_CALIBRATION_PATH, take_all=False, lane_number=LANE_NUMBER)
+    SET = DataLoader(DATA, scale=SCALE, batch_size=1, dimensions=DIMENSIONS, standardization=False, augmentation=False, flip=True)
     print("The set is composed of {} images".format(len(DATA)))
 
     # --- Get every LANES --- #
@@ -62,7 +63,7 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("../data/5_model_output/videos/labelled_videos{}".format(TRIES))
-    NAME_LABELLED_VIDEO = "labelled_augmented_flip_{}.mp4".format(VIDEO_NAME)
+    NAME_LABELLED_VIDEO = "labelled_flip_{}.mp4".format(VIDEO_NAME)
     make_video(NAME_LABELLED_VIDEO, EVERY_LANES, fps=FPS, destination=DESTINATION_VIDEO)
 
 except FindPathDataError as find_path_data_error:
