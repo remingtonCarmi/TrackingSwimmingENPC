@@ -53,20 +53,22 @@ The validation set is composed of 678 images from 1 4K outside video :
 </DIV>
 
 There is not a unique answer to the problem since no one knows the exact position of the head of the swimmers.
-Thus it is good to compare the pointings between several humans.
+Thus it is good to compare the pointed images between several humans. We have asked to 3 persons to point the head swimmers on 180 same images of the training set with varying difficulty.
 
-Show a table ...
+<DIV ALIGN="CENTER">
+<td><img width="600px" src="reports/pointing_comparison.jpg"></td> <br>
+</DIV>
 
 
 ### Analysis of the results
 The algorithm uses two neural networks : a rough one that is trained on 150 pixels width images and a tigh one that is trained on 30 pixels width images.
 
-Here you may see the accuracy during the training of the simple model.
+Here you may see the accuracy during the training of the simple model for 150 pixels width images.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/final_training/accuracy_150_epoch_22_batch_12_1.jpg"></td> <br>
 </DIV>
 
-Here you may see the loss during the training of the simple model.
+Here you may see the loss during the training of the simple model for 150 pixels width images.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/final_training/loss_150_epoch_22_batch_12_1.jpg"></td> <br>
 </DIV>
@@ -77,7 +79,7 @@ This is why the loss is composed of two terms for the two task. A trade off has 
 <td><img width="600px" src="reports/trade_off_results/simple_model/window_30_epoch_7_batch_12.jpg"></td> <br>
 </DIV>
 
-The second neural network has been trained with this value of trade off.
+The second neural network has been trained with this value of trade off for 30 pixels width images.
 <DIV ALIGN="CENTER">
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/trade_off_tune/accuracy_30_epoch_7_batch_12_trade_off_0.01_1.jpg"></td> <br>
 </DIV>
