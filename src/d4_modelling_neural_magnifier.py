@@ -59,14 +59,6 @@ def train_magnifier(data_param, loading_param, training_param, tries, model_type
     if trade_off != 0:
         trade_off_info = "trade_off_{}_".format(trade_off)
 
-    path_weight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type))
-    path_former_training = path_weight / "window_{}_epoch_{}_batch_{}_{}{}.h5".format(window_size, 22, batch_size, trade_off_info, number_training - 1)
-    print("path weight exist", path_weight.exists())
-    import os
-    print("list dir weight", os.listdir(path_weight))
-    print(path_weight)
-    print(path_former_training)
-    print("Path exist ?", path_former_training.exists())
     # -- Paths to the data -- #
     paths_label_train = []
     for video_name_train in video_names_train:
