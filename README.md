@@ -3,7 +3,7 @@
 ### Presentation
 
 This project aims to track the position of swimmers in a video clip. With the position of the swimmers, the instant velocity can be computed. We chose to track the head to deduce the position of the swimmer.
-This project has been requested by the [French Swimming Federation](https://www.ffnatation.fr/) and financed by [ANR Neptune](https://anr.fr/).
+This project has been requested by the [French Swimming Federation](https://www.ffnatation.fr/) and financed by [ANR NePTUNE](https://anr.fr/).
 The project has been made by [Théo Vincent](https://github.com/theovincent), [Maxime Brisinger](https://github.com/MaximeBrisinger), [Victoria Brami](https://github.com/Victoria-brami) and supervised by [Rémi Carmigniani](https://github.com/remingtonCarmi) and [Vincent Lepetit](http://imagine.enpc.fr/~lepetitv/).
 
 The code contains two different methods of swimmer tracking : the first one focuses on the skin color of the swimmers and the second one uses neural networks. 
@@ -151,3 +151,12 @@ python create_data_set.py
 
 ## License
 [ENPC](https://www.ecoledesponts.fr/)
+
+<div class="row">
+  <div class="column">
+    <img src="logos/anr_neptune.jpg" alt="Snow" style="width:100%">
+  </div>
+  <div class="column">
+    <img src="logos/ponts.jpg" alt="Mountains" style="width:100%">
+  </div>
+</div>
