@@ -154,9 +154,9 @@ python create_data_set.py
 
 <div class="row">
   <div class="column">
-    <img src="logos/anr_neptune.jpg" style="width:10%">
+    <td><img width="300px" src="anr_neptune.jpg"></td> <br>
   </div>
   <div class="column">
-    <img src="logos/ponts.png" style="width:10%">
+    <td><img width="300px" src="ponts.png"></td> <br>
   </div>
 </div>
