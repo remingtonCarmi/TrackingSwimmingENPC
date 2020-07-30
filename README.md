@@ -154,8 +154,8 @@ python create_data_set.py
 
 
 <DIV ALIGN="CENTER">
-    <td><img width="300px" src="anr_neptune.jpg"></td> <br>
+    <td><img width="300px" src="logos/anr_neptune.jpg"></td> <br>
 </DIV>
 <DIV ALIGN="CENTER">
-    <td><img width="300px" src="ponts.png"></td> <br>
+    <td><img width="300px" src="logos/ponts.png"></td> <br>
 </DIV>
