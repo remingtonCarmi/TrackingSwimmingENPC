@@ -152,11 +152,11 @@ python create_data_set.py
 ## License
 [ENPC](https://www.ecoledesponts.fr/)
 
-<div class="row">
-  <div class="column">
-    <td><img width="300px" src="anr_neptune.jpg"></td> <br>
-  </div>
-  <div class="column">
-    <td><img width="300px" src="ponts.png"></td> <br>
-  </div>
-</div>
+<DIV ALIGN="CENTER">
+    <DIV ALIGN="LEFT">
+        <td><img width="300px" src="anr_neptune.jpg"></td> <br>
+    </DIV>
+    <DIV ALIGN="RIGHT">
+        <td><img width="300px" src="ponts.png"></td> <br>
+    </DIV>
+</DIV>
