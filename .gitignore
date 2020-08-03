@@ -35,7 +35,7 @@ reports/**/*.xlsx
 !reports/trade_off_results/simple_model/window_30_epoch_7_batch_12.jpg
 !reports/figures_results/zoom_model/simple_model/trade_off_tune/accuracy_30_epoch_7_batch_12_trade_off_0.01_1.jpg
 !reports/figures_results/zoom_model/simple_model/trade_off_tune/mae_30_epoch_7_batch_12_trade_off_0.01_1.jpg
-!reports/graphic_results/100_NL_D_FA-Canet_simple_model_150_simple_model_30.jpg
+!reports/graphic_results/100_NL_D_FA-Canet_deep_model_150_deep_model_30.jpg
 !data/5_model_output/gif/predicted_original_100_NL_D_FA-Canet_deep_model_window_150_deep_model_window_30_short.gif
 
 # The trainings
