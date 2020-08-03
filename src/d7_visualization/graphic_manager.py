@@ -1,6 +1,7 @@
 """
 This module contains the GraphicManager class.
 """
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
@@ -13,62 +14,66 @@ class GraphicManager:
     """
     Class to manage the graphic data.
     """
-    def __init__(self, path_video, path_calibration, scale, nb_images, horiz_dimension):
+    def __init__(self, prediction_memories):
         """
         Construct the parameters and the data for the figure.
 
         Args:
-            path_video (WindowsPath): the path to the video.
-
-            path_calibration (WindowsPath): the path to the calibration file.
-
-            scale (integer): the scale of the images in pixels per meter.
-
-            nb_images (integer): the number of images.
-
-            horiz_dimension (integer): the horizontal dimension of the images.
+            prediction_memories (PredictionMemories): THE ATTRIBUTE DATA HAS TO BE FILLED i.e
+                THE VIDEO HAS TO BE MADE BEFORE.
         """
         # Parameters
-        video = cv2.VideoCapture(str(path_video))
-        self.fps = video.get(cv2.CAP_PROP_FPS)
-        (self.left_limit, length_video) = get_meters_video(path_calibration)
-        self.scale = scale
+        self.fps = prediction_memories.fps
+        (self.left_limit, length_video) = get_meters_video(prediction_memories.calibration_path)
+        self.scale = prediction_memories.scale
+        self.added_pad = prediction_memories.added_pad
 
-        self.added_pad = ((horiz_dimension - int(scale * length_video)) // 2) / scale
+        # Data for the figure
+        self.begin_frame = prediction_memories.begin_frame
+        self.nb_images = len(prediction_memories.preds)
 
-        # Data for figure
-        self.pos_predictions = np.zeros((nb_images, 2))
-        self.pos_regression = np.zeros(nb_images)
-        self.pos_real = np.zeros(nb_images)
-        self.time = np.zeros(nb_images)
-        self.lane_numbers = np.zeros(nb_images)
+        self.pos_predictions = np.zeros((self.nb_images, 2))
+        self.pos_regression = np.zeros(self.nb_images)
+        self.pos_real = np.zeros(self.nb_images)
+        self.time = np.zeros(self.nb_images)
 
-    def update(self, idx_image, frame_name, index_preds, index_regression_pred, label):
+        # Label in the original coordinates
+        labels = prediction_memories.data[:, 2]
+        unlabelled_lanes = np.where(labels < 0)
+        # Label in the transformed coordinates
+        labels /= prediction_memories.unscaled_factor
+        labels += prediction_memories.added_pad
+        # Put the unlabelled lanes down to zero
+        labels[unlabelled_lanes] = 0
+
+        self.fill_positions(prediction_memories.preds, labels)
+
+    def fill_positions(self, predictions, labels):
         """
-        Update the lists with a new prediction.
+        Fill the data for the graphic.
 
         Args:
-            idx_image (integer): the index of the image.
+            predictions (list of list of integers): the list of predictions by frame,
+                one element is [lane, index_classification_left, index_classification_right, index_regression].
 
-            frame_name (string): the name of the image.
-
-            index_regression_pred (array): the index of the columns where the head should be.
-
-            label (integer): the column where the head is.
+            labels (array of integers): the list of the head positions.
         """
-        # Update the frame number and the lane number
-        frame_number = int(frame_name.split("f")[1])
-        self.lane_numbers[idx_image] = int(frame_name.split("f")[0][1: -1])
+        # Count the index corresponding to any images
+        nb_false_indexes = 0
 
-        # Get the time
-        self.time[idx_image] = frame_number / self.fps
+        for idx_frame in range(self.nb_images):
+            # Get the time
+            self.time[idx_frame] = (idx_frame + self.begin_frame) / self.fps
 
-        # Register the predicted and the real position of the head
-        self.pos_predictions[idx_image] = np.array([self.left_limit + index_preds[0] / self.scale - self.added_pad, self.left_limit + index_preds[-1] / self.scale - self.added_pad])
-        self.pos_regression[idx_image] = np.array([self.left_limit + index_regression_pred / self. scale - self.added_pad])
-        self.pos_real[idx_image] = self.left_limit + label / self.scale - self.added_pad
+            # Register the predicted and the real position of the head
+            if len(predictions[idx_frame]) > 0:
+                self.pos_predictions[idx_frame] = np.array([self.left_limit + (predictions[idx_frame][0][1] - self.added_pad) / self.scale , self.left_limit + (predictions[idx_frame][0][2] - self.added_pad) / self.scale ])
+                self.pos_regression[idx_frame] = np.array([self.left_limit + (predictions[idx_frame][0][3] - self.added_pad) / self.scale] )
+                self.pos_real[idx_frame] = self.left_limit + (labels[idx_frame - nb_false_indexes] - self.added_pad) / self.scale
+            else:
+                nb_false_indexes += 1
 
-    def make_graphic(self, path_save):
+    def save_graphic(self, path_save):
         """
         Save the graphic.
 
@@ -82,7 +87,7 @@ class GraphicManager:
         ax.plot(self.pos_real, self.time, label="real position", c="black")
 
         # Set the mean for the predictions
-        ax.plot(self.pos_regression, self.time, label="estimated position", c="blue")
+        ax.plot(self.pos_regression, self.time, label="estimated position", c="red")
 
         # Set the uncertainty
         ax.fill_betweenx(self.time, self.pos_predictions[:, 0], self.pos_predictions[:, 1], alpha=0.3, facecolor="blue", label="likely zone")

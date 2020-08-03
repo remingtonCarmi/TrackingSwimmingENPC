@@ -96,7 +96,7 @@ For the deeper model, the accuracy on the validation set reaches ?? % with a los
 With the predictions returned by the algorithm, a time according to the position of a particular swimmer can be computed.
 This following graphic shows the position of the swimmer in the 7th lane for the validation set :
 <DIV ALIGN="CENTER">
-<td><img width="600px" src="reports/graphic_results/100_NL_D_FA-Canet_simple_model_150_simple_model_30.jpg"></td> <br>
+<td><img width="600px" src="reports/graphic_results/100_NL_D_FA-Canet_deep_model_150_deep_model_30.jpg"></td> <br>
 </DIV>
 
 Here, the prediction on the validation set can be seen :
