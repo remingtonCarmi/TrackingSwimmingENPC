@@ -18,7 +18,7 @@ from src.d0_utils.store_load_data.make_video import make_video
 
 
 # --- BEGIN : !! TO MODIFY !! --- #
-REAL_RUN = False
+REAL_RUN = True
 # For the data
 VIDEO_NAME = "vid0"
 LANE_NUMBER = -1
@@ -28,9 +28,9 @@ BEGIN_TIME = 12  # 10
 END_TIME = 13  # 36
 
 # For the models
-DEEP_MODELS = [False, False]
+DEEP_MODELS = [True, True]
 NUMBER_TRAININGS = [1, 1]
-NB_EPOCHS = [22, 7]
+NB_EPOCHS = [1, 22]
 BATCH_SIZES = [12, 12]
 WINDOW_SIZES = [150, 30]
 RECOVERIES = [75, 29]
