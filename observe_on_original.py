@@ -29,7 +29,7 @@ END_TIME = 13  # 36
 
 # For the models
 DEEP_MODELS = [True, True]
-NUMBER_TRAININGS = [1, 1]
+NUMBER_TRAININGS = [4, 1]
 NB_EPOCHS = [1, 22]
 BATCH_SIZES = [12, 12]
 WINDOW_SIZES = [150, 30]
