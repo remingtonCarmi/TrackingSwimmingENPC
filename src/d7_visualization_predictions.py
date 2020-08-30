@@ -80,8 +80,10 @@ def observe_model(data_param, models_param, model_evaluator, tries):
     data = generate_data(
         path_label, starting_data_path, starting_calibration_path, take_all=True, lane_number=lane_number
     )
+    print("data before in time", data)
     # Withdraw the frame that are out of the laps of time of interest
     data = prediction_memories.in_time(data)
+    print("data after in time", data)
     set_loader = DataLoader(
         data, batch_size=1, scale=scale, dimensions=dimensions, standardization=True, augmentation=False, flip=True
     )
@@ -100,10 +102,7 @@ def observe_model(data_param, models_param, model_evaluator, tries):
 
     # --- Get the weights of the trainings --- #
     # Build the rough model to load the weights
-    print(set_loader[0])
     (lanes, labels) = set_loader[0]
-    print("lanes", lanes)
-    print("labels", labels)
     (sub_lanes, sub_labels) = slice_lane(lanes[0], labels[0], window_sizes[0], recoveries[0])[:2]
     model_rough.build(sub_lanes.shape)
     # Load the weights
