@@ -9,8 +9,17 @@ That is to say, the user can create:
 from pathlib import Path
 
 # Exceptions
-from src.d0_utils.extractions.exceptions.exception_classes import FindPathExtractError, TimeError, EmptyFolder, NoMoreFrame
-from src.d0_utils.store_load_data.exceptions.exception_classes import FindPathError, AlreadyExistError, NothingToAddError
+from src.d0_utils.extractions.exceptions.exception_classes import (
+    FindPathExtractError,
+    TimeError,
+    EmptyFolder,
+    NoMoreFrame,
+)
+from src.d0_utils.store_load_data.exceptions.exception_classes import (
+    FindPathError,
+    AlreadyExistError,
+    NothingToAddError,
+)
 
 # To calibrate the video
 from src.d2_intermediate_calibration import calibrate_video_text
@@ -24,11 +33,11 @@ from src.d3_processing_head_pointing import head_pointing
 
 # BEGIN : !! TO MODIFY !! #
 # The name of the video
-NAME_VIDEO = "S5580002"
+NAME_VIDEO = "100_NL_D_FA-Canet"
 
 # Time range for pointing
-POINTING_STARTING_TIME = 103
-POINTING_ENDING_TIME = 110
+POINTING_STARTING_TIME = 4
+POINTING_ENDING_TIME = 17
 # END : !! TO MODIFY !! #
 
 
@@ -55,9 +64,14 @@ try:
     print(" --- Save the LANES as jpg files --- ")
     MARGIN = 0
 
-    create_data(PATH_VIDEO, PATH_TXT, MARGIN, destination=DESTINATION_LANES,
-                time_begin=POINTING_STARTING_TIME,
-                time_end=POINTING_ENDING_TIME)
+    create_data(
+        PATH_VIDEO,
+        PATH_TXT,
+        MARGIN,
+        destination=DESTINATION_LANES,
+        time_begin=POINTING_STARTING_TIME,
+        time_end=POINTING_ENDING_TIME,
+    )
 except FindPathError as find_error:
     print(find_error.__repr__())
 except AlreadyExistError as already_exists:
