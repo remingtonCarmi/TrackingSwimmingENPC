@@ -112,10 +112,12 @@ class PredictionMemories:
         print("Frame numbers", frame_numbers)
         # Get the indexes separately
         index_selection_low = np.where(frame_numbers >= self.begin_frame)[0]
+        print("Low", index_selection_low)
         index_selection_high = np.where(frame_numbers < self.end_frame)[0]
-        print("Index inter", list(set(index_selection_low).intersection(index_selection_high)))
+        print("High", index_selection_high)
+        print("Index inter", index_selection_low & index_selection_high)
         # Get the intersections of the indexes
-        return data[list(set(index_selection_low).intersection(index_selection_high))]
+        return data[index_selection_low & index_selection_high]
 
     def update(self, frame_name, index_pred_left, index_pred_rigth, index_regression_pred):
         """
