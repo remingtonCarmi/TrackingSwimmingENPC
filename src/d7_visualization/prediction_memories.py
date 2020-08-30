@@ -111,9 +111,10 @@ class PredictionMemories:
         frame_numbers = np.array([int(element[0].parts[-1][:-4].split("f")[1]) for element in data])
         print("Frame numbers", frame_numbers)
         # Get the indexes separately
-        index_selection_low = np.where(frame_numbers >= self.begin_frame)[0]
+        index_selection_low = np.where(frame_numbers >= self.begin_frame, True, False)
         print("Low", index_selection_low)
-        index_selection_high = np.where(frame_numbers < self.end_frame)[0]
+        index_selection_high = np.where(frame_numbers < self.end_frame, True, False)
+        print("End", self.end_frame)
         print("High", index_selection_high)
         print("Index inter", index_selection_low & index_selection_high)
         # Get the intersections of the indexes
