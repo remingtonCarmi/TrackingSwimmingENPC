@@ -57,6 +57,7 @@ class PredictionMemories:
         # --- General variables --- #
         video = cv2.VideoCapture(str(path_video))
         self.fps = video.get(cv2.CAP_PROP_FPS)
+        self.fps = 25
 
         self.begin_time = begin_time
         self.end_time = end_time
