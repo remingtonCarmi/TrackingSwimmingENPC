@@ -51,20 +51,40 @@ def observe_model(data_param, models_param, model_evaluator, tries):
     starting_calibration_path = Path("data/2_intermediate_top_down_lanes/calibration{}".format(tries))
 
     path_weight_rough = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type1))
-    path_current_weight_rough = path_weight_rough / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[0], nb_epochs[0], batch_sizes[0], number_trainings[0])
+    path_current_weight_rough = path_weight_rough / "window_{}_epoch_{}_batch_{}_{}.h5".format(
+        window_sizes[0], nb_epochs[0], batch_sizes[0], number_trainings[0]
+    )
 
     path_weight_tight = Path("data/4_models_weights{}/magnifier{}".format(tries, model_type2))
-    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_{}.h5".format(window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1])
+    path_current_weight_tight = path_weight_tight / "window_{}_epoch_{}_batch_{}_{}.h5".format(
+        window_sizes[1], nb_epochs[1], batch_sizes[1], number_trainings[1]
+    )
 
     # --- Define the prediction memories --- #
 
-    prediction_memories = PredictionMemories(begin_time, end_time, path_video, starting_calibration_path, dimensions, scale, extract_image_video, generate_data, DataLoader, read_homography, get_original_image)
+    prediction_memories = PredictionMemories(
+        begin_time,
+        end_time,
+        path_video,
+        starting_calibration_path,
+        dimensions,
+        scale,
+        extract_image_video,
+        generate_data,
+        DataLoader,
+        read_homography,
+        get_original_image,
+    )
 
     # --- Generate and load the sets --- #
-    data = generate_data(path_label, starting_data_path, starting_calibration_path, take_all=True, lane_number=lane_number)
+    data = generate_data(
+        path_label, starting_data_path, starting_calibration_path, take_all=True, lane_number=lane_number
+    )
     # Withdraw the frame that are out of the laps of time of interest
     data = prediction_memories.in_time(data)
-    set = DataLoader(data, batch_size=1, scale=scale, dimensions=dimensions, standardization=True, augmentation=False, flip=True)
+    set_loader = DataLoader(
+        data, batch_size=1, scale=scale, dimensions=dimensions, standardization=True, augmentation=False, flip=True
+    )
 
     print("The set is composed of {} images".format(len(data)))
 
@@ -80,7 +100,7 @@ def observe_model(data_param, models_param, model_evaluator, tries):
 
     # --- Get the weights of the trainings --- #
     # Build the rough model to load the weights
-    (lanes, labels) = set[0]
+    (lanes, labels) = set_loader[0]
     (sub_lanes, sub_labels) = slice_lane(lanes[0], labels[0], window_sizes[0], recoveries[0])[:2]
     model_rough.build(sub_lanes.shape)
     # Load the weights
@@ -96,12 +116,14 @@ def observe_model(data_param, models_param, model_evaluator, tries):
     model_rough.trainable = False
     model_tight.trainable = False
 
-    for (idx_batch, batch) in enumerate(set):
+    for (idx_batch, batch) in enumerate(set_loader):
         (lanes, labels) = batch
         swimming_way = data[idx_batch, 3]
 
         # -- Get the predictions -- #
-        (index_preds, index_regression_pred) = model_evaluator(model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries)
+        (index_preds, index_regression_pred) = model_evaluator(
+            model_rough, model_tight, lanes[0], labels[0], window_sizes, recoveries
+        )
         print("Prediction tight", index_preds)
         print("Regression prediction", index_regression_pred)
 
@@ -111,7 +133,7 @@ def observe_model(data_param, models_param, model_evaluator, tries):
             index_preds = dimensions[1] - index_preds
 
         # -- For the original video -- #
-        frame_name = data[idx_batch, 0].parts[-1][: -4]
+        frame_name = data[idx_batch, 0].parts[-1][:-4]
         prediction_memories.update(frame_name, index_preds[0], index_preds[-1], index_regression_pred)
 
     return prediction_memories
