@@ -4,7 +4,10 @@ This script allows the user to observe the behavior of the trained models on the
 from pathlib import Path
 
 # Exceptions
-from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import FindPathDataError, PaddingError
+from src.d4_modelling_neural.loading_data.transformations.tools.exceptions.exception_classes import (
+    FindPathDataError,
+    PaddingError,
+)
 from src.d0_utils.store_load_data.exceptions.exception_classes import AlreadyExistError, FindPathError
 
 # To compute the predictions
@@ -20,12 +23,12 @@ from src.d0_utils.store_load_data.make_video import make_video
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
 # For the data
-VIDEO_NAME = "vid0"
+VIDEO_NAME = "100_NL_D_FA-Canet"
 LANE_NUMBER = -1
 DIMENSIONS = [108, 1820]
 SCALE = 35
-BEGIN_TIME = 12  # 10
-END_TIME = 13  # 36
+BEGIN_TIME = 4  # 10
+END_TIME = 6  # 36
 
 # For the models
 DEEP_MODELS = [True, True]
@@ -64,8 +67,15 @@ try:
     # --- Make the video --- #
     print("Making the video...")
     DESTINATION_VIDEO = Path("data/5_model_output/videos{}".format(TRIES))
-    NAME_PREDICTED_VIDEO = "predicted_original_{}_{}_window_{}_{}_window_{}.mp4".format(VIDEO_NAME, MODEL_TYPE1[1:], WINDOW_SIZES[0], MODEL_TYPE2[1:], WINDOW_SIZES[1])
-    make_video(NAME_PREDICTED_VIDEO, PREDICTION_MEMORIES.get_original_frames(), fps=PREDICTION_MEMORIES.fps, destination=DESTINATION_VIDEO)
+    NAME_PREDICTED_VIDEO = "predicted_original_{}_{}_window_{}_{}_window_{}.mp4".format(
+        VIDEO_NAME, MODEL_TYPE1[1:], WINDOW_SIZES[0], MODEL_TYPE2[1:], WINDOW_SIZES[1]
+    )
+    make_video(
+        NAME_PREDICTED_VIDEO,
+        PREDICTION_MEMORIES.get_original_frames(),
+        fps=PREDICTION_MEMORIES.fps,
+        destination=DESTINATION_VIDEO,
+    )
 
 except FindPathDataError as find_path_data_error:
     print(find_path_data_error.__repr__())
