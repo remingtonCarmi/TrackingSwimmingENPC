@@ -57,7 +57,6 @@ class PredictionMemories:
         # --- General variables --- #
         video = cv2.VideoCapture(str(path_video))
         self.fps = video.get(cv2.CAP_PROP_FPS)
-        self.fps = 25
 
         self.begin_time = begin_time
         self.end_time = end_time
@@ -108,16 +107,10 @@ class PredictionMemories:
                 Only the interesting elements are kept.
         """
         # Get the frame numbers
-        print("One frame number", int(data[0][0].parts[-1][:-4].split("f")[1]))
         frame_numbers = np.array([int(element[0].parts[-1][:-4].split("f")[1]) for element in data])
-        print("Frame numbers", frame_numbers)
         # Get the indexes separately
         index_selection_low = np.where(frame_numbers >= self.begin_frame, True, False)
-        print("Low", index_selection_low)
         index_selection_high = np.where(frame_numbers < self.end_frame, True, False)
-        print("End", self.end_frame)
-        print("High", index_selection_high)
-        print("Index inter", index_selection_low & index_selection_high)
         # Get the intersections of the indexes
         return data[index_selection_low & index_selection_high]
 
