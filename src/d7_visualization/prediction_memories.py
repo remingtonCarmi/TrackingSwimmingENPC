@@ -13,7 +13,21 @@ class PredictionMemories:
     """
     This class collects all the predictions and add them to the original video clip.
     """
-    def __init__(self, begin_time, end_time, path_video, starting_calibration_path, dimensions, scale, extract_image, generate_data, DataLoader, read_homography, get_original_image):
+
+    def __init__(
+        self,
+        begin_time,
+        end_time,
+        path_video,
+        starting_calibration_path,
+        dimensions,
+        scale,
+        extract_image,
+        generate_data,
+        DataLoader,
+        read_homography,
+        get_original_image,
+    ):
         """
         Construct the list of all the predictions.
 
@@ -93,12 +107,13 @@ class PredictionMemories:
                 Only the interesting elements are kept.
         """
         # Get the frame numbers
+        print("One frame number", int(data[0][0].parts[-1][:-4].split("f")[1]))
         frame_numbers = np.array([int(element[0].parts[-1][:-4].split("f")[1]) for element in data])
-
+        print("Frame numbers", frame_numbers)
         # Get the indexes separately
         index_selection_low = np.where(frame_numbers >= self.begin_frame)[0]
         index_selection_high = np.where(frame_numbers < self.end_frame)[0]
-
+        print("Index inter", list(set(index_selection_low).intersection(index_selection_high)))
         # Get the intersections of the indexes
         return data[list(set(index_selection_low).intersection(index_selection_high))]
 
@@ -117,9 +132,11 @@ class PredictionMemories:
         """
         # Get the frame and lane number
         frame_number = int(frame_name.split("f")[1])
-        lane_number = int(frame_name.split("f")[0][1: -1])
+        lane_number = int(frame_name.split("f")[0][1:-1])
 
-        self.preds[frame_number - self.begin_frame].append([lane_number, index_pred_left, index_pred_rigth, index_regression_pred])
+        self.preds[frame_number - self.begin_frame].append(
+            [lane_number, index_pred_left, index_pred_rigth, index_regression_pred]
+        )
 
     def get_original_frames(self):
         """
@@ -162,10 +179,13 @@ class PredictionMemories:
             origin_index_rigth = int((index_pred_right - self.added_pad) * self.unscaled_factor)
             origin_index_regression = int((index_regression - self.added_pad) * self.unscaled_factor)
 
-            transformed_image[vertical_pixel_begin: vertical_pixel_end, origin_index_left: origin_index_rigth] += 40
+            transformed_image[vertical_pixel_begin:vertical_pixel_end, origin_index_left:origin_index_rigth] += 40
 
             # [-255, -255, 255] to be sure that after the clip, it will be [0, 0, 255]
-            transformed_image[vertical_pixel_begin: vertical_pixel_end, np.clip(origin_index_regression, 0, self.original_dimensions[1] - 1)] = [-255, -255, 255]
+            transformed_image[
+                vertical_pixel_begin:vertical_pixel_end,
+                np.clip(origin_index_regression, 0, self.original_dimensions[1] - 1),
+            ] = [-255, -255, 255]
 
         return self.get_original_image(transformed_image, self.homography, self.original_dimensions)
 
@@ -185,9 +205,19 @@ class PredictionMemories:
         path_label = [Path("data/3_processed_positions{}/{}.csv".format(tries, self.video_name))]
         starting_data_path = Path("data/2_intermediate_top_down_lanes/lanes{}".format(tries))
 
-        self.data = self.generate_data(path_label, starting_data_path, self.starting_calibration_path, take_all=True, lane_number=lane_number)
+        self.data = self.generate_data(
+            path_label, starting_data_path, self.starting_calibration_path, take_all=True, lane_number=lane_number
+        )
         self.data = self.in_time(self.data)
-        set_visu = self.data_loader(self.data, scale=self.scale, batch_size=1, dimensions=self.dimensions, standardization=False, augmentation=False, flip=False)
+        set_visu = self.data_loader(
+            self.data,
+            scale=self.scale,
+            batch_size=1,
+            dimensions=self.dimensions,
+            standardization=False,
+            augmentation=False,
+            flip=False,
+        )
         list_lanes = np.zeros((len(self.data), self.dimensions[0], self.dimensions[1], 3))
 
         # For each image
@@ -215,7 +245,7 @@ class PredictionMemories:
         """
         # Modify the color of the lane
         # Classification
-        lane[:, self.preds[idx_frame][0][1]: self.preds[idx_frame][0][2]] += 40
+        lane[:, self.preds[idx_frame][0][1] : self.preds[idx_frame][0][2]] += 40
 
         # Regression
         lane[:, self.preds[idx_frame][0][3]] = [0, 0, 255]
