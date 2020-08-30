@@ -27,8 +27,8 @@ VIDEO_NAME = "100_NL_D_FA-Canet"
 LANE_NUMBER = -1
 DIMENSIONS = [108, 1820]
 SCALE = 35
-BEGIN_TIME = 4  # 10
-END_TIME = 6  # 36
+BEGIN_TIME = 6  # 10
+END_TIME = 10  # 36
 
 # For the models
 DEEP_MODELS = [True, True]
