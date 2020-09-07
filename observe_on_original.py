@@ -23,12 +23,12 @@ from src.d0_utils.store_load_data.make_video import make_video
 # --- BEGIN : !! TO MODIFY !! --- #
 REAL_RUN = True
 # For the data
-VIDEO_NAME = "100_NL_D_FA-Canet"
+VIDEO_NAME = "vid0"
 LANE_NUMBER = -1
 DIMENSIONS = [108, 1820]
 SCALE = 35
-BEGIN_TIME = 8  # 10
-END_TIME = 10  # 36
+BEGIN_TIME = 14  # 10
+END_TIME = 16  # 36
 
 # For the models
 DEEP_MODELS = [True, True]

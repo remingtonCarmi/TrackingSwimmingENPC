@@ -90,7 +90,7 @@ The second neural network has been trained with this value of trade off for 30 p
 <td><img width="600px" src="reports/figures_results/zoom_model/simple_model/trade_off_tune/mae_30_epoch_7_batch_12_trade_off_0.01_1.jpg"></td> <br>
 </DIV>
 
-For the deeper model, the accuracy on the validation set reaches ?? % with a loss value of ??. This deeper model is more efficient.
+For the deeper model, the accuracy on the validation set reaches 92 %. This deeper model is more efficient.
 
 
 With the predictions returned by the algorithm, a time according to the position of a particular swimmer can be computed.
